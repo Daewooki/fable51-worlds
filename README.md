@@ -8,32 +8,6 @@ No game engine. No proprietary 3D tiles. No downloaded meshes. Every building, s
 
 ---
 
-## Why code
-
-A world written as code is not the same kind of object as a world generated as pixels or held in a latent space.
-
-| | |
-|---|---|
-| **Verifiable** | You can check it by running it. Every elevation in Higashiyama is an independent survey query; a walker drives the real movement code over the whole route; Playwright diffs fixed viewpoints against photographs taken from the same spot. A wrong number is a failing test, not a matter of taste. |
-| **Compositional** | The parts are reusable and legible. A townhouse generator, a roof kit, a street-plot layout engine - each is a module with a contract, and a district is a few hundred lines that calls them. |
-| **Editable** | "Make the shopfront recesses deeper" is a diff, not a re-roll. The world changes exactly where you asked and nowhere else, and the change survives into every later render. |
-
----
-
-## Any input → a world
-
-Text, video or image. The brief names the **subject** and the **style**, and the same pipeline runs behind all three.
-
-| Input | A brief looks like | The world that comes back |
-|---|---|---|
-| 📝<br>**Text** | "Hanamikoji, Kyoto - as a hand-painted anime background" | A named place in a named style: real geometry on surveyed ground, with the look written to order |
-| 🎞️<br>**Video** | a thirty-second walk-and-talk from a film | The set behind the shot, continued past the edges of frame - step off the camera path and walk the rest of it |
-| 🖼️<br>**Image** | one photograph, any angle | The place in the frame as geometry: turn around, change the hour, light it differently |
-
-Style is as open as subject. The same street can come back as a cel-shaded anime plate, a photographic reconstruction or a night scene, because each world's renderer is written for it rather than chosen from a list.
-
----
-
 ## Worlds
 
 ### 🌉 [Union Square, San Francisco](union-square-sf/)
@@ -49,6 +23,20 @@ Style is as open as subject. The same street can come back as a cel-shaded anime
 <sub>▶ **[Watch the walkthrough](kyoto-higashiyama/media/kyoto-higashiyama-walkthrough.mp4)** · 54 s · 1920×1080 · seven scenes, Gion to Kiyomizu-dera at sunset</sub>
 
 *More worlds coming.*
+
+---
+
+## Any input → a world
+
+Text, video or image. The brief names the **subject** and the **style**, and the same pipeline runs behind all three.
+
+| Input | A brief looks like | The world that comes back |
+|---|---|---|
+| 📝<br>**Text** | "Hanamikoji, Kyoto - as a hand-painted anime background" | A named place in a named style: real geometry on surveyed ground, with the look written to order |
+| 🎞️<br>**Video** | a thirty-second walk-and-talk from a film | The set behind the shot, continued past the edges of frame - step off the camera path and walk the rest of it |
+| 🖼️<br>**Image** | one photograph, any angle | The place in the frame as geometry: turn around, change the hour, light it differently |
+
+Style is as open as subject. The same street can come back as a cel-shaded anime plate, a photographic reconstruction or a night scene, because each world's renderer is written for it rather than chosen from a list.
 
 ---
 
@@ -73,6 +61,18 @@ Every stage is in the repo, and every stage can be re-run:
 2. **Asset generation** - scripts emit the kit a world needs: façade modules, street furniture, vehicles, vegetation, fixtures. Some worlds ship no binary assets at all and draw every texture at start-up.
 3. **Runtime** - a pure Three.js app assembles terrain, streets, façades, props, crowds and traffic from JSON specs.
 4. **Verification** - Playwright drives the real app, screenshots fixed viewpoints, and diffs them against photographs taken from the same spot. Independent reviewer agents - architect, geographer, technical artist, interaction - file reports that drive the next fix cycle. **Builders never grade their own work**, and every world ships its own QA report, defects included.
+
+---
+
+## Why code
+
+A world written as code is not the same kind of object as a world generated as pixels or held in a latent space.
+
+| | |
+|---|---|
+| **Verifiable** | You can check it by running it. Every elevation in Higashiyama is an independent survey query; a walker drives the real movement code over the whole route; Playwright diffs fixed viewpoints against photographs taken from the same spot. A wrong number is a failing test, not a matter of taste. |
+| **Compositional** | The parts are reusable and legible. A townhouse generator, a roof kit, a street-plot layout engine - each is a module with a contract, and a district is a few hundred lines that calls them. |
+| **Editable** | "Make the shopfront recesses deeper" is a diff, not a re-roll. The world changes exactly where you asked and nowhere else, and the change survives into every later render. |
 
 ## License
 
