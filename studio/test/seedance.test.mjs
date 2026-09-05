@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { buildArgv, jobCardMarkdown, extractMp4Url, winCmdQuote } from '../server/finalize/seedance.mjs';
+import path from 'node:path';
+import { buildArgv, jobCardMarkdown, extractMp4Url, resolveCli, posixQuote } from '../server/finalize/seedance.mjs';
 const files = { previz: 'C:/p/previz.mp4', artist: ['C:/p/a1.png', 'C:/p/a2.png'], style: ['C:/p/s.png'], audio: 'C:/p/track.mp3' };
 describe('seedance argv', () => {
   it('video_edit uses previz as the video reference and no images', () => {
@@ -51,14 +52,41 @@ describe('extractMp4Url', () => {
   });
 });
 
-describe('winCmdQuote', () => {
-  it('wraps a value containing a space in quotes', () => {
-    expect(winCmdQuote('a b')).toBe('"a b"');
+
+describe('resolveCli (no shell anywhere)', () => {
+  // The whole point of C1: the CLI is spawned as an absolute path to a native binary with
+  // shell:false, so cmd.exe never re-parses the prompt. On this machine `@higgsfield/cli` is
+  // installed globally, so the win32 lookup must find `vendor/hf.exe`.
+  it.skipIf(process.platform !== 'win32')('resolves the native hf.exe on win32', () => {
+    const p = resolveCli();
+    expect(typeof p).toBe('string');
+    expect(p.endsWith('hf.exe')).toBe(true);
   });
-  it('escapes embedded double quotes', () => {
-    expect(winCmdQuote('say "hi"')).toContain('\\"hi\\"');
+  it('returns a string or null, never a bare command name', () => {
+    const p = resolveCli();
+    expect(p === null || (typeof p === 'string' && path.isAbsolute(p))).toBe(true);
   });
-  it('doubles a trailing backslash before the closing quote', () => {
-    expect(winCmdQuote('C:\\dir\\')).toMatch(/\\\\"$/);
+});
+
+describe('prompt injection is structurally impossible', () => {
+  const nasty = 'x" & echo INJECTED %USERNAME%';
+  it('buildArgv carries the prompt as one argv element, verbatim', () => {
+    const a = buildArgv({ mode: 'video_edit', prompt: nasty, resolution: '1080p' }, files);
+    expect(a[a.indexOf('--prompt') + 1]).toBe(nasty);
+  });
+  it('the job card shows the prompt intact (it is copy/paste documentation, never executed)', () => {
+    const md = jobCardMarkdown({ mode: 'video_edit', prompt: nasty, resolution: '1080p', duration: 5, aspect: '16:9' }, files);
+    expect(md).toContain(nasty);
+  });
+  it('the card quotes the command line POSIX-style for a human to paste', () => {
+    const md = jobCardMarkdown({ mode: 'video_edit', prompt: nasty, resolution: '1080p', duration: 5, aspect: '16:9' }, files);
+    expect(md).toContain(`'x" & echo INJECTED %USERNAME%'`);
+    expect(posixQuote("it's")).toBe("'it'\\''s'");
+  });
+});
+
+describe('mode validation', () => {
+  it('rejects a mode outside the four Seedance modes', () => {
+    expect(() => buildArgv({ mode: 'sneaky', prompt: 'p' }, files)).toThrow(/unknown seedance mode/);
   });
 });
