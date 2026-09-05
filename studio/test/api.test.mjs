@@ -38,3 +38,11 @@ it('GET /api/qr?url=... returns a PNG', async () => {
   expect(res.status).toBe(200);
   expect(res.headers.get('content-type')).toBe('image/png');
 });
+
+it('GET /api/qr?url=... rejects a url over 2048 chars', async () => {
+  const longUrl = `https://x/${'a'.repeat(3000)}`;
+  const res = await fetch(`${base}/api/qr?url=${encodeURIComponent(longUrl)}`);
+  expect(res.status).toBe(400);
+  const body = await res.json();
+  expect(body.error).toBe('url too long');
+});

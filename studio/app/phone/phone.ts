@@ -48,7 +48,18 @@ function onOrient(e: DeviceOrientationEvent) {
   ];
 }
 
+let streaming = false;
+
+function stopStreaming() {
+  streaming = false;
+  window.removeEventListener('deviceorientation', onOrient);
+  if (sendTimer) { clearInterval(sendTimer); sendTimer = null; }
+  startBtn.textContent = 'Start';
+}
+
 startBtn.onclick = async () => {
+  if (streaming) { stopStreaming(); return; }
+
   const D: any = (window as any).DeviceOrientationEvent;
   if (!D) {
     messageEl.textContent = 'This device/browser has no orientation sensor (DeviceOrientationEvent is unavailable).';
@@ -69,8 +80,8 @@ startBtn.onclick = async () => {
   }
   messageEl.textContent = '';
   window.addEventListener('deviceorientation', onOrient);
-  startBtn.textContent = 'Streaming…';
-  startBtn.disabled = true;
+  streaming = true;
+  startBtn.textContent = 'Stop';
   if (sendTimer) clearInterval(sendTimer);
   sendTimer = setInterval(() => {
     if (ws && ws.readyState === WebSocket.OPEN) {

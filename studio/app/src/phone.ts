@@ -17,6 +17,29 @@ export function integrate(state: { eye: number[] }, dir: number[], dolly: number
   return { eye: [state.eye[0] + dir[0] * d, state.eye[1] + dir[1] * d, state.eye[2] + dir[2] * d] };
 }
 
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+
+// Validates + normalizes a raw `cam` message from the phone room before it's allowed anywhere
+// near `integrate`/`eye`: a malformed or NaN-laced `q` would otherwise poison `eye` forever
+// (every subsequent sample integrates off a NaN), and an out-of-range `dolly`/`zoom` would
+// send the camera flying or blow out the fov. Returns null for anything that isn't at least a
+// well-formed, non-zero-length quaternion with a finite timestamp; `dolly`/`zoom` are clamped
+// (with defaults) rather than rejected, since those are just UI slider values.
+export function sanitizeCam(m: unknown): { q: [number, number, number, number]; dolly: number; zoom: number; ts: number } | null {
+  if (!m || typeof m !== 'object') return null;
+  const o = m as Record<string, unknown>;
+  const rawQ = o.q;
+  if (!Array.isArray(rawQ) || rawQ.length !== 4 || !rawQ.every((v): v is number => typeof v === 'number' && Number.isFinite(v))) return null;
+  const [x, y, z, w] = rawQ as number[];
+  const len = Math.hypot(x, y, z, w);
+  if (!(len > 0)) return null;
+  const q: [number, number, number, number] = [x / len, y / len, z / len, w / len];
+  const dollyRaw = typeof o.dolly === 'number' && Number.isFinite(o.dolly) ? o.dolly : 0;
+  const zoomRaw = typeof o.zoom === 'number' && Number.isFinite(o.zoom) ? o.zoom : 66;
+  if (typeof o.ts !== 'number' || !Number.isFinite(o.ts)) return null;
+  return { q, dolly: clamp(dollyRaw, -1, 1), zoom: clamp(zoomRaw, 30, 90), ts: o.ts };
+}
+
 const REC_MAX_SEC = 60;
 
 export function mountPhonePanel(
@@ -61,12 +84,15 @@ export function mountPhonePanel(
         return;
       }
       if (m.type !== 'cam') return;
-      const dt = last ? Math.min(0.1, (m.ts - last) / 1000) : 0;
-      last = m.ts;
-      const dir = quatToLook(m.q);
-      eye = integrate({ eye }, dir, m.dolly || 0, dt).eye;
+      const cam = sanitizeCam(m);
+      if (!cam) return; // malformed/NaN sample: drop it, don't touch eye/last
+      const dt = last ? Math.min(0.1, (cam.ts - last) / 1000) : 0;
+      last = cam.ts;
+      const dir = quatToLook(cam.q);
+      const nextEye = integrate({ eye }, dir, cam.dolly, dt).eye;
+      eye = nextEye.every((v) => Number.isFinite(v)) ? nextEye : eye; // guard: keep last good eye
       const look = [eye[0] + dir[0] * 10, eye[1] + dir[1] * 10, eye[2] + dir[2] * 10];
-      const fov = m.zoom || 66;
+      const fov = cam.zoom;
       opts.bridge.call('setCameraRaw', { eye, look, fov }).catch(() => {});
       statusEl.textContent = rec ? `REC ${(rec.length / 30).toFixed(1)}s` : 'live';
       if (rec) {

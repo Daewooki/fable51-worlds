@@ -72,6 +72,7 @@ export function createServer() {
         }
         if (seg[1] === 'qr' && !seg[2] && req.method === 'GET') {
           const url = u.searchParams.get('url') || '';
+          if (url.length > 2048) return json(res, 400, { error: 'url too long' });
           if (!/^https?:\/\//i.test(url)) return json(res, 400, { error: 'url must be http(s)' });
           const png = await QRCode.toBuffer(url);
           res.writeHead(200, { 'content-type': 'image/png' });
