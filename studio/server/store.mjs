@@ -1,7 +1,10 @@
 import fs from 'node:fs/promises'; import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateProject } from '../schemas/project.mjs';
-export const PROJECTS_DIR = process.env.STUDIO_PROJECTS || fileURLToPath(new URL('../projects', import.meta.url));
+// path.resolve normalizes separators (the env var is often set with forward slashes, even
+// on Windows) so the static-file safety check in server/index.mjs (`file.startsWith(root +
+// path.sep)`) compares two paths in the same separator style instead of always failing.
+export const PROJECTS_DIR = path.resolve(process.env.STUDIO_PROJECTS || fileURLToPath(new URL('../projects', import.meta.url)));
 export const projectDir = (id) => path.join(PROJECTS_DIR, id);
 export async function listProjects() {
   await fs.mkdir(PROJECTS_DIR, { recursive: true }); const out = [];

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MV Studio — Director</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="panel-left" class="panel"></div>
+      <div id="panel-center" class="panel">
+        <div id="world-wrap">
+          <iframe id="world" title="world preview"></iframe>
+        </div>
+        <div id="scrub-row">
+          <input id="scrub" type="range" min="0" max="0" step="0.01" value="0" disabled />
+          <span id="scrub-time">0.00s</span>
+          <span id="live-pos"></span>
+        </div>
+        <div id="status-line"></div>
+      </div>
+      <div id="panel-right" class="panel"></div>
+      <div id="panel-jobs" class="panel"></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

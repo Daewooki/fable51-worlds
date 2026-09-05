@@ -1,6 +1,11 @@
-import { randomUUID } from 'node:crypto';
+// Uses the global Web Crypto `crypto.randomUUID()` (available in Node 19+ and every
+// evergreen browser) instead of `node:crypto`'s `randomUUID` so this module — imported
+// both by the server and, for WORLDS/createProject/createShot, by the browser Director UI
+// (studio/app/src/main.ts) — stays load-safe in a browser bundle. Importing `node:crypto`
+// directly makes Vite substitute a throw-on-access stub for client code, which crashed the
+// whole module at import time even for callers that never invoke newId().
 export const WORLDS = ['union-square-sf', 'kyoto-higashiyama'];
-export const newId = () => randomUUID().slice(0, 13);
+export const newId = () => crypto.randomUUID().slice(0, 13);
 
 export function createProject({ name, world }) {
   if (!WORLDS.includes(world)) throw new Error(`unknown world: ${world} (valid: ${WORLDS.join(', ')})`);
