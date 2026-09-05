@@ -24,7 +24,8 @@ async function main() {
   const app = new App(document.getElementById('app')!);
   const world = new World();
   app.scene.add(world.group);
-  await Assets.loadManifests(['arch', 'street', 'retail', 'vehicles', 'veg', 'people']);
+  await Assets.loadManifests(['arch', 'street', 'retail', 'vehicles', 'veg', 'people', 'varco']);
+  await Assets.loadOverrides();
   for (const id of heroExcludeIds()) world.heroIds.add(id);
   await world.build(progress);
   progress('hero buildings', 0.72);
@@ -128,6 +129,7 @@ async function main() {
   hud.setVisible((Config.debug || Config.qa) && Config.ui);
   if (!Config.ui) for (const id of ['toolbar', 'help', 'crosshair', 'prompt']) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
   setMode(mode);
+  if (new URLSearchParams(location.search).get('studio') === '1') { walk.enabled = false; orbit.setEnabled(false); }
   if (Config.view && applyView(Config.view)) { /* placed */ }
   else if (Config.pos) { const [x, y, z] = Config.pos.split(',').map(Number); const [h, p] = (Config.look || '35,0').split(',').map(Number); walk.teleport(x, z, compassToYaw(h), THREE.MathUtils.degToRad(p), Number.isFinite(y) ? y : undefined); }
   else walk.teleport(-64, 60, compassToYaw(35), -0.03);
@@ -167,5 +169,6 @@ async function main() {
     log: [],
     ...({ buildingAt: (x: number, z: number) => { let best: any = null, bd = 1e9; for (const i of world.buildings.infos.values()) { const d = Math.hypot(i.footprint[0][0] - x, i.footprint[0][1] - z); if (d < bd) { bd = d; best = i; } } return best && { id: best.id, name: best.name, address: best.address, height: best.height, floors: best.floors, style: best.style, floorH: best.floorH, bayW: best.bayW, baseY: best.baseY, fp: best.footprint }; }, world, app, hero, life, props } as any),
   });
+  if (new URLSearchParams(location.search).get('studio') === '1') { const { installStudioBridge } = await import('./debug/StudioBridge'); installStudioBridge(app, (window as any).__twin); }
 }
 main().catch((e) => { console.error(e); msg.textContent = 'Error: ' + (e?.message || e); (window as any).__twinError = String(e?.stack || e); });

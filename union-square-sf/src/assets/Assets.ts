@@ -63,6 +63,7 @@ export class InstancedModel {
 
 export const Assets = {
   manifest: {} as Record<string, ManifestEntry>,
+  overrides: {} as Record<string, string>,
   async loadManifests(categories: string[]) {
     await Promise.all(categories.map(async (c) => {
       try {
@@ -71,12 +72,13 @@ export const Assets = {
       } catch (e) { console.warn('manifest missing', c); }
     }));
   },
+  async loadOverrides() { try { const r = await fetch(`${BASE}data/asset_overrides.json`); if (r.ok) this.overrides = await r.json(); } catch { /* none */ } },
   /** Load (once) a GLB prototype by relative name, e.g. "street/streetlight_sf_teardrop". */
   load(rel: string): Promise<THREE.Group> {
     let p = protos.get(rel);
     if (!p) {
       p = new Promise((resolve, reject) => {
-        loader.load(`${BASE}assets/models/${rel}.glb`, (gltf) => {
+        loader.load(`${BASE}assets/models/${this.overrides[rel] ?? rel}.glb`, (gltf) => {
           const g = gltf.scene;
           Materials.remap(g);
           g.name = rel;
