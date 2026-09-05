@@ -1,0 +1,28 @@
+{
+  "name": "mv-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server/index.mjs",
+    "dev:ui": "vite --config app/vite.config.ts --port 5180 --strictPort",
+    "test": "vitest run",
+    "render": "node server/render/previz.mjs",
+    "inject": "node tools/inject_asset.mjs"
+  },
+  "dependencies": {
+    "ws": "^8.18.0",
+    "@gltf-transform/core": "^4.1.0",
+    "@gltf-transform/functions": "^4.1.0",
+    "playwright": "^1.62.1",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "vite": "^8.2.2",
+    "typescript": "^7.0.2",
+    "three": "^0.185.1",
+    "@types/three": "^0.185.4",
+    "@types/ws": "^8.5.12",
+    "vitest": "^3.2.0"
+  }
+}
