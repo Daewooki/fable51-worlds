@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "node server/index.mjs",
     "dev:ui": "vite --config app/vite.config.ts --port 5180 --strictPort",

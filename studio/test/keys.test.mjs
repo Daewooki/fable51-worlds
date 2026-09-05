@@ -28,4 +28,16 @@ describe('keys', () => {
   it('caption switches at the midpoint of a segment', () => {
     expect(sample(KEYS, 3.0).cap).toBe('A'); expect(sample(KEYS, 4.0).cap).toBe('B');
   });
+  it('holds air pose before a cut key', () => {
+    const s = sample(KEYS, 2.2);
+    expect(s.air).toBe(true); expect(s.eye[0]).toBeCloseTo(100); expect(s.eye[1]).toBe(100); expect(s.look).toEqual([0, 0, 0]); expect(s.cut).toBe(false);
+  });
+  it('empty keys array throws', () => {
+    expect(() => sample([], 0)).toThrow('sample: no keys');
+  });
+  it('single key returns that key pose with cut false', () => {
+    const k = KEYS[0];
+    const s = sample([k], 5);
+    expect(s.air).toBe(true); expect(s.eye).toEqual(k.eye); expect(s.look).toEqual(k.look); expect(s.cut).toBe(false);
+  });
 });
