@@ -14,6 +14,7 @@ export function installStudioBridge(app: App, twin: TwinApi) {
     pos: () => { const c = app.camera; const d = c.getWorldDirection(new THREE.Vector3()); return { eye: [c.position.x, c.position.y, c.position.z], look: [c.position.x + d.x * 10, c.position.y + d.y * 10, c.position.z + d.z * 10], fov: c.fov }; },
   };
   window.addEventListener('message', (ev) => {
+    if (ev.source !== window.parent) return;
     const m = ev.data; if (!m || m.type !== 'studio:cmd') return;
     try { const h = handlers[m.cmd]; if (!h) throw new Error(`unknown cmd ${m.cmd}`); send({ type: 'studio:res', id: m.id, ok: true, data: h(m) }); }
     catch (e: any) { send({ type: 'studio:res', id: m.id, ok: false, error: String(e?.message || e) }); }
