@@ -7,10 +7,10 @@ const BIN = process.platform === 'win32' ? 'higgsfield.cmd' : 'higgsfield';
 // But with shell:true, Node just does argv.join(' ') with no quoting at all, so any
 // argument containing a space (the prompt, virtually always) gets split into multiple
 // shell tokens by cmd.exe. Quote each token ourselves before handing it to spawn.
-function winCmdQuote(arg) {
+export function winCmdQuote(arg) {
   const s = String(arg);
   if (s === '') return '""';
-  if (!/[\s"&|<>^%]/.test(s)) return s;
+  if (!/[\s"&|<>^%]/.test(s) && !s.endsWith('\\')) return s;
   let result = '"';
   let backslashes = 0;
   for (const ch of s) {
@@ -39,7 +39,8 @@ export function buildArgv(job, files) {
   return a;
 }
 export function jobCardMarkdown(job, files) {
-  return `# Seedance job (manual)\n\nmodel: seedance_2_5\nmode: ${job.mode}\nresolution: ${job.resolution}\nduration: ${job.duration}\naspect: ${job.aspect}\n\nprompt:\n${job.prompt}\n\nmedias:\n- previz (video reference): ${files.previz || '-'}\n- artist images: ${(files.artist || []).join(', ') || '-'}\n- style images: ${(files.style || []).join(', ') || '-'}\n- audio: ${files.audio || '-'}\n\nRun in Higgsfield web or: higgsfield ${buildArgv(job, files).join(' ')}\n`;
+  const cmd = quoteForShell(buildArgv(job, files)).join(' ');
+  return `# Seedance job (manual)\n\nmodel: seedance_2_5\nmode: ${job.mode}\nresolution: ${job.resolution}\nduration: ${job.duration}\naspect: ${job.aspect}\n\nprompt:\n${job.prompt}\n\nmedias:\n- previz (video reference): ${files.previz || '-'}\n- artist images: ${(files.artist || []).join(', ') || '-'}\n- style images: ${(files.style || []).join(', ') || '-'}\n- audio: ${files.audio || '-'}\n\nRun in Higgsfield web or: higgsfield ${cmd}\n`;
 }
 export function detectCli() {
   const r = spawnSync(BIN, ['model', 'list', '--json'], { encoding: 'utf8', shell: process.platform === 'win32' });
@@ -48,19 +49,38 @@ export function detectCli() {
   if (/No workspace selected|not logged in|unauthori[sz]ed|auth login/i.test(out) || r.status !== 0) return { ok: false, reason: 'higgsfield CLI needs login: run `higgsfield auth login` then `higgsfield workspace set <id>`' };
   return { ok: true };
 }
-function extractMp4Url(out) {
-  // Prefer a URL from parsed --json output: any field ending in "url" pointing at .mp4.
-  const objs = [...out.matchAll(/\{[\s\S]*\}/g)].map((m) => m[0]);
-  for (const raw of objs.reverse()) {
-    try {
-      const parsed = JSON.parse(raw);
-      const found = findUrlField(parsed);
-      if (found) return found;
-    } catch { /* not valid JSON as a whole; fall through */ }
+// Extract every top-level {...} object from possibly-noisy CLI stdout: `--wait` streams a
+// progress object roughly every `--wait-interval`, then a final result object; both plain and
+// pretty-printed (multi-line) JSON must be handled, and stray/unbalanced braces in surrounding
+// log text must not throw or corrupt the scan. A brace-depth walk that respects quoted strings
+// (and escapes within them) finds each balanced top-level object regardless of line breaks.
+function findJsonObjects(text) {
+  const objs = [];
+  let depth = 0; let start = -1; let inStr = false; let esc = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (ch === '\\') esc = true;
+      else if (ch === '"') inStr = false;
+      continue;
+    }
+    if (ch === '"') { inStr = true; continue; }
+    if (ch === '{') { if (depth === 0) start = i; depth++; }
+    else if (ch === '}') {
+      if (depth > 0) {
+        depth--;
+        if (depth === 0 && start !== -1) {
+          const raw = text.slice(start, i + 1);
+          try { objs.push(JSON.parse(raw)); } catch { /* not valid JSON; skip */ }
+          start = -1;
+        }
+      }
+    }
   }
-  return (out.match(/https?:\/\/\S+\.mp4\S*/) || [])[0];
+  return objs;
 }
-function findUrlField(node) {
+export function findUrlField(node) {
   if (!node || typeof node !== 'object') return null;
   for (const [k, v] of Object.entries(node)) {
     if (typeof v === 'string' && /url$/i.test(k) && /\.mp4(\?|$)/i.test(v)) return v;
@@ -69,6 +89,21 @@ function findUrlField(node) {
     if (v && typeof v === 'object') { const found = findUrlField(v); if (found) return found; }
   }
   return null;
+}
+export function extractMp4Url(out) {
+  // Prefer a URL parsed out of --json output. Multiple objects can appear (progress, then
+  // result); walk them in stream order and keep the LAST one that carries a *url->.mp4 field,
+  // since the final result object comes last and progress objects normally carry none.
+  let found;
+  for (const obj of findJsonObjects(out)) {
+    const url = findUrlField(obj);
+    if (url) found = url;
+  }
+  if (found) return found;
+  // Fall back to a loose scan of plain-text output. Stop at the first quote/space/bracket so
+  // trailing JSON punctuation (e.g. a stray `"}`) doesn't get glued onto the URL.
+  const m = out.match(/https?:\/\/[^\s"'<>}\]]+\.mp4[^\s"'<>}\]]*/);
+  return m ? m[0] : undefined;
 }
 export async function runSeedance({ project, shotId, driver = 'auto', log = () => {}, ...job }) {
   const dir = path.join(projectDir(project.id), 'shots', shotId); fs.mkdirSync(dir, { recursive: true });
@@ -80,7 +115,11 @@ export async function runSeedance({ project, shotId, driver = 'auto', log = () =
   const argv = buildArgv(job, files); log('$ higgsfield', argv.join(' '));
   const out = await new Promise((resolve, reject) => { const p = spawn(BIN, quoteForShell(argv), { shell: process.platform === 'win32' }); let s = ''; p.stdout.on('data', (d) => { s += d; log(String(d).trimEnd()); }); p.stderr.on('data', (d) => log(String(d).trimEnd())); p.on('close', (c) => (c === 0 ? resolve(s) : reject(new Error(`higgsfield exited ${c}`)))); });
   const url = extractMp4Url(out);
-  if (!url) return { driver: 'higgsfield-cli', jobCard: card, raw: out.slice(-2000) };
-  const mp4 = path.join(dir, 'final.mp4'); const buf = Buffer.from(await (await fetch(url)).arrayBuffer()); fs.writeFileSync(mp4, buf); log('saved', mp4);
+  if (!url) { const tail = out.slice(-2000); log('no mp4 url found in higgsfield output; stdout tail:', tail); return { driver: 'higgsfield-cli', jobCard: card, raw: tail }; }
+  const mp4 = path.join(dir, 'final.mp4');
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`download failed ${res.status} ${url}`);
+  const buf = Buffer.from(await res.arrayBuffer());
+  fs.writeFileSync(mp4, buf); log('saved', mp4);
   return { driver: 'higgsfield-cli', mp4, jobCard: card };
 }
