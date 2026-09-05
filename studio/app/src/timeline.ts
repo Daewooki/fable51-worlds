@@ -8,3 +8,13 @@ export function keyFromCamera(c: { eye: number[]; look: number[]; fov: number },
   const base: Key = { t: o.t, m: o.m, look: [c.look[0], c.look[1], c.look[2]], fov: Math.round(c.fov), cap: o.cap, cut: o.cut };
   return o.m === 'air' ? { ...base, eye: [c.eye[0], c.eye[1], c.eye[2]] } : { ...base, pos: [c.eye[0], c.eye[2]] };
 }
+
+// Segments whose two ends have different modes. sample() does not interpolate those: it
+// holds the destination pose for the whole segment (schemas/keys.mjs) — an MVP constraint
+// inherited from tools/qa/demo_video.mjs, documented in the spec and warned about in the
+// keyframe list. Returned as "<t0>s→<t1>s" labels, in timeline order.
+export function mixedModeSegments(ks: Key[]): string[] {
+  const out: string[] = [];
+  for (let i = 1; i < ks.length; i++) if (ks[i - 1].m !== ks[i].m) out.push(`${ks[i - 1].t}s→${ks[i].t}s`);
+  return out;
+}

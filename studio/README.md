@@ -80,14 +80,17 @@ the UI is the only URL you need.
 1. **New project** (left panel) — name it, pick the world, Create.
 2. **New shot** — fps / width / height / time of day. 30 fps, 1920×1080, sunset is the
    default. The world loads into the centre iframe and the status line says `world ready`.
-3. **Block the camera.** Fly it however you like — drag in the iframe (union-square-sf
-   only, see the Kyoto note below), drive it from a phone (below), or type a prompt into
-   **Prompt → path** and hit Generate to get a 4-key move built from that world's landmark
-   anchors.
+3. **Block the camera.** Three ways: press **Unlock controls** under the viewport and fly
+   the world by hand in the iframe (union-square-sf only — see *Unlocking the camera*
+   below), drive it from a phone (below), or type a prompt into **Prompt → path** and hit
+   Generate to get a 4-key move built from that world's landmark anchors.
 4. **Keyframes** (right panel) — set `t`, choose `air` (free camera) or `walk` (eye height
    follows the ground, with a footstep bob), and press **Add key @ t** to capture wherever
-   the camera is now. `cut` makes a hard cut with a short fade; `cap` puts a caption on
-   screen; `time` re-lights the world mid-shot.
+   the camera is now (locked or unlocked — it reads the live pose either way). `cut` makes a
+   hard cut with a short fade; `cap` puts a caption on screen; `time` re-lights the world
+   mid-shot. Two adjacent keys with **different modes do not interpolate**: the segment
+   holds the destination pose and the camera jumps at its start, so the timeline shows a
+   warning under the list. Split the move with a matching-mode key to keep it smooth.
 5. **Scrub** the timeline under the viewport to see the interpolated move live.
 6. **Render previz** (jobs panel). The job list shows a live log tail and, when it is done,
    plays the MP4 inline. Frames are also left on disk under
@@ -115,6 +118,24 @@ refs/…                       # artist / style / audio references you drop in y
 
 ---
 
+## Unlocking the camera
+
+Under `?studio=1` both worlds switch their own camera controllers **off**, so nothing fights
+the pose the Director sets when you scrub. That also means dragging in the iframe does
+nothing by default. The **Unlock controls** toggle under the viewport hands the camera back
+to the world (`walk` or `orbit`, picked in the select next to it); toggle it off and the
+Director owns the camera again.
+
+- **union-square-sf** — both modes work. Note that unlocking hands over to the world's own
+  controller, which resumes from *its* last pose, so the view jumps once when you unlock;
+  block from there, then **Add key @ t**.
+- **kyoto-higashiyama** — the button reads `n/a`. That world is a first-person walker with
+  no camera modes at all (its adapter's `setMode()` is a documented no-op), so block its
+  shots with **Prompt → path**, the phone camera, or by editing key values, and scrub to see
+  them.
+
+---
+
 ## Prompt → path
 
 `POST /api/projects/:id/prompt` turns a sentence into keys.
@@ -132,10 +153,27 @@ Set `STUDIO_LLM` to pick the default the UI opens with.
 
 ## Phone as a virtual camera
 
-The phone panel shows a QR code for `http://<your-ip>:5180/phone/?projectId=…`. Open it on a
-phone on the same Wi-Fi, and the phone's orientation drives the world camera live over the
-`/ws` relay; a swipe dollies, a pinch zooms, and the record button captures the move
-straight into the current shot's keys.
+The phone panel shows a QR code — and the URL under it as text — for
+`http://<lan-ip>:<director-port>/phone/?projectId=…&token=…`. The address comes from
+`GET /api/lan-ip`, the port is whatever port the Director itself is on, and the token is the
+studio server's per-process phone token. Open it on a phone on the same Wi-Fi, and the
+phone's orientation drives the world camera live over the `/ws` relay; a swipe dollies, a
+pinch zooms, and the record button captures the move straight into the current shot's keys.
+
+**Two things have to be true for this to work**, because the server is loopback-only and
+Origin/Host-checked by default:
+
+1. **Start the studio server with `STUDIO_BIND=0.0.0.0`** so the phone can reach it at all:
+   ```bash
+   cd studio && STUDIO_BIND=0.0.0.0 npm run dev        # PowerShell: $env:STUDIO_BIND='0.0.0.0'; npm run dev
+   ```
+2. **Open the Director on the LAN IP yourself** — `http://<lan-ip>:5180`, not
+   `http://localhost:5180`. The phone page talks to the same origin it was loaded from, and
+   `localhost` on the phone is the phone.
+
+The token is minted per server process, so restarting the server invalidates an open phone
+page (re-scan the QR). Set `STUDIO_TOKEN` to pin it across restarts. A `join` for the phone
+room without the right token is closed with WebSocket code `4401`.
 
 **iPhones need HTTPS.** iOS Safari only exposes `DeviceOrientationEvent.requestPermission()`
 on a secure context, so on plain http the phone page loads and then never receives a single
@@ -179,13 +217,13 @@ replacement.
 
 ### Other Kyoto limitations
 
-- **No in-iframe camera control.** That world's first-person walker re-seats the camera on
-  the player's head every frame, so under `?studio=1` its adapter parks the frame loop and
-  neutralises pointer lock; otherwise the walker would silently undo every camera the
-  Director UI sets. The consequence is that dragging inside the Kyoto iframe does nothing:
-  block its shots with **Prompt → path**, the phone camera, or by editing key values, and
-  scrub to see them. (union-square-sf keeps its own controls under `studio=1` and can be
-  flown by hand.)
+- **No in-iframe camera control, and no Unlock.** That world's first-person walker re-seats
+  the camera on the player's head every frame, so under `?studio=1` its adapter parks the
+  frame loop and neutralises pointer lock; otherwise the walker would silently undo every
+  camera the Director UI sets. It has no camera modes to hand back either — `setMode()` in
+  its adapter is a no-op — so the **Unlock controls** button reads `n/a` for Kyoto. Block its
+  shots with **Prompt → path**, the phone camera, or by editing key values, and scrub to see
+  them. (Under `?qa=1` alone — that world's own capture tooling — the loop is *not* parked.)
 - **The preview is a still.** With the loop parked, the Kyoto iframe re-renders only when
   the bridge sets something. Animation — petals, water, lantern flicker — is present in the
   rendered previz (the renderer drives those updates itself) but not in the live preview.
@@ -203,6 +241,8 @@ replacement.
 | Variable | Default | What it does |
 | --- | --- | --- |
 | `STUDIO_PORT` | `5190` | Port the studio server listens on. |
+| `STUDIO_BIND` | `127.0.0.1` | Interface to bind. Set to `0.0.0.0` to let the phone reach it. |
+| `STUDIO_TOKEN` | random per process | The phone token carried in the QR URL. Set it to keep one token across restarts. |
 | `STUDIO_PROJECTS` | `studio/projects` | Where projects, jobs and artifacts are written. |
 | `STUDIO_LLM` | `none` | Default prompt→path provider: `none` \| `anthropic` \| `openai`. |
 | `STUDIO_LLM_MODEL` | per provider | Override the model id. |
@@ -350,11 +390,15 @@ check that the GPU driver is current and that nothing else is holding the device
 flags are in `studio/server/render/browser.mjs`.
 
 **Finalize wrote `seedance-job.md` instead of a video.**
-The Higgsfield CLI is missing or not logged in — `detectCli()` looks for
-`No workspace selected` / `not logged in` / a non-zero exit and falls back to the manual
-driver, recording the reason in the job's artifacts. Fix with `higgsfield auth login` and
-`higgsfield workspace set <id>`, or just run the command in the job card by hand. Choosing
-`driver: manual` in the finalize form takes this path deliberately, and never shells out.
+The Higgsfield CLI is missing or not logged in. `resolveCli()` looks for the **native binary**
+the npm package ships — `<npm root -g>/@higgsfield/cli/vendor/hf.exe` on Windows, `vendor/hf`
+(or the PATH entry) elsewhere — because the studio spawns it directly with no shell: the
+`higgsfield` shim on PATH would need `shell: true`, and cmd.exe would then re-parse your
+prompt (a `"` in it would end the argument and `%VAR%` would expand). If the binary cannot be
+found, or `detectCli()` sees `No workspace selected` / `not logged in` / a non-zero exit, the
+job falls back to the manual driver and records the reason in its artifacts. Fix with
+`higgsfield auth login` and `higgsfield workspace set <id>`, or just run the command printed
+in the job card by hand. Choosing `driver: manual` takes this path deliberately.
 
 **`npm run dev` in union-square-sf dies with `ENOENT ... mkdir 'C:\C:\Users\...Personal%20Project\...'`.**
 Its pre-step `tools/geo/sync_data.mjs` builds paths from `new URL(import.meta.url).pathname`,

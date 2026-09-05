@@ -1,6 +1,6 @@
 import { WorldBridge } from './bridge';
 import { api } from './api';
-import { addKeyAt, removeKey, moveKey, keyFromCamera, type Key } from './timeline';
+import { addKeyAt, removeKey, moveKey, keyFromCamera, mixedModeSegments, type Key } from './timeline';
 import { mountJobsPanel, type Ctx } from './jobs';
 import { mountPromptPanel } from './prompt';
 import { mountPhonePanel } from './phone';
@@ -18,6 +18,7 @@ const panelJobs = $('#panel-jobs');
 const panelPrompt = $('#panel-prompt');
 const panelPhone = $('#panel-phone');
 let iframeEl = $<HTMLIFrameElement>('#world');
+const viewportControlsEl = $('#viewport-controls');
 const scrubEl = $<HTMLInputElement>('#scrub');
 const scrubTimeEl = $('#scrub-time');
 const livePosEl = $('#live-pos');
@@ -122,6 +123,16 @@ function renderLeft() {
   });
 }
 
+// Adjacent keys with different `m` do not interpolate: sample() holds the destination pose
+// for the whole segment (schemas/keys.mjs:21-23), an MVP constraint inherited from
+// tools/qa/demo_video.mjs and recorded in the spec. Surfacing it here is the difference
+// between "the move jumps" and "the tool is broken".
+function mixedModeWarning(keys: Key[]): string {
+  const at = mixedModeSegments(keys);
+  if (!at.length) return '';
+  return `<div class="key-warning">air↔walk segments do not interpolate — the camera holds the destination pose for the whole segment (${esc(at.join(', '))}). Split the move with a matching-mode key if you want a smooth transition.</div>`;
+}
+
 function renderRight() {
   const keys: Key[] = ctx.shot?.keys || [];
   panelRight.innerHTML = `
@@ -157,6 +168,7 @@ function renderRight() {
           </tr>`).join('')}
       </tbody>
     </table>
+    ${mixedModeWarning(keys)}
   `;
 
   $('#nk-add').addEventListener('click', async () => {
@@ -200,6 +212,53 @@ function renderRight() {
   });
 }
 
+// --- Unlock controls -------------------------------------------------------------------
+// Under `?studio=1` a world switches its own camera controllers off, so the bridged camera
+// is never fought — which also means there is no way to *author* a pose by hand. This
+// toggle hands the camera back: `setMode` in union-square-sf/src/main.ts:68-77 enables
+// exactly one controller ('walk' -> WalkControls, 'orbit' -> OrbitMode) and disables the
+// other, and any other mode string disables BOTH — which is what re-locking needs, since
+// there is no dedicated "off" mode and `?studio=1`'s own lock is applied once at startup.
+// (Divergence from the review ruling's literal "setMode back to 'orbit'": that would leave
+// OrbitMode enabled and still fighting the scrubber.)
+// kyoto-higashiyama's adapter has no camera modes at all — `setMode()` there is a documented
+// no-op — so the button reads "n/a" for that world.
+const MODE_LOCKED = 'none';
+let unlocked = false;
+let unlockMode: 'walk' | 'orbit' = 'walk';
+
+const worldSupportsModes = () => ctx.project?.world === 'union-square-sf';
+
+function renderViewportControls() {
+  const supported = worldSupportsModes();
+  const enabled = !!ctx.bridge && supported;
+  viewportControlsEl.innerHTML = `
+    <button id="vc-unlock" type="button" ${enabled ? '' : 'disabled'}>${unlocked ? 'Lock controls' : 'Unlock controls'}</button>
+    <select id="vc-mode" ${enabled ? '' : 'disabled'}>
+      <option value="walk" ${unlockMode === 'walk' ? 'selected' : ''}>walk</option>
+      <option value="orbit" ${unlockMode === 'orbit' ? 'selected' : ''}>orbit</option>
+    </select>
+    <span class="vc-note">${supported
+      ? (unlocked
+        ? 'flying by hand — drag in the viewport; “Add key @ t” captures the live pose'
+        : 'camera locked to the timeline')
+      : 'n/a — this world has no camera modes'}</span>
+  `;
+  $('#vc-unlock').addEventListener('click', () => setUnlocked(!unlocked));
+  $<HTMLSelectElement>('#vc-mode').addEventListener('change', (e) => {
+    unlockMode = (e.target as HTMLSelectElement).value as 'walk' | 'orbit';
+    if (unlocked) setUnlocked(true); // re-apply straight away
+  });
+}
+
+async function setUnlocked(on: boolean) {
+  if (!ctx.bridge) return;
+  unlocked = on;
+  const m = on ? unlockMode : MODE_LOCKED;
+  try { await ctx.bridge.call('setMode', { m }); } catch { /* world may not implement modes */ }
+  renderViewportControls();
+}
+
 function updateScrubber() {
   const keys: Key[] = ctx.shot?.keys || [];
   const d = duration(keys);
@@ -234,6 +293,7 @@ function disposeBridge() {
 
 function mountWorldForShot(shot: any) {
   disposeBridge();
+  unlocked = false; // a fresh iframe means a fresh world, which starts with both controllers off
   const world = ctx.project.world;
   const port = WORLD_PORTS[world];
   const fresh = document.createElement('iframe');
@@ -256,6 +316,7 @@ function mountWorldForShot(shot: any) {
     if (ctx.bridge !== bridge) return; // superseded by a later shot switch
     statusEl.textContent = 'world ready';
     renderRight();
+    renderViewportControls();
     (window as any).__studio = { bridge, ctx };
   });
 }
@@ -302,6 +363,7 @@ const promptPanel = mountPromptPanel(panelPrompt, ctx);
 function renderAll() {
   renderLeft();
   renderRight();
+  renderViewportControls();
   updateScrubber();
   jobsPanel.refresh();
   promptPanel.refresh();
