@@ -143,7 +143,7 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .job-head { display: flex; gap: 8px; align-items: center; }
 .job-status { font-size: 11px; padding: 1px 6px; border-radius: 10px; background: var(--panel-2); }
 .status-done { color: var(--ok); }
-.status-failed { color: var(--bad); }
+.status-failed, .status-error { color: var(--bad); }
 .status-running, .status-queued { color: var(--warn); }
 .job-pct { color: var(--dim); font-size: 11px; }
 .job-log {

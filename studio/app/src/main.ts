@@ -2,6 +2,7 @@ import { WorldBridge } from './bridge';
 import { api } from './api';
 import { addKeyAt, removeKey, moveKey, keyFromCamera, type Key } from './timeline';
 import { mountJobsPanel, type Ctx } from './jobs';
+import { esc } from './dom';
 // Plain ESM (no type declarations) shared with the server — see mjs-shim.d.ts.
 import { WORLDS, createShot } from '../../schemas/project.mjs';
 import { sample, duration } from '../../schemas/keys.mjs';
@@ -35,7 +36,21 @@ const ctx: Ctx = {
 };
 
 function fmtWorldOptions(selected?: string): string {
-  return WORLDS.map((w: string) => `<option value="${w}" ${w === selected ? 'selected' : ''}>${w}</option>`).join('');
+  return WORLDS.map((w: string) => `<option value="${esc(w)}" ${w === selected ? 'selected' : ''}>${esc(w)}</option>`).join('');
+}
+
+// Populates a <select> with one <option> per row via createElement + textContent (rather
+// than an innerHTML template string) so a project/shot name can never be interpreted as
+// markup, no escaping required.
+function fillOptions<T>(sel: HTMLSelectElement, rows: T[], opts: { value: (r: T) => string; label: (r: T) => string; selected?: (r: T) => boolean }) {
+  sel.innerHTML = '';
+  for (const r of rows) {
+    const o = document.createElement('option');
+    o.value = opts.value(r);
+    o.textContent = opts.label(r);
+    if (opts.selected?.(r)) o.selected = true;
+    sel.appendChild(o);
+  }
 }
 
 function renderLeft() {
@@ -65,7 +80,11 @@ function renderLeft() {
     </details>
   `;
   const projectSel = $<HTMLSelectElement>('#project-select');
-  projectSel.innerHTML = projectsCache.map((p) => `<option value="${p.id}" ${p.id === ctx.project?.id ? 'selected' : ''}>${p.name} (${p.world})</option>`).join('');
+  fillOptions(projectSel, projectsCache, {
+    value: (p: any) => p.id,
+    label: (p: any) => `${p.name} (${p.world})`,
+    selected: (p: any) => p.id === ctx.project?.id,
+  });
   projectSel.addEventListener('change', () => selectProject(projectSel.value));
 
   $('#np-create').addEventListener('click', async () => {
@@ -78,7 +97,11 @@ function renderLeft() {
   });
 
   const shotSel = $<HTMLSelectElement>('#shot-select');
-  shotSel.innerHTML = (ctx.project?.shots || []).map((s: any) => `<option value="${s.id}" ${s.id === ctx.shot?.id ? 'selected' : ''}>${s.name}</option>`).join('');
+  fillOptions(shotSel, ctx.project?.shots || [], {
+    value: (s: any) => s.id,
+    label: (s: any) => s.name,
+    selected: (s: any) => s.id === ctx.shot?.id,
+  });
   shotSel.addEventListener('change', () => selectShot(shotSel.value));
 
   $('#ns-create').addEventListener('click', async () => {
@@ -106,7 +129,7 @@ function renderRight() {
       </select>
       <input id="nk-cap" type="text" placeholder="caption" />
       <label><input id="nk-cut" type="checkbox" /> cut</label>
-      <label>t <input id="nk-t" type="number" step="0.1" min="0" value="${Number(scrubEl.value) || 0}" /></label>
+      <label>t <input id="nk-t" type="number" step="0.1" min="0" value="${esc(Number(scrubEl.value) || 0)}" /></label>
       <button id="nk-add" type="button" ${ctx.shot && ctx.bridge ? '' : 'disabled'}>Add key @ t</button>
     </div>
     <table class="key-table">
@@ -114,9 +137,9 @@ function renderRight() {
       <tbody>
         ${keys.map((k, i) => `
           <tr data-i="${i}">
-            <td><input class="k-t" type="number" step="0.1" value="${k.t}" /></td>
-            <td>${k.m}</td>
-            <td><input class="k-cap" type="text" value="${(k.cap || '').replace(/"/g, '&quot;')}" /></td>
+            <td><input class="k-t" type="number" step="0.1" value="${esc(k.t)}" /></td>
+            <td>${esc(k.m)}</td>
+            <td><input class="k-cap" type="text" value="${esc(k.cap || '')}" /></td>
             <td><input class="k-cut" type="checkbox" ${k.cut ? 'checked' : ''} /></td>
             <td>
               <select class="k-time">
@@ -196,7 +219,17 @@ scrubEl.addEventListener('input', () => {
   ctx.bridge.call('setCameraRaw', { eye, look: s.look, fov: s.fov }).catch(() => {});
 });
 
+// Disposes the current bridge (removing its window listeners and ping-poll timer) before
+// discarding it, so switching shots/projects repeatedly doesn't leak listeners or leave a
+// stale bridge whose request ids (both instances number from `c1`) could collide with a
+// freshly constructed one.
+function disposeBridge() {
+  ctx.bridge?.dispose();
+  ctx.bridge = null;
+}
+
 function mountWorldForShot(shot: any) {
+  disposeBridge();
   const world = ctx.project.world;
   const port = WORLD_PORTS[world];
   const fresh = document.createElement('iframe');
@@ -206,7 +239,6 @@ function mountWorldForShot(shot: any) {
   iframeEl = fresh;
   if (!port) {
     statusEl.textContent = `world "${world}" has no dev server mapped yet`;
-    ctx.bridge = null;
     return;
   }
   // Bridge is constructed BEFORE the iframe src is assigned so its message listeners are
@@ -228,7 +260,7 @@ async function selectProject(id: string) {
   const p = await api.get(id);
   ctx.project = p;
   ctx.shot = null;
-  ctx.bridge = null;
+  disposeBridge();
   statusEl.textContent = '';
   renderAll();
   if (p.shots.length) await selectShot(p.shots[0].id);

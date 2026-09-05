@@ -4,6 +4,7 @@
 // panels into the same shell without touching this one.
 import { api } from './api';
 import type { WorldBridge } from './bridge';
+import { esc } from './dom';
 
 export type Ctx = {
   project: any;
@@ -13,7 +14,6 @@ export type Ctx = {
   refresh: () => void;
 };
 
-const esc = (s: unknown) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
 const fileUrl = (projectId: string, rel: string) => `/files/${projectId}/${rel}`;
 
 async function logTail(projectId: string, jobId: string, n = 20): Promise<string> {
@@ -163,7 +163,7 @@ export function mountJobsPanel(el: HTMLElement, ctx: Ctx): { refresh: () => void
     const rows = [...jobs.values()].sort((a, b) => b.createdAt - a.createdAt);
     jobsListEl.innerHTML = rows.map((job) => {
       const pct = typeof job.progress === 'number' ? `${Math.round(job.progress * 100)}%` : '';
-      const err = job.status === 'failed' ? `<div class="job-error">${esc(job.error)}</div>` : '';
+      const err = (job.status === 'failed' || job.status === 'error') ? `<div class="job-error">${esc(job.error)}</div>` : '';
       return `<div class="job-card" data-job="${job.id}">
         <div class="job-head"><b>${esc(job.type)}</b> <span class="job-status status-${esc(job.status)}">${esc(job.status)}</span> <span class="job-pct">${pct}</span></div>
         <pre class="job-log">${esc(job._log || '')}</pre>
@@ -177,18 +177,30 @@ export function mountJobsPanel(el: HTMLElement, ctx: Ctx): { refresh: () => void
     jobs.set(job.id, job);
     renderJobs();
     const projectId = ctx.project.id;
-    await api.pollJob(job.id, async (updated: any) => {
-      jobs.set(updated.id, updated);
-      updated._log = await logTail(projectId, updated.id);
+    try {
+      await api.pollJob(job.id, async (updated: any) => {
+        jobs.set(updated.id, updated);
+        updated._log = await logTail(projectId, updated.id);
+        renderJobs();
+      });
+    } catch (e: any) {
+      // A network failure (server down mid-poll, etc.) should surface on the card, not
+      // freeze it silently on its last-seen status.
+      const current = jobs.get(job.id) || job;
+      jobs.set(job.id, { ...current, status: 'error', error: String(e?.message || e) });
       renderJobs();
-    });
+    }
   }
 
   async function startJob(input: any) {
     if (!ctx.shot) { alert('select a shot first'); return; }
-    await ctx.save();
-    const job = await api.job(ctx.project.id, input);
-    trackJob(job);
+    try {
+      await ctx.save();
+      const job = await api.job(ctx.project.id, input);
+      trackJob(job);
+    } catch (e: any) {
+      alert(`failed to start job: ${String(e?.message || e)}`);
+    }
   }
 
   $('#job-previz').addEventListener('click', () => startJob({ type: 'previz', shotId: ctx.shot?.id }));
