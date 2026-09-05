@@ -207,18 +207,25 @@ export function installStudio({
   };
 
   /* --------------------- park the world's own loop --------------------- */
-  // main.js has already built the world and rendered one frame by the time
-  // this runs (it calls `frame()` before this module's entry point), so the
-  // pause lands after a complete first frame, as the contract requires.
-  window.__paused = true;
-  if (player) {
-    player.frozen = true;
-    player.locked = false;
-    player.keys.clear();
-    player.lock = () => {};        // canvas click / hud start must not grab the pointer
+  // Only under `studio=1`. `qa=1` alone is this world's OWN automation surface
+  // (tools/capture.mjs and friends), which expects a live frame loop and a live
+  // player; parking those for it would change behaviour that has nothing to do
+  // with the studio. The studio always passes both flags.
+  //
+  // main.js has already built the world and rendered one frame by the time this
+  // runs (it calls `frame()` before this module's entry point), so the pause
+  // lands after a complete first frame, as the contract requires.
+  if (studio) {
+    window.__paused = true;
+    if (player) {
+      player.frozen = true;
+      player.locked = false;
+      player.keys.clear();
+      player.lock = () => {};      // canvas click / hud start must not grab the pointer
+    }
+    if (hud) hud.onStart = null;
+    if (cameras && cameras.overview) cameras.setOverview(false);
   }
-  if (hud) hud.onStart = null;
-  if (cameras && cameras.overview) cameras.setOverview(false);
 
   /* ------------------------- initial time of day ----------------------- */
   const t = params.get('time');

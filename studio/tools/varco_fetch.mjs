@@ -14,4 +14,8 @@ const start = await fetch(`${BASE}/v1/image-to-3d`, { method: 'POST', headers: {
 const { job_id } = await start.json(); let res;
 for (let i = 0; i < 120; i++) { await new Promise((r) => setTimeout(r, 5000)); res = await (await fetch(`${BASE}/v1/jobs/${job_id}`, { headers: { Authorization: `Bearer ${KEY}` } })).json(); if (res.status === 'succeeded' || res.status === 'failed') break; process.stdout.write('.'); }
 if (res?.status !== 'succeeded') { console.error('\nVARCO job did not succeed', JSON.stringify(res)); process.exit(1); }
-fs.writeFileSync(out, Buffer.from(await (await fetch(res.result.glb_url)).arrayBuffer())); console.log('\nsaved', out, '-> next: node tools/inject_asset.mjs', out, '--as varco/' + name, '--height <metres>');
+// Check the download before writing: without this an expired-URL error page lands on disk
+// as a `.glb` and only fails later, inside inject_asset.
+const glbRes = await fetch(res.result.glb_url);
+if (!glbRes.ok) { console.error(`\nGLB download failed ${glbRes.status} ${glbRes.statusText} — ${res.result.glb_url}`); process.exit(1); }
+fs.writeFileSync(out, Buffer.from(await glbRes.arrayBuffer())); console.log('\nsaved', out, '-> next: node tools/inject_asset.mjs', out, '--as varco/' + name, '--height <metres>');

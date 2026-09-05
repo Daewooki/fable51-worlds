@@ -1,6 +1,9 @@
 # Usage (inside Blender): blender --python blender_import.py -- scene.glb <shot>.keys.json
 import bpy, json, sys
 argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
+if len(argv) < 2:
+    print('usage: blender --python blender_import.py -- <scene.glb> <shot.keys.json>')
+    sys.exit(1)
 glb, keys_path = argv[0], argv[1]
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=glb)
@@ -16,6 +19,7 @@ def keyframe(t, eye, look, fov):
 for k in data['keys']:
     eye = k['eye'] if k['m'] == 'air' else [k['pos'][0], 1.7, k['pos'][1]]
     keyframe(k['t'], eye, k['look'], k.get('fov', 60 if k['m'] == 'air' else 66))
-scene.frame_end = int(round(data['keys'][-1]['t'] * fps))
+if data['keys']:
+    scene.frame_end = int(round(data['keys'][-1]['t'] * fps))
 bpy.ops.wm.save_as_mainfile(filepath=glb.replace('.glb', '.blend'))
 print('saved', glb.replace('.glb', '.blend'))

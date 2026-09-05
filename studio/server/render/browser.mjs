@@ -8,7 +8,12 @@ const SOFT = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swif
 export async function launchWorld({ world, width = 1280, height = 720, time = 'sunset', quality = 'med', software = false, extraQuery = '', port: portOverride } = {}) {
   const port = portOverride ?? WORLD_PORTS[world];
   if (!port) throw new Error(`unknown world ${world}`);
-  const url = `http://localhost:${port}/?qa=1&ui=0&life=0&time=${time}&q=${quality}${extraQuery}`;
+  // `studio=1` as well as `qa=1`, exactly as the world contract in studio/README.md
+  // documents ("The world is always opened as ?qa=1&ui=0&studio=1&life=0&time=&q="). It is
+  // what tells a world that something else is driving its camera: union-square-sf switches
+  // its own controllers off, kyoto-higashiyama parks its frame loop (its `qa=1` path is that
+  // world's own capture tooling and must keep a live loop).
+  const url = `http://localhost:${port}/?qa=1&ui=0&studio=1&life=0&time=${time}&q=${quality}${extraQuery}`;
 
   const attempt = async (args, softwareRender) => {
     const browser = await chromium.launch({ headless: true, args });

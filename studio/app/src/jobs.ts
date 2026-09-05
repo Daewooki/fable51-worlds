@@ -164,8 +164,12 @@ export function mountJobsPanel(el: HTMLElement, ctx: Ctx): { refresh: () => void
     jobsListEl.innerHTML = rows.map((job) => {
       const pct = typeof job.progress === 'number' ? `${Math.round(job.progress * 100)}%` : '';
       const err = (job.status === 'failed' || job.status === 'error') ? `<div class="job-error">${esc(job.error)}</div>` : '';
+      // Chromium refused the GPU path and fell back to SwiftShader: the render is correct but
+      // roughly an order of magnitude slower, which is worth seeing on the card rather than
+      // only in the artifacts JSON.
+      const sw = job.artifacts?.softwareRender ? ' <span class="job-badge" title="Chromium fell back to SwiftShader — correct but much slower">software render</span>' : '';
       return `<div class="job-card" data-job="${job.id}">
-        <div class="job-head"><b>${esc(job.type)}</b> <span class="job-status status-${esc(job.status)}">${esc(job.status)}</span> <span class="job-pct">${pct}</span></div>
+        <div class="job-head"><b>${esc(job.type)}</b> <span class="job-status status-${esc(job.status)}">${esc(job.status)}</span> <span class="job-pct">${pct}</span>${sw}</div>
         <pre class="job-log">${esc(job._log || '')}</pre>
         ${err}
         <div class="job-artifacts">${projectId ? artifactsHtml(job, projectId) : ''}</div>
