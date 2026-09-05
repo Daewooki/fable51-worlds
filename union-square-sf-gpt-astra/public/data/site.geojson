@@ -1,0 +1,587 @@
+{
+  "type": "FeatureCollection",
+  "name": "Union Square original interpretive reconstruction",
+  "metadata": {
+    "latitude": 37.78799,
+    "longitude": -122.4075,
+    "gridEastBearingDegrees": 80.87,
+    "rotationSource": "https://data.sfgov.org/Geographic-Locations-and-Boundaries/Street-Intersections/gmfx-8h6i",
+    "horizontalDatum": "WGS84 approximate monument center",
+    "verticalDatum": "Local authored Y; absolute geodetic elevation unknown",
+    "accuracy": "Interpretive georeferencing, not survey. Grid rotation approx9.13degrees; authored site has5–8percent horizontal uncertainty.",
+    "era": "July–August2025",
+    "generated": "2026-09-04",
+    "notices": "Approximate authored coordinates, not surveyed entrances or comprehensive tenant census. Geographic coordinates are longitude,latitude. Local Y is retained only as a property, never as absolute altitude."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "nintendo",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40839623710622,
+          37.7875850217989
+        ]
+      },
+      "properties": {
+        "name": "Nintendo SAN FRANCISCO",
+        "address": "331 Powell Street",
+        "category": "Games and merchandise",
+        "status": "verified",
+        "confidence": "High: dated official opening",
+        "source": "https://www.nintendo.com/us/whatsnew/nintendo-san-francisco-opens-its-doors-to-bring-smiles-to-guests-of-all-ages-near-and-far/",
+        "notes": "Opened May 15, 2025. Public entry on Powell; modeled ground and lower sales floors.",
+        "world": [
+          -85,
+          2.5810000000000004,
+          32
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "apple",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40712050031641,
+          37.78862049825716
+        ]
+      },
+      "properties": {
+        "name": "Apple Union Square",
+        "address": "300 Post Street",
+        "category": "Technology",
+        "status": "verified",
+        "confidence": "High: official location and architectural documentation",
+        "source": "https://www.apple.com/retail/unionsquare/",
+        "notes": "Official flagship location. Original interpreted interior with upper level and rear court.",
+        "world": [
+          44.1,
+          5.2657,
+          -64
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "westin",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.4084539542093,
+          37.787868840807555
+        ]
+      },
+      "properties": {
+        "name": "The Westin St. Francis",
+        "address": "335 Powell Street",
+        "category": "Hotel",
+        "status": "verified",
+        "confidence": "Medium: current primary locator; summer2025 continuity inferred",
+        "source": "https://www.marriott.com/en-us/hotels/sfouw-the-westin-st-francis-san-francisco-on-union-square/overview/",
+        "notes": "Historic hotel frontage. Nintendo occupies its southern retail corner; no hotel-room interior is modeled.",
+        "world": [
+          -85,
+          3.6050000000000004,
+          0
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "saks-former",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40796895841316,
+          37.78851273784599
+        ]
+      },
+      "properties": {
+        "name": "Former Saks Fifth Avenue",
+        "address": "384 Post Street",
+        "category": "Former department store",
+        "status": "closed",
+        "confidence": "High: dated company statement reported by KTVU",
+        "source": "https://www.ktvu.com/news/saks-fifth-leaving-san-francisco",
+        "notes": "Company announced closure May 10, 2025. Historical exterior lettering retained; exact removal date unverified.",
+        "world": [
+          -31.5,
+          5.4925,
+          -64
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tiffany",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.4076670599634,
+          37.7885510811669
+        ]
+      },
+      "properties": {
+        "name": "Tiffany & Co.",
+        "address": "350 Post Street",
+        "category": "Jewelry",
+        "status": "verified",
+        "confidence": "Medium: current primary locator; summer2025 continuity inferred",
+        "source": "https://www.tiffany.com/stores/directory/united-states",
+        "notes": "Longstanding Post Street flagship; 2025 occupancy inferred between documented older and current operation.",
+        "world": [
+          -4.6,
+          5.4117999999999995,
+          -64
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "williams-sonoma",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40744821164479,
+          37.788578876511046
+        ]
+      },
+      "properties": {
+        "name": "Williams Sonoma",
+        "address": "340 Post Street",
+        "category": "Kitchenware and home goods",
+        "status": "verified",
+        "confidence": "High: 2013 Planning identity plus 2025 reporting",
+        "source": "https://www.sfchronicle.com/realestate/article/union-square-building-sale-21086701.php",
+        "notes": "The earlier model label Goyard was a factual error, not an era change. Contemporary 2025 reporting confirms Williams Sonoma remained; proposed Chanel succession occurred later.",
+        "world": [
+          14.9,
+          5.3533,
+          -64
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "macys",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.4073845657938,
+          37.78742236198269
+        ]
+      },
+      "properties": {
+        "name": "Macy’s Union Square",
+        "address": "170 O’Farrell Street; Geary frontage",
+        "category": "Department store",
+        "status": "verified",
+        "confidence": "Medium: current primary locator; summer2025 continuity inferred",
+        "source": "https://www.macys.com/stores/ca/sanfrancisco/union-square_428.html",
+        "notes": "The modeled frontage faces Geary; the official postal address is on O’Farrell. Closure plans do not imply a closed summer-2025 store.",
+        "world": [
+          0,
+          1.302,
+          64
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "louis-vuitton",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40686269672636,
+          37.78748864318797
+        ]
+      },
+      "properties": {
+        "name": "Louis Vuitton",
+        "address": "233 Geary Street",
+        "category": "Fashion and leather goods",
+        "status": "verified",
+        "confidence": "Medium: official address; modeled frontage position approximate",
+        "source": "https://us.louisvuitton.com/eng-us/point-of-sale/usa/louis-vuitton-san-francisco-union-square",
+        "notes": "Verified real address; exact modeled bay relative to Macy’s requires additional geospatial calibration.",
+        "world": [
+          46.5,
+          1.1625,
+          64
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cheesecake-factory",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40717132897055,
+          37.78744944462571
+        ]
+      },
+      "properties": {
+        "name": "The Cheesecake Factory",
+        "address": "251 Geary Street",
+        "category": "Restaurant",
+        "status": "verified",
+        "confidence": "Medium: current primary locator; summer2025 continuity inferred",
+        "source": "https://locations.thecheesecakefactory.com/ca/san-francisco-34.html",
+        "notes": "Located atop Macy’s. Selection marker represents exterior visibility; no direct street-level restaurant entrance or interior is claimed.",
+        "world": [
+          19,
+          1.245,
+          64
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "neiman-marcus",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40618370578916,
+          37.78757488002494
+        ]
+      },
+      "properties": {
+        "name": "Neiman Marcus",
+        "address": "150 Stockton Street",
+        "category": "Department store",
+        "status": "verified",
+        "confidence": "Medium: current primary locator; summer2025 continuity inferred",
+        "source": "https://stores.neimanmarcus.com/stores/sanfrancisco/ca/sanfrancisco/1012",
+        "notes": "Southeast diagonal context across Geary, not the plaza-facing 200 Stockton building.",
+        "world": [
+          107,
+          0.9810000000000001,
+          64
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "grand-hyatt",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40693243392323,
+          37.7889355335754
+        ]
+      },
+      "properties": {
+        "name": "Grand Hyatt San Francisco",
+        "address": "345 Stockton Street",
+        "category": "Hotel",
+        "status": "verified",
+        "confidence": "Medium: current primary locator; summer2025 continuity inferred",
+        "source": "https://www.hyatt.com/grand-hyatt/en-US/sfous-grand-hyatt-san-francisco",
+        "notes": "Background tower behind Apple. Modeled side selection point is approximate, not an authenticated entrance.",
+        "world": [
+          66,
+          6.223999999999999,
+          -96
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "west-cafe",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.4080063174926,
+          37.787852906582785
+        ]
+      },
+      "properties": {
+        "name": "b. Patisserie",
+        "address": "350 Powell Street · west plaza kiosk",
+        "category": "Bakery and cafe",
+        "status": "verified",
+        "confidence": "High: dated municipal announcement and June2025 lease record",
+        "source": "https://www.sfrecpark.org/m/newsflash/home/detail/2127",
+        "notes": "Replaced Miller & Lux in March 2025; active west kiosk in the selected summer era.",
+        "world": [
+          -46.4,
+          3.2332,
+          8
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "east-cafe",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40699368250739,
+          37.788127093417216
+        ]
+      },
+      "properties": {
+        "name": "East plaza cafe · vacant",
+        "address": "Stockton Street · east plaza kiosk",
+        "category": "Vacant cafe",
+        "status": "closed",
+        "confidence": "High: contemporary municipal RFP",
+        "source": "https://sfrecpark.org/DocumentCenter/View/26253/Union-Square-East-Cafe-RFP-2025",
+        "notes": "June26,2025 municipal RFP explicitly records vacancy. Physical renovation was scheduled for fall/winter; Super Duper is a later tenant.",
+        "world": [
+          46.4,
+          3.4668,
+          -8
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "one-union-square",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40649193600655,
+          37.78784507887183
+        ]
+      },
+      "properties": {
+        "name": "One Union Square · former Bulgari",
+        "address": "200–212 Stockton Street",
+        "category": "Retail frontage · occupancy unresolved",
+        "status": "uncertain",
+        "confidence": "High: relocation; low: replacement occupancy",
+        "source": "https://www.bulgari.com/en-int/storelocator/united-states/california/san-francisco/200-stockton-street",
+        "notes": "Bulgari relocated to206Grant inApril2025. Replacement tenant and exact old-sign removal date unverified; no active brand is invented.",
+        "world": [
+          85,
+          2.1350000000000002,
+          30
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "stockton-275-post",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40661278119114,
+          37.78843932492121
+        ]
+      },
+      "properties": {
+        "name": "Post / Stockton corner retail",
+        "address": "275–299 Post Street",
+        "category": "Retail frontage · occupancy unresolved",
+        "status": "uncertain",
+        "confidence": "Low: current occupancy unresolved",
+        "source": "https://commissions.sfplanning.org/hpcpackets/2013.0628EH%20ARC.pdf",
+        "notes": "Historic parcel and facade supported by municipal photos. Summer2025 ground-floor business census incomplete.",
+        "world": [
+          85,
+          4.279,
+          -37
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "stockton-250",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40659113727749,
+          37.78833289279296
+        ]
+      },
+      "properties": {
+        "name": "250–260 Stockton frontage",
+        "address": "250–260 Stockton Street",
+        "category": "Retail frontage · occupancy unresolved",
+        "status": "uncertain",
+        "confidence": "Low: current occupancy unresolved",
+        "source": "https://commissions.sfplanning.org/hpcpackets/2013.0628EH%20ARC.pdf",
+        "notes": "Narrow gray historic facade. Business identity deliberately neutral pending dated verification.",
+        "world": [
+          85,
+          3.8950000000000005,
+          -25
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "stockton-234",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40656768970435,
+          37.788217591320695
+        ]
+      },
+      "properties": {
+        "name": "234–240 Stockton frontage",
+        "address": "234–240 Stockton Street",
+        "category": "Retail frontage · occupancy unresolved",
+        "status": "uncertain",
+        "confidence": "Low: current occupancy unresolved",
+        "source": "https://commissions.sfplanning.org/hpcpackets/2013.0628EH%20ARC.pdf",
+        "notes": "Tall cream/green frontage north of Maiden Lane. No unsupported luxury label is assigned.",
+        "world": [
+          85,
+          3.479,
+          -12
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "stockton-218",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40652800919598,
+          37.78802246575224
+        ]
+      },
+      "properties": {
+        "name": "218–222 Stockton frontage",
+        "address": "218–222 Stockton Street",
+        "category": "Retail frontage · occupancy unresolved",
+        "status": "uncertain",
+        "confidence": "Low: current occupancy unresolved",
+        "source": "https://commissions.sfplanning.org/hpcpackets/2013.0628EH%20ARC.pdf",
+        "notes": "Red brick corner south of Maiden Lane; contemporary tenant unresolved.",
+        "world": [
+          85,
+          2.7750000000000004,
+          10
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "post-powell-retail",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.40824392168525,
+          37.78847781549052
+        ]
+      },
+      "properties": {
+        "name": "Post / Powell retail frontage",
+        "address": "Post Street west of384Post",
+        "category": "Retail frontage · occupancy unresolved",
+        "status": "uncertain",
+        "confidence": "Low: address and occupancy unresolved",
+        "source": "https://media.bizj.us/view/img/12620914/chottomatte-3.jpg",
+        "notes": "Approximate ornate low frontage. Neither exact street address nor summer2025 tenant is established.",
+        "world": [
+          -56,
+          5.566,
+          -64
+        ],
+        "positionRole": "Authored facade selection marker, not surveyed entrance",
+        "era": "July–August2025"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "park-boundary",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -122.40830524809316,
+              37.7882698613017
+            ],
+            [
+              -122.40684625930245,
+              37.788455163596026
+            ],
+            [
+              -122.40669475190684,
+              37.7877101386983
+            ],
+            [
+              -122.40815374069754,
+              37.787524836403975
+            ],
+            [
+              -122.40830524809316,
+              37.7882698613017
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Union Square modeled park boundary",
+        "dimensionsMeters": [
+          130,
+          84
+        ],
+        "source": "references/LAYOUT.md",
+        "accuracy": "Rectangular authored footprint; not survey or cadastral boundary"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dewey-center",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.4075,
+          37.78799
+        ]
+      },
+      "properties": {
+        "name": "Dewey Monument approximate origin",
+        "accuracy": "WGS84 center estimate supplied for interpretive georeferencing",
+        "localPlazaHeight": 2.4
+      }
+    }
+  ]
+}
