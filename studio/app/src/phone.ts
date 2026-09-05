@@ -2,7 +2,6 @@
 // `/ws` relay, turns each phone `cam` sample (device quaternion + dolly/zoom) into a camera
 // pose applied to the world bridge, and — while a recording is in progress — appends one air
 // key per sample, handing the finished list back to the caller on `rec: false`.
-import { esc } from './dom';
 
 // Rotate the camera's forward vector (0,0,-1) by quaternion q = [x,y,z,w]. Standard
 // quaternion-vector rotation formula specialized for v=(0,0,-1); returns a plain [x,y,z].
@@ -42,18 +41,44 @@ export function sanitizeCam(m: unknown): { q: [number, number, number, number]; 
 
 const REC_MAX_SEC = 60;
 
+// The QR is read by a *different device*, so `location.hostname` — "localhost" when the
+// Director was opened the documented way — is useless to it; the server reports the
+// machine's LAN address at GET /api/lan-ip. The port is the Director's own (5180 for the UI
+// dev server, 5190 when the built app is served by the studio itself), not a hardcoded one.
+// The token is the per-process secret the phone must present to join the `phone` room.
+export function phoneUrl(o: { protocol: string; host: string; port: string; projectId: string; token: string }): string {
+  const authority = o.port ? `${o.host}:${o.port}` : o.host;
+  return `${o.protocol}//${authority}/phone/?projectId=${encodeURIComponent(o.projectId)}&token=${encodeURIComponent(o.token)}`;
+}
+
+async function resolvePhoneUrl(projectId: string): Promise<string> {
+  const [ip, token] = await Promise.all([
+    fetch('/api/lan-ip').then((r) => r.json()).then((j: any) => j.ip as string).catch(() => ''),
+    fetch('/api/config').then((r) => r.json()).then((j: any) => j.phoneToken as string).catch(() => ''),
+  ]);
+  return phoneUrl({
+    protocol: location.protocol,
+    host: ip || location.hostname,
+    port: location.port || '5180',
+    projectId,
+    token: token || '',
+  });
+}
+
 export function mountPhonePanel(
   el: HTMLElement,
   opts: { projectId: string; bridge: { call(cmd: string, p?: any): Promise<any> }; onRecorded(keys: any[]): void },
 ): { dispose(): void } {
-  const url = `${location.protocol}//${location.hostname}:5180/phone/?projectId=${opts.projectId}`;
   el.innerHTML = `
     <h3>Phone camera</h3>
-    <img src="/api/qr?url=${encodeURIComponent(url)}" width="160" alt="phone camera QR" />
-    <div><code>${esc(url)}</code></div>
+    <img id="ph-qr" width="160" alt="phone camera QR" />
+    <div><code id="ph-url">resolving LAN address…</code></div>
+    <div class="ph-hint">Open the Director itself on this address for the QR to work.</div>
     <div id="ph-status">waiting…</div>
   `;
   const statusEl = el.querySelector<HTMLElement>('#ph-status')!;
+  const qrEl = el.querySelector<HTMLImageElement>('#ph-qr')!;
+  const urlEl = el.querySelector<HTMLElement>('#ph-url')!;
 
   let eye = [0, 1.7, 0];
   let last = 0;
@@ -107,6 +132,12 @@ export function mountPhonePanel(
     };
   }
   connect();
+
+  void resolvePhoneUrl(opts.projectId).then((url) => {
+    if (disposed) return;
+    qrEl.src = `/api/qr?url=${encodeURIComponent(url)}`;
+    urlEl.textContent = url;
+  }).catch(() => { urlEl.textContent = 'could not resolve the LAN address (is the studio server up?)'; });
 
   return {
     dispose() {

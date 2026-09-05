@@ -35,7 +35,10 @@ const WORLD = arg('world', 'union-square-sf');
 const PORT = Number(arg('port', 5191));
 const PROJECTS = path.resolve(arg('projects', fs.mkdtempSync(path.join(os.tmpdir(), 'mv-e2e-'))));
 const KEEP = flag('keep');
-const BASE = `http://localhost:${PORT}`;
+// 127.0.0.1, not `localhost`: the server binds loopback by default (STUDIO_BIND), and on
+// Windows `localhost` can resolve to ::1 first. This also makes the Host header a literal
+// the server's host allowlist accepts.
+const BASE = `http://127.0.0.1:${PORT}`;
 
 const timings = [];
 const t0 = Date.now();

@@ -4,7 +4,7 @@ import QRCode from 'qrcode';
 import { listProjects, readProject, writeProject, projectDir, PROJECTS_DIR } from './store.mjs';
 import { createProject } from '../schemas/project.mjs';
 import { createJob, enqueue, getJob, listJobs } from './jobs.mjs';
-import { attachWs } from './ws.mjs';
+import { attachWs, isAllowedHost, PHONE_TOKEN } from './ws.mjs';
 import { renderPreviz } from './render/previz.mjs';
 import { runSeedance } from './finalize/seedance.mjs';
 import { exportGlb } from './export/glb.mjs';
@@ -46,12 +46,28 @@ function lanIp() {
 export function createServer() {
   const server = http.createServer(async (req, res) => {
     try {
+      // Host allowlist first: this is what stops a hostile page the operator visits from
+      // reaching the API by DNS rebinding (its requests carry that site's Host, not ours).
+      if (!isAllowedHost(req.headers.host)) return json(res, 403, { error: 'bad host' });
       const u = new URL(req.url, 'http://x'); const seg = u.pathname.split('/').filter(Boolean);
+      // Every /api/projects/<id>/... route resolves <id> to a directory, so it is validated
+      // once here (projectDir() throws on anything but [A-Za-z0-9_-]{1,64}) rather than in
+      // each handler. `%2e%2e%2f` survives URL.pathname un-decoded and fails the same test.
+      if (seg[0] === 'api' && seg[1] === 'projects' && seg[2]) {
+        try { projectDir(seg[2]); } catch { return json(res, 400, { error: 'invalid project id' }); }
+      }
       if (seg[0] === 'api') {
         if (seg[1] === 'projects' && !seg[2] && req.method === 'GET') return json(res, 200, await listProjects());
         if (seg[1] === 'projects' && !seg[2] && req.method === 'POST') { const b = await readBody(req); return json(res, 201, await writeProject(createProject(b))); }
         if (seg[1] === 'projects' && seg[2] && !seg[3] && req.method === 'GET') return json(res, 200, await readProject(seg[2]));
-        if (seg[1] === 'projects' && seg[2] && !seg[3] && req.method === 'PUT') return json(res, 200, await writeProject(await readBody(req)));
+        if (seg[1] === 'projects' && seg[2] && !seg[3] && req.method === 'PUT') {
+          // The URL segment is the authority on which project is written; a body `id` that
+          // disagrees is a client bug (or an attempt to write somewhere else) and is refused
+          // rather than silently honoured.
+          const b = await readBody(req);
+          if (b.id !== undefined && b.id !== seg[2]) return json(res, 409, { error: 'id mismatch' });
+          return json(res, 200, await writeProject({ ...b, id: seg[2] }));
+        }
         if (seg[1] === 'projects' && seg[2] && seg[3] === 'jobs' && req.method === 'GET') return json(res, 200, listJobs(seg[2]));
         if (seg[1] === 'projects' && seg[2] && seg[3] === 'jobs' && req.method === 'POST') {
           const b = await readBody(req);
@@ -81,7 +97,9 @@ export function createServer() {
         if (seg[1] === 'config' && !seg[2] && req.method === 'GET') {
           const provider = process.env.STUDIO_LLM || 'none';
           const hasKey = provider === 'anthropic' ? !!process.env.ANTHROPIC_API_KEY : provider === 'openai' ? !!process.env.OPENAI_API_KEY : true;
-          return json(res, 200, { provider, hasKey });
+          // The Director UI is same-origin, so it can simply read the phone token here and
+          // put it in the QR URL; the phone, which is not, must present it to join.
+          return json(res, 200, { provider, hasKey, phoneToken: PHONE_TOKEN });
         }
         if (seg[1] === 'lan-ip' && !seg[2] && req.method === 'GET') return json(res, 200, { ip: lanIp() });
         return json(res, 404, { error: 'not found' });
@@ -89,7 +107,7 @@ export function createServer() {
       const root = seg[0] === 'files' ? PROJECTS_DIR : APP_DIST; const rel = seg[0] === 'files' ? seg.slice(1).join('/') : (seg.join('/') || 'index.html');
       const file = path.resolve(root, rel);
       if (!(file === root || file.startsWith(root + path.sep)) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); return res.end('not found'); }
-      const ext = path.extname(file); const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.mp4': 'video/mp4', '.png': 'image/png', '.glb': 'model/gltf-binary' };
+      const ext = path.extname(file); const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.mp4': 'video/mp4', '.png': 'image/png', '.glb': 'model/gltf-binary', '.md': 'text/markdown', '.py': 'text/x-python', '.log': 'text/plain' };
       res.writeHead(200, { 'content-type': types[ext] || 'application/octet-stream' }); fs.createReadStream(file).pipe(res);
     } catch (e) {
       if (e instanceof HttpError) { json(res, e.status, { error: e.message }); if (e.status === 413) req.destroy(); return; }
@@ -101,6 +119,11 @@ export function createServer() {
 }
 if (process.argv[1] && process.argv[1].endsWith('index.mjs')) {
   const PORT = Number(process.env.STUDIO_PORT || 5190);
+  // Loopback by default: the studio has no accounts and drives a CLI and an LLM key, so it
+  // has no business being reachable from the LAN unless the operator asks for it (the phone
+  // camera is the one reason to, and it needs STUDIO_BIND=0.0.0.0 plus the Director opened
+  // on the LAN IP — see studio/README.md).
+  const BIND = process.env.STUDIO_BIND || '127.0.0.1';
   const server = createServer();
-  server.listen(PORT, () => console.log(`MV Studio server http://localhost:${PORT}`));
+  server.listen(PORT, BIND, () => console.log(`MV Studio server http://localhost:${PORT} (bound to ${BIND})`));
 }

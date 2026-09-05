@@ -1,6 +1,10 @@
 // The phone page: streams device orientation + two sliders (dolly, zoom) to the Director
 // over the `/ws` relay (room 'phone'), and toggles server-relayed recording on/off.
-const projectId = new URLSearchParams(location.search).get('projectId') || 'demo';
+const params = new URLSearchParams(location.search);
+const projectId = params.get('projectId') || 'demo';
+// The per-process phone token, carried in the QR URL. The relay closes a `phone` join
+// without it (code 4401), so a page opened by hand without the token cannot drive the world.
+const token = params.get('token') || '';
 
 const statusEl = document.getElementById('status') as HTMLElement;
 const messageEl = document.getElementById('message') as HTMLElement;
@@ -19,9 +23,13 @@ function connect() {
   (window as any).__ws = ws;
   ws.onopen = () => {
     statusEl.textContent = 'connected';
-    ws!.send(JSON.stringify({ type: 'join', room: 'phone', projectId }));
+    ws!.send(JSON.stringify({ type: 'join', room: 'phone', projectId, token }));
   };
-  ws.onclose = () => {
+  ws.onclose = (e) => {
+    if (e.code === 4401) {
+      statusEl.textContent = 'rejected: no valid token — re-scan the QR from the Director';
+      return; // reconnecting would just be rejected again
+    }
     statusEl.textContent = 'reconnecting…';
     setTimeout(connect, 1000);
   };
