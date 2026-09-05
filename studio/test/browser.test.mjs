@@ -8,3 +8,15 @@ it('loads union-square-sf headless and exposes __twin', async () => {
   expect(ready).toBe(true);
   expect(typeof softwareRender).toBe('boolean');
 }, 300000);
+
+it('rejects unknown worlds', async () => {
+  await expect(launchWorld({ world: 'mars' })).rejects.toThrow(/unknown world/);
+});
+
+it('rejects promptly with a world-load error when nothing listens on the given port', async () => {
+  const start = Date.now();
+  await expect(
+    launchWorld({ world: 'union-square-sf', port: 5999, width: 320, height: 180 })
+  ).rejects.toThrow(/^world load/);
+  expect(Date.now() - start).toBeLessThan(60000);
+}, 60000);

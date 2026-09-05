@@ -5,36 +5,39 @@ export const WORLD_PORTS = { 'union-square-sf': 5173, 'kyoto-higashiyama': 5174 
 const GPU = ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--use-gl=angle', '--hide-scrollbars'];
 const SOFT = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--hide-scrollbars'];
 
-export async function launchWorld({ world, width = 1280, height = 720, time = 'sunset', quality = 'med', software = false, extraQuery = '' }) {
-  const port = WORLD_PORTS[world];
+export async function launchWorld({ world, width = 1280, height = 720, time = 'sunset', quality = 'med', software = false, extraQuery = '', port: portOverride } = {}) {
+  const port = portOverride ?? WORLD_PORTS[world];
   if (!port) throw new Error(`unknown world ${world}`);
   const url = `http://localhost:${port}/?qa=1&ui=0&life=0&time=${time}&q=${quality}${extraQuery}`;
 
   const attempt = async (args, softwareRender) => {
     const browser = await chromium.launch({ headless: true, args });
-    const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
     const errors = [];
-    page.on('pageerror', (e) => errors.push(e.message));
-    await page.goto(url, { waitUntil: 'load' });
-    const ok = await page
-      .waitForFunction(() => window.__twin?.ready || window.__twinError, null, { timeout: 240000 })
-      .then(() => true)
-      .catch(() => false);
-    const state = ok
-      ? await page.evaluate(() => ({ ready: !!window.__twin?.ready, err: window.__twinError || null }))
-      : { ready: false, err: 'timeout' };
-    if (!state.ready) {
-      await browser.close();
-      throw new Error(`world load ${state.err || 'failed'}: ${errors.slice(0, 2).join(' | ')}`);
+    try {
+      const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
+      page.on('pageerror', (e) => errors.push(e.message));
+      await page.goto(url, { waitUntil: 'load', timeout: 240000 });
+      await page.waitForFunction(() => window.__twin?.ready || window.__twinError, null, { timeout: 240000 });
+      const state = await page.evaluate(() => ({ ready: !!window.__twin?.ready, err: window.__twinError || null }));
+      if (!state.ready) throw new Error(state.err || 'failed');
+      return { browser, page, softwareRender, errors };
+    } catch (e) {
+      const rawMessage = String((e && e.message) || e);
+      const isTimeout = /timeout/i.test(rawMessage);
+      await browser.close().catch(() => {});
+      const reason = isTimeout ? 'timeout' : rawMessage.slice(0, 200);
+      const err = new Error(`world load ${reason}`);
+      err.isTimeout = isTimeout;
+      err.pageErrors = errors;
+      throw err;
     }
-    return { browser, page, softwareRender, errors };
   };
 
   if (software) return attempt(SOFT, true);
   try {
     return await attempt(GPU, false);
   } catch (e) {
-    if (/timeout/.test(String(e))) throw e;
+    if (e.isTimeout) throw e;
     return attempt(SOFT, true);
   }
 }
