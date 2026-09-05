@@ -73,7 +73,7 @@ function cloneMeshDeep(doc, mesh) {
 export async function injectAsset({ input, worldDir, as, kind = 'prop', height, scale, budget = 2000, replace }) {
   if (!/^varco\/[a-z0-9_]+$/.test(as)) throw new Error('--as must look like varco/name');
   if (height !== undefined && !(height > 0)) throw new Error('--height must be > 0');
-  if (scale !== undefined && !(scale > 0)) throw new Error('--height must be > 0');
+  if (scale !== undefined && !(scale > 0)) throw new Error('--scale must be > 0');
   const modelsDir = path.join(worldDir, 'public/assets/models');
   if (replace) {
     const all = Object.assign({}, ...fs.readdirSync(modelsDir).filter((f) => /^manifest_.*\.json$/.test(f)).map((f) => JSON.parse(fs.readFileSync(path.join(modelsDir, f), 'utf8'))));
@@ -149,8 +149,14 @@ export async function injectAsset({ input, worldDir, as, kind = 'prop', height, 
         tanAcc.setArray(a);
       }
     }
-    node.setTranslation([0, 0, 0]).setRotation([0, 0, 0, 1]).setScale([1, 1, 1]);
   }
+  // 1b) every node's TRS is now redundant and must go — including the mesh-less ones. A
+  // mesh node's own transform was baked into its vertices, but so was every ancestor's (the
+  // bake uses getWorldMatrix()), so leaving an empty parent's TRS in place applies it a
+  // second time at load. Blender and VARCO exports routinely carry an empty root, and the
+  // failure is silent: `parent(scale 10) -> child(mesh)` with `--height 2` produced geometry
+  // that renders at 20 m while the manifest (measured from the baked vertices) says 2.
+  for (const node of doc.getRoot().listNodes()) node.setTranslation([0, 0, 0]).setRotation([0, 0, 0, 1]).setScale([1, 1, 1]);
   // 2) scale to target height (or explicit scale), 3) re-origin to bottom-centre
   let b = bounds(doc);
   const s = scale ?? (height ? height / (b.max[1] - b.min[1]) : 1);

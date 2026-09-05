@@ -56,3 +56,21 @@ const node2 = doc2.createNode('fixture_rot').setMesh(mesh2).setTranslation([3, 1
 doc2.createScene().addChild(node2);
 await new NodeIO().write(fileURLToPath(new URL('./fixture_rot.glb', import.meta.url)), doc2);
 console.log('fixture_rot written');
+
+// fixture_tree.glb: the shape a Blender/VARCO export routinely has — an EMPTY root node
+// carrying the transform (scale 10) with the mesh on a child node. The bake reads
+// getWorldMatrix(), so the parent's scale ends up in the child's vertices; if the parent's
+// own TRS is then left in place (the C2 defect) it is applied a second time at load and the
+// asset renders 10x too big while the manifest reports the correct height.
+const doc3 = new Document();
+const buf3 = doc3.createBuffer();
+const p3 = doc3.createAccessor().setArray(new Float32Array(pos)).setType('VEC3').setBuffer(buf3);
+const ix3 = doc3.createAccessor().setArray(new Uint16Array(idx)).setBuffer(buf3);
+const mat3 = doc3.createMaterial('VarcoMat').setBaseColorFactor([0.8, 0.2, 0.2, 1]);
+const prim3 = doc3.createPrimitive().setAttribute('POSITION', p3).setIndices(ix3).setMaterial(mat3);
+const mesh3 = doc3.createMesh('fixture_tree').addPrimitive(prim3);
+const child3 = doc3.createNode('mesh_child').setMesh(mesh3).setTranslation([0, 0, 0]);
+const root3 = doc3.createNode('empty_root').setScale([10, 10, 10]).addChild(child3);
+doc3.createScene().addChild(root3);
+await new NodeIO().write(fileURLToPath(new URL('./fixture_tree.glb', import.meta.url)), doc3);
+console.log('fixture_tree written');

@@ -8,10 +8,11 @@ import { injectAsset, triCount } from '../tools/inject_asset.mjs';
 
 const fixture = fileURLToPath(new URL('./fixtures/fixture.glb', import.meta.url));
 const fixtureRot = fileURLToPath(new URL('./fixtures/fixture_rot.glb', import.meta.url));
+const fixtureTree = fileURLToPath(new URL('./fixtures/fixture_tree.glb', import.meta.url));
 let worldDir;
 
 beforeAll(async () => {
-  if (!fs.existsSync(fixture) || !fs.existsSync(fixtureRot)) {
+  if (!fs.existsSync(fixture) || !fs.existsSync(fixtureRot) || !fs.existsSync(fixtureTree)) {
     await import('./fixtures/make_fixture.mjs');
   }
   worldDir = fs.mkdtempSync(path.join(os.tmpdir(), 'world-'));
@@ -88,4 +89,37 @@ it('triCount is mode-aware for TRIANGLE_STRIP (n-2 triangles, not n/3)', () => {
 
 it('rejects a non-positive height', async () => {
   await expect(injectAsset({ input: fixture, worldDir, as: 'varco/zero', height: 0 })).rejects.toThrow(/--height must be > 0/);
+});
+
+it('clears the TRS of mesh-less ancestors, so a hierarchy is not scaled twice', async () => {
+  const r = await injectAsset({ input: fixtureTree, worldDir, as: 'varco/tree_test', height: 2, budget: 400 });
+  const doc = await new NodeIO().read(r.glb);
+  // Every node — the empty root included — must be identity, or the ancestor scale that was
+  // already baked into the vertices is applied a second time when the world loads the GLB.
+  for (const node of doc.getRoot().listNodes()) {
+    expect(node.getScale()).toEqual([1, 1, 1]);
+    expect(node.getTranslation()).toEqual([0, 0, 0]);
+    expect(node.getRotation()).toEqual([0, 0, 0, 1]);
+  }
+  // ...and the geometry, read with world matrices applied, is actually 2 m tall — the same
+  // number the manifest reports.
+  let minY = 1e9, maxY = -1e9;
+  for (const node of doc.getRoot().listNodes()) {
+    const m = node.getMesh();
+    if (!m) continue;
+    const wm = node.getWorldMatrix();
+    for (const prim of m.listPrimitives()) {
+      const a = prim.getAttribute('POSITION').getArray();
+      for (let i = 0; i < a.length; i += 3) {
+        const wy = wm[1] * a[i] + wm[5] * a[i + 1] + wm[9] * a[i + 2] + wm[13];
+        minY = Math.min(minY, wy); maxY = Math.max(maxY, wy);
+      }
+    }
+  }
+  expect(maxY - minY).toBeCloseTo(2, 2);
+  expect(r.manifestEntry.height).toBeCloseTo(2, 2);
+});
+
+it('rejects a non-positive scale with a message naming --scale', async () => {
+  await expect(injectAsset({ input: fixture, worldDir, as: 'varco/zeroscale', scale: 0 })).rejects.toThrow(/--scale must be > 0/);
 });
