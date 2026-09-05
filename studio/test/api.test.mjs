@@ -23,3 +23,18 @@ it('still serves requests after the malformed body (process did not die)', async
   const jobsRes = await fetch(`${base}/api/projects/${p.id}/jobs`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ type: 'nope' }) });
   expect(jobsRes.status).toBe(400);
 });
+
+it('POST prompt with provider none returns >= 2 keys', async () => {
+  const create = await fetch(`${base}/api/projects`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: 'Prompt test', world: 'union-square-sf' }) });
+  const p = await create.json();
+  const res = await fetch(`${base}/api/projects/${p.id}/prompt`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ prompt: 'a sweeping intro', durationSec: 6, provider: 'none' }) });
+  expect(res.status).toBe(200);
+  const body = await res.json();
+  expect(body.keys.length).toBeGreaterThanOrEqual(2);
+});
+
+it('GET /api/qr?url=... returns a PNG', async () => {
+  const res = await fetch(`${base}/api/qr?url=${encodeURIComponent('https://x')}`);
+  expect(res.status).toBe(200);
+  expect(res.headers.get('content-type')).toBe('image/png');
+});

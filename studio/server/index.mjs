@@ -1,5 +1,6 @@
-import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path';
+import http from 'node:http'; import fs from 'node:fs'; import path from 'node:path'; import os from 'node:os';
 import { fileURLToPath } from 'node:url';
+import QRCode from 'qrcode';
 import { listProjects, readProject, writeProject, projectDir, PROJECTS_DIR } from './store.mjs';
 import { createProject } from '../schemas/project.mjs';
 import { createJob, enqueue, getJob, listJobs } from './jobs.mjs';
@@ -7,6 +8,7 @@ import { attachWs } from './ws.mjs';
 import { renderPreviz } from './render/previz.mjs';
 import { runSeedance } from './finalize/seedance.mjs';
 import { exportGlb } from './export/glb.mjs';
+import { promptToKeys } from './prompt.mjs';
 const APP_DIST = fileURLToPath(new URL('../app/dist', import.meta.url));
 const json = (res, code, body) => { res.writeHead(code, { 'content-type': 'application/json' }); res.end(JSON.stringify(body)); };
 const BODY_LIMIT = 1024 * 1024;
@@ -30,6 +32,17 @@ const RUNNERS = {
   finalize: async (job, log) => runSeedance({ project: await readProject(job.projectId), ...job.input, log }),
   export: async (job, log) => { const p = await readProject(job.projectId); return exportGlb({ project: p, shotId: job.input.shotId, log }); },
 };
+// First non-internal IPv4 address, for the phone-camera QR code (a phone on the same Wi-Fi
+// can't reach `localhost`).
+function lanIp() {
+  const ifaces = os.networkInterfaces();
+  for (const name of Object.keys(ifaces)) {
+    for (const info of ifaces[name] || []) {
+      if (info.family === 'IPv4' && !info.internal) return info.address;
+    }
+  }
+  return '127.0.0.1';
+}
 export function createServer() {
   const server = http.createServer(async (req, res) => {
     try {
@@ -46,6 +59,30 @@ export function createServer() {
           const job = createJob({ projectId: seg[2], type: b.type, input: b }); enqueue(job, RUNNERS[b.type]).catch(() => {}); return json(res, 202, job);
         }
         if (seg[1] === 'jobs' && seg[2]) { const j = getJob(seg[2]); return j ? json(res, 200, j) : json(res, 404, { error: 'no job' }); }
+        if (seg[1] === 'projects' && seg[2] && seg[3] === 'prompt' && req.method === 'POST') {
+          const b = await readBody(req);
+          let p;
+          try { p = await readProject(seg[2]); } catch { return json(res, 404, { error: 'project not found' }); }
+          try {
+            const keys = await promptToKeys({ world: p.world, prompt: b.prompt, durationSec: b.durationSec, provider: b.provider });
+            return json(res, 200, { keys });
+          } catch (e) {
+            return json(res, 400, { error: String(e?.message || e) });
+          }
+        }
+        if (seg[1] === 'qr' && !seg[2] && req.method === 'GET') {
+          const url = u.searchParams.get('url') || '';
+          if (!/^https?:\/\//i.test(url)) return json(res, 400, { error: 'url must be http(s)' });
+          const png = await QRCode.toBuffer(url);
+          res.writeHead(200, { 'content-type': 'image/png' });
+          return res.end(png);
+        }
+        if (seg[1] === 'config' && !seg[2] && req.method === 'GET') {
+          const provider = process.env.STUDIO_LLM || 'none';
+          const hasKey = provider === 'anthropic' ? !!process.env.ANTHROPIC_API_KEY : provider === 'openai' ? !!process.env.OPENAI_API_KEY : true;
+          return json(res, 200, { provider, hasKey });
+        }
+        if (seg[1] === 'lan-ip' && !seg[2] && req.method === 'GET') return json(res, 200, { ip: lanIp() });
         return json(res, 404, { error: 'not found' });
       }
       const root = seg[0] === 'files' ? PROJECTS_DIR : APP_DIST; const rel = seg[0] === 'files' ? seg.slice(1).join('/') : (seg.join('/') || 'index.html');

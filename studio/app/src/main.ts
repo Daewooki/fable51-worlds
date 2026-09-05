@@ -2,6 +2,8 @@ import { WorldBridge } from './bridge';
 import { api } from './api';
 import { addKeyAt, removeKey, moveKey, keyFromCamera, type Key } from './timeline';
 import { mountJobsPanel, type Ctx } from './jobs';
+import { mountPromptPanel } from './prompt';
+import { mountPhonePanel } from './phone';
 import { esc } from './dom';
 // Plain ESM (no type declarations) shared with the server — see mjs-shim.d.ts.
 import { WORLDS, createShot } from '../../schemas/project.mjs';
@@ -13,6 +15,8 @@ const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)
 const panelLeft = $('#panel-left');
 const panelRight = $('#panel-right');
 const panelJobs = $('#panel-jobs');
+const panelPrompt = $('#panel-prompt');
+const panelPhone = $('#panel-phone');
 let iframeEl = $<HTMLIFrameElement>('#world');
 const scrubEl = $<HTMLInputElement>('#scrub');
 const scrubTimeEl = $('#scrub-time');
@@ -256,6 +260,25 @@ function mountWorldForShot(shot: any) {
   });
 }
 
+// Phone panel is (re)mounted per project, since its WS `join` message and QR URL are keyed
+// to the project id; the bridge it drives is looked up on ctx at call time (via this proxy)
+// so switching shots — which discards and rebuilds ctx.bridge — needs no remount.
+const bridgeProxy = { call: (cmd: string, p?: any) => (ctx.bridge ? ctx.bridge.call(cmd, p) : Promise.reject(new Error('no bridge'))) };
+let phoneApi: { dispose(): void } | null = null;
+function mountPhoneForProject(projectId: string) {
+  phoneApi?.dispose();
+  phoneApi = mountPhonePanel(panelPhone, {
+    projectId,
+    bridge: bridgeProxy,
+    onRecorded: async (keys) => {
+      if (!ctx.shot) return;
+      ctx.shot.keys = keys;
+      await ctx.save();
+      ctx.refresh();
+    },
+  });
+}
+
 async function selectProject(id: string) {
   const p = await api.get(id);
   ctx.project = p;
@@ -263,6 +286,7 @@ async function selectProject(id: string) {
   disposeBridge();
   statusEl.textContent = '';
   renderAll();
+  mountPhoneForProject(p.id);
   if (p.shots.length) await selectShot(p.shots[0].id);
 }
 
@@ -273,12 +297,14 @@ async function selectShot(id: string) {
 }
 
 const jobsPanel = mountJobsPanel(panelJobs, ctx);
+const promptPanel = mountPromptPanel(panelPrompt, ctx);
 
 function renderAll() {
   renderLeft();
   renderRight();
   updateScrubber();
   jobsPanel.refresh();
+  promptPanel.refresh();
 }
 ctx.refresh = renderAll;
 
