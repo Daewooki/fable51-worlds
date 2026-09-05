@@ -36,6 +36,22 @@ Same brief, same test conditions, two models. Each built Union Square from scrat
 
 ---
 
+## 🎬 MV Studio
+
+**[`studio/`](studio/README.md)** — a local music-video workbench that films these worlds.
+
+Block a shot by flying the camera around the live world in an iframe, keyframe it on a
+timeline, render a **previz** MP4 headlessly at full resolution, hand that previz to
+**Seedance 2.5** as a motion reference to finalize, and **export** the world as a GLB with
+the camera path and a Blender import script. A phone can be used as a virtual camera, and a
+sentence can be turned into a camera path.
+
+It drives both worlds through one small contract (`window.__twin` plus a postMessage
+bridge), so a third world becomes filmable as soon as it implements it.
+**[Setup, walkthrough, the world contract and troubleshooting →](studio/README.md)**
+
+---
+
 ## Any input → a world
 
 Text, video or image. The brief names the **subject** and the **style**, and the same pipeline runs behind all three.

@@ -9,7 +9,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5174 --strictPort",
     "build": "vite build",
     "preview": "vite preview",
     "shots": "node tools/capture.mjs",

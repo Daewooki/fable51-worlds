@@ -10,6 +10,7 @@ import { DISTRICT_MODULES, SYSTEMS } from './world/districts.js';
 import { createAudio } from './core/audio.js';
 import { createTimeOfDay } from './systems/time.js';
 import { createCameras, HERO_VIEWS } from './systems/cameras.js';
+import { installStudio } from './studio.js';
 
 /* ------------------------------------------------------------------ *
  * 東山 -- entry point.
@@ -232,6 +233,15 @@ frame();
 
 window.__scene = { scene, camera, renderer, pipeline, world, player, hud, time, cameras,
                   sun, fill, bounce, hemi, sky, basin, THREE, HERO_VIEWS };
+
+/* ------------------------------------------------------------------ *
+ * MV Studio.
+ *
+ * A no-op unless the page was opened with `?studio=1` or `?qa=1`, so ordinary
+ * play is untouched.  Everything it does lives in `studio.js`; see the note at
+ * the top of that file for why the translation is not a one-liner.
+ * ------------------------------------------------------------------ */
+installStudio({ scene, camera, renderer, pipeline, world, player, hud, time, cameras, sky });
 
 /* ------------------------------------------------------------------ *
  * The shot harness.
