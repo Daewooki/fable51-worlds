@@ -1,0 +1,39 @@
+import { randomUUID } from 'node:crypto';
+export const WORLDS = ['union-square-sf', 'kyoto-higashiyama'];
+export const newId = () => randomUUID().slice(0, 13);
+
+export function createProject({ name, world }) {
+  if (!WORLDS.includes(world)) throw new Error(`unknown world: ${world} (valid: ${WORLDS.join(', ')})`);
+  return { id: newId(), name, world, createdAt: new Date().toISOString(), refs: { artist: [], style: [] }, shots: [], finalize: [] };
+}
+export function createShot({ name, fps = 30, width = 1920, height = 1080, timeOfDay = 'sunset' }) {
+  return { id: newId(), name, fps, width, height, timeOfDay, keys: [] };
+}
+const isVec = (v, n) => Array.isArray(v) && v.length === n && v.every(Number.isFinite);
+export function validateKey(k) {
+  const e = [];
+  if (!(k.t >= 0)) e.push('t must be >= 0');
+  if (k.m !== 'air' && k.m !== 'walk') e.push("m must be 'air' or 'walk'");
+  if (k.m === 'air' && !isVec(k.eye, 3)) e.push('air key needs eye [x,y,z]');
+  if (k.m === 'walk' && !isVec(k.pos, 2)) e.push('walk key needs pos [x,z]');
+  if (!isVec(k.look, 3)) e.push('look must be [x,y,z]');
+  if (k.fov !== undefined && !(k.fov > 10 && k.fov < 150)) e.push('fov must be in (10,150)');
+  if (k.time !== undefined && !['day', 'sunset', 'night'].includes(k.time)) e.push('time must be day|sunset|night');
+  return e;
+}
+export function validateShot(s) {
+  const e = [];
+  if (!s.name) e.push('shot needs a name');
+  if (!(s.fps > 0 && s.width > 0 && s.height > 0)) e.push('fps/width/height must be positive');
+  if (!['day', 'sunset', 'night'].includes(s.timeOfDay)) e.push('timeOfDay must be day|sunset|night');
+  s.keys.forEach((k, i) => validateKey(k).forEach((m) => e.push(`key[${i}]: ${m}`)));
+  for (let i = 1; i < s.keys.length; i++) if (s.keys[i].t < s.keys[i - 1].t) { e.push('keys must be sorted by t'); break; }
+  return e;
+}
+export function validateProject(p) {
+  const e = [];
+  if (!p.id || !p.name) e.push('project needs id and name');
+  if (!WORLDS.includes(p.world)) e.push(`unknown world: ${p.world}`);
+  p.shots.forEach((s, i) => validateShot(s).forEach((m) => e.push(`shot[${i}]: ${m}`)));
+  return e;
+}
