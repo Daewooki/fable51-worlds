@@ -1,7 +1,9 @@
 import { WebSocketServer } from 'ws';
 export function attachWs(server) {
   const wss = new WebSocketServer({ server, path: '/ws' }); const meta = new Map();
+  wss.on('error', () => {});
   wss.on('connection', (sock) => {
+    sock.on('error', () => {});
     sock.on('message', (raw) => {
       let m; try { m = JSON.parse(raw.toString()); } catch { return; }
       if (m.type === 'join') { meta.set(sock, { room: m.room, projectId: m.projectId }); return; }
