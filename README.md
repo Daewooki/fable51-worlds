@@ -8,6 +8,16 @@ No game engine. No proprietary 3D tiles. No downloaded meshes. Every building, s
 
 ---
 
+## ⚔️ Head-to-head: Claude Fable 5.1 vs GPT-6 Astra
+
+Same brief, same test conditions, two models. Each built Union Square from scratch, then the Astra world was filmed along the Fable walkthrough's camera route and the two are shown side by side, unedited.
+
+<a href="union-square-sf-gpt-astra/media/fable51-vs-gpt6-astra-union-square.mp4"><img src="union-square-sf-gpt-astra/media/preview.gif" width="100%" alt="Side by side: GPT-6 Astra on the left, Claude Fable 5.1 on the right"></a>
+
+<sub>▶ **[Watch the head-to-head](union-square-sf-gpt-astra/media/fable51-vs-gpt6-astra-union-square.mp4)** · 59 s · left **GPT-6 Astra**, right **Claude Fable 5.1** · [Fable 5.1 build](union-square-sf/) · [GPT-6 Astra build](union-square-sf-gpt-astra/)</sub>
+
+---
+
 ## Worlds
 
 ### 🌉 [Union Square, San Francisco](union-square-sf/)

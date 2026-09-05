@@ -1,0 +1,25 @@
+{
+  "name": "union-square-sf-gpt-astra",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "qa": "node scripts/qa.mjs",
+    "qa:walk": "node scripts/walk-qa.mjs",
+    "qa:performance": "node scripts/performance-qa.mjs",
+    "qa:effects": "node scripts/effects-qa.mjs",
+    "snapshot": "node scripts/snapshot.mjs"
+  },
+  "dependencies": {
+    "three": "0.185.0"
+  },
+  "devDependencies": {
+    "@types/three": "0.185.4",
+    "vite": "8.2.2",
+    "typescript": "7.0.2",
+    "playwright": "1.62.1"
+  }
+}
