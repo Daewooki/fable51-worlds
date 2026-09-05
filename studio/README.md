@@ -353,17 +353,21 @@ includes the world's load-and-build time in the first render of each run.
 | Step | union-square-sf | kyoto-higashiyama |
 | --- | --- | --- |
 | create project + prompt → keys (provider `none`) | < 0.1 s | < 0.1 s |
-| previz, 2 s @ 640×360 — 60 frames | **36.3 s** | **29.1 s** |
-| previz, 10 s @ 1920×1080 — 300 frames | **194.1 s** (0.65 s/frame) | **72.1 s** (0.24 s/frame) |
+| previz, 2 s @ 640×360 — 60 frames | **26.1 s** | **28.2 s** |
+| previz, 10 s @ 1920×1080 — 300 frames | **143.0 s** (0.48 s/frame) | **72.8 s** (0.24 s/frame) |
 | finalize, `driver: manual` (writes the job card) | < 0.1 s | < 0.1 s |
-| export GLB + keys + Blender script | **21.4 s** (39.7 MB, 1229 meshes) | **39.9 s** (397.2 MB, 1052 meshes) |
-| **total** | **253.8 s** | **142.1 s** |
+| export GLB + keys + Blender script | **20.4 s** (39.7 MB, 1229 meshes) | **38.8 s** (397.2 MB, 1052 meshes) |
+| **total** | **190.4 s** | **140.7 s** |
 
 Neither run fell back to software rendering (`softwareRender: false`). The Blender import
 step is not included: Blender is not installed on this machine, so `blender_import.py` is
 written and checked for existence but has not been executed here.
 
-Two things worth knowing from those numbers. Kyoto renders roughly 2.7× faster per 1080p
+Union Square's 1080p previz got ~25 % faster once the renderer started sending `studio=1`
+(that world then switches its own walk/orbit controllers off instead of running them beside
+the driven camera).
+
+Two things worth knowing from those numbers. Kyoto renders roughly 2× faster per 1080p
 frame than Union Square, but its **GLB is ten times bigger** — 397 MB against 40 MB. Union
 Square ships repeated props as `EXT_mesh_gpu_instancing`, whereas Kyoto bakes its districts
 into large merged vertex-coloured meshes, and baked geometry does not deduplicate. It loads
