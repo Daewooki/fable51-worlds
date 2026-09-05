@@ -38,36 +38,6 @@ const exportInPageSrc = (primaryUrl, fallbackUrl, chunkBytes) => `(async () => {
   const names = ['world', 'props', 'vegetation'];
   let objs = names.map((n) => app.scene.getObjectByName(n)).filter(Boolean);
 
-  // Union Square's props (traffic-signal bodies/lamps) are THREE.InstancedMesh. Three's
-  // GLTFExporter emits those via EXT_mesh_gpu_instancing and marks it extensionsRequired;
-  // @gltf-transform/core's NodeIO only accepts required extensions it has registered, and
-  // this app doesn't depend on @gltf-transform/extensions. Rather than require every reader
-  // of scene.glb to register that extension, expand each InstancedMesh into ordinary Mesh
-  // siblings (one per instance, sharing geometry/material) before exporting, and hide the
-  // original so onlyVisible skips it.
-  let instancingSeen = false;
-  for (const root of objs) {
-    const instanced = [];
-    root.traverse((o) => { if (o.isInstancedMesh) instanced.push(o); });
-    for (const im of instanced) {
-      instancingSeen = true;
-      const Matrix4 = im.matrix.constructor;
-      const Mesh = Object.getPrototypeOf(Object.getPrototypeOf(im)).constructor;
-      const m = new Matrix4();
-      for (let i = 0; i < im.count; i++) {
-        im.getMatrixAt(i, m);
-        const clone = new Mesh(im.geometry, im.material);
-        clone.matrix.copy(m);
-        clone.matrix.decompose(clone.position, clone.quaternion, clone.scale);
-        clone.matrixAutoUpdate = true;
-        clone.castShadow = im.castShadow; clone.receiveShadow = im.receiveShadow;
-        clone.name = im.name + '_i' + i;
-        im.parent.add(clone);
-      }
-      im.visible = false;
-    }
-  }
-
   const exp = new GLTFExporter();
   const doExport = (list) => new Promise((res, rej) => exp.parse(list, res, rej, { binary: true, onlyVisible: true, maxTextureSize: 2048 }));
   let buf;
@@ -83,7 +53,7 @@ const exportInPageSrc = (primaryUrl, fallbackUrl, chunkBytes) => `(async () => {
   }
   let meshes = 0;
   for (const g of names.map((n) => app.scene.getObjectByName(n)).filter(Boolean)) {
-    g.traverse((o) => { if ((o.isMesh || o.isInstancedMesh) && o.visible) meshes++; });
+    g.traverse((o) => { if (o.isMesh || o.isInstancedMesh) meshes++; });
   }
   const bytes = buf instanceof ArrayBuffer ? buf : buf.buffer;
   const total = bytes.byteLength;
@@ -98,7 +68,7 @@ const exportInPageSrc = (primaryUrl, fallbackUrl, chunkBytes) => `(async () => {
     });
     await window.__glbChunk(b64);
   }
-  return { bytes: total, meshes, parseError, instancingSeen };
+  return { bytes: total, meshes, parseError };
 })()`;
 
 export async function exportGlb({ project, shotId, log }) {
@@ -120,7 +90,6 @@ export async function exportGlb({ project, shotId, log }) {
     const fallbackUrl = fsFallbackUrl(project.world);
     const result = await page.evaluate(exportInPageSrc(primaryUrl, fallbackUrl, CHUNK_BYTES));
     if (result.parseError) log('gltf parse failed on first attempt, retried with filtered meshes:', result.parseError);
-    if (result.instancingSeen) log('expanded InstancedMesh props to individual meshes to avoid EXT_mesh_gpu_instancing');
     log('glb bytes', result.bytes, 'meshes', result.meshes);
 
     const keys = path.join(out, `${shot.id}.keys.json`);
