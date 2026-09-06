@@ -52,8 +52,25 @@ Also needed:
 
 ## Running
 
-Three or four terminals. The world's dev server has to be up before any render job runs —
-the studio drives the *live* world, it does not have its own copy of it.
+**One terminal:**
+
+```bash
+cd studio
+npm run up            # union-square-sf (:5173) + studio server (:5190) + Director UI (:5180)
+npm run up:all        # both worlds
+npm run up:lan        # server bound to 0.0.0.0 for the phone camera; prints the LAN URL
+npm run down          # stop whatever is listening on 5173/5174/5180/5190
+```
+
+`tools/up.mjs` spawns the three processes, prefixes their logs (`[union-square-sf]`,
+`[server]`, `[ui]`), waits until each port answers, prints the Director URL, and stops
+everything it started on Ctrl+C (whole process trees, on Windows too). A port that is
+already serving is reused rather than restarted — so it is safe to run `up` while a world
+you started by hand is still up. Flags: `--world <name|all>`, `--lan`, `--open` (opens the
+browser), `--stop`.
+
+**By hand — three or four terminals.** The world's dev server has to be up before any render
+job runs — the studio drives the *live* world, it does not have its own copy of it.
 
 ```bash
 # 1. the world  (pick one; the studio can drive either)

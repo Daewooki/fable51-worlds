@@ -7,6 +7,10 @@
     "node": ">=22"
   },
   "scripts": {
+    "up": "node tools/up.mjs",
+    "up:all": "node tools/up.mjs --world all",
+    "up:lan": "node tools/up.mjs --lan",
+    "down": "node tools/up.mjs --stop",
     "dev": "node server/index.mjs",
     "dev:ui": "vite --config app/vite.config.ts --port 5180 --strictPort",
     "test": "vitest run",
