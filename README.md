@@ -10,11 +10,21 @@ No game engine. No proprietary 3D tiles. No downloaded meshes. Every building, s
 
 ## ⚔️ Head-to-head: Claude Fable 5.1 vs GPT-6 Astra
 
+### Union Square, San Francisco
+
 Same brief, same test conditions, two models. Each built Union Square from scratch, then the Astra world was filmed along the Fable walkthrough's camera route and the two are shown side by side, unedited.
 
 <a href="union-square-sf-gpt-astra/media/fable51-vs-gpt6-astra-union-square.mp4"><img src="union-square-sf-gpt-astra/media/preview.gif" width="100%" alt="Side by side: GPT-6 Astra on the left, Claude Fable 5.1 on the right"></a>
 
 <sub>▶ **[Watch the head-to-head](union-square-sf-gpt-astra/media/fable51-vs-gpt6-astra-union-square.mp4)** · 59 s · left **GPT-6 Astra**, right **Claude Fable 5.1** · [Fable 5.1 build](union-square-sf/) · [GPT-6 Astra build](union-square-sf-gpt-astra/)</sub>
+
+### Higashiyama, Kyoto — Codex one-shot result
+
+The complete Codex Kyoto scene, presented as a minimal orbit/pan/zoom viewer, alongside the existing Fable build. The comparison follows Fable's seven-beat order and timing with corresponding authored viewpoints. Camera positions, scale, lighting and some subareas differ; this is not an exact camera-matched comparison. [Methodology and known mismatches](kyoto-higashiyama-gpt-astra/media/COMPARISON.md).
+
+<a href="kyoto-higashiyama-gpt-astra/media/fable51-vs-gpt6-astra-kyoto.mp4"><img src="kyoto-higashiyama-gpt-astra/media/preview.gif" width="100%" alt="Kyoto side by side: Codex / GPT-6 Astra on the left, Claude Fable 5.1 on the right"></a>
+
+<sub>▶ **[Watch the Kyoto comparison](kyoto-higashiyama-gpt-astra/media/fable51-vs-gpt6-astra-kyoto.mp4)** · 53.9 s · left **Codex / GPT-6 Astra**, right **Claude Fable 5.1** · [Fable build](kyoto-higashiyama/) · [Codex source and viewer](kyoto-higashiyama-gpt-astra/) · **[Full Codex walkover GIF](kyoto-higashiyama-gpt-astra/media/kyoto-higashiyama-codex-walkover.gif)**</sub>
 
 ---
 

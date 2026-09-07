@@ -1,0 +1,24 @@
+<!doctype html><html><head><title>Kyoto architecture QA</title><style>html,body{margin:0;background:#b5c7c8}canvas{display:block}</style></head><body><script type="module">
+import * as THREE from 'three';
+import { makeMachiya } from '../src/world/machiya.js';
+import { makeBicycle,makeVendingMachine,makeCat } from '../src/world/details.js';
+const scene=new THREE.Scene();scene.background=new THREE.Color('#c1d2d3');
+scene.add(new THREE.HemisphereLight('#f5eacd','#a7a4bb',1.45));const sun=new THREE.DirectionalLight('#ffefd2',2.0);sun.position.set(-13,20,12);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-20;sun.shadow.camera.right=20;sun.shadow.camera.top=20;sun.shadow.camera.bottom=-20;sun.shadow.bias=-.0003;scene.add(sun);
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(1600,900);renderer.setPixelRatio(1);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.NoToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;document.body.appendChild(renderer.domElement);
+const camera=new THREE.PerspectiveCamera(43,1600/900,.1,200);const ground=new THREE.Mesh(new THREE.PlaneGeometry(200,200),new THREE.MeshToonMaterial({color:'#c8c1ac'}));ground.rotation.x=-Math.PI/2;ground.position.y=-.014;ground.receiveShadow=true;scene.add(ground);
+let current;
+window.selectArchitecture=(name)=>{
+ if(current)scene.remove(current);current=new THREE.Group();scene.add(current);
+ if(name==='details'){
+  const bike=makeBicycle();bike.position.set(-1.8,0,0);current.add(bike);
+  const vending=makeVendingMachine();vending.position.set(1.2,0,0);current.add(vending);
+  const cat=makeCat();cat.position.set(0,0,.1);current.add(cat);camera.position.set(4,2.5,6.8);camera.lookAt(0,.85,0);
+ }else if(name==='street'){
+  for(let i=0;i<5;i++){const house=makeMachiya({width:5.8,depth:6.4,seed:21+i,variant:i,district:'ninenzaka',shopType:['tea','pottery','fans','confectionery','kimono'][i]});house.position.set((i-2)*6.1,0,-3.2);current.add(house);}
+  camera.position.set(-12,1.75,7);camera.lookAt(7,2.3,0);
+ }else{
+  const gion=name==='gion';current.add(makeMachiya({width:5.8,depth:6.4,seed:gion?528:1031,variant:gion?1:2,district:gion?'hanamikoji':'ninenzaka',shopType:gion?'restaurant':'pottery'}));camera.position.set(8,4.25,12.5);camera.lookAt(0,2.5,.3);
+ }
+ renderer.render(scene,camera);window.architectureStats={bounds:new THREE.Box3().setFromObject(current),calls:renderer.info.render.calls,triangles:renderer.info.render.triangles};
+};window.selectArchitecture('gion');
+</script></body></html>

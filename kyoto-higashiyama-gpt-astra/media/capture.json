@@ -1,0 +1,849 @@
+{
+  "capturedAt": "2026-09-07T23:01:17.551Z",
+  "sourceSha256": "de70a946169184714107d97aa79e7d2d44c424a25f3458bbd5c1c01c35d656ea",
+  "base": "http://127.0.0.1:5182/kyoto-higashiyama-gpt-astra/dist/",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "duration": 65.9,
+  "comparisonDuration": 53.9,
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)"
+  },
+  "errors": [],
+  "shots": [
+    {
+      "id": "over-the-roofs",
+      "t0": 0,
+      "t1": 6.1,
+      "moveEnd": 5.6,
+      "air": true,
+      "from": [
+        248,
+        62,
+        220
+      ],
+      "to": [
+        234,
+        46,
+        201
+      ],
+      "target": [
+        185,
+        25,
+        182
+      ]
+    },
+    {
+      "id": "hanamikoji-north",
+      "t0": 6.1,
+      "t1": 13.3,
+      "push": 1.8,
+      "pan": 0.19,
+      "label": "Hanamikoji; Shirakawa is absent"
+    },
+    {
+      "id": "yasaka-court",
+      "t0": 13.3,
+      "t1": 20.5,
+      "orbit": -0.2,
+      "pivot": 18,
+      "label": "Yasaka Shrine lantern court"
+    },
+    {
+      "id": "maruyama-blossom",
+      "t0": 20.5,
+      "t1": 27.1,
+      "rise": 4.2,
+      "tilt": -0.15,
+      "label": "Maruyama blossom; no weeping cherry"
+    },
+    {
+      "id": "pagoda-classic",
+      "t0": 27.1,
+      "t1": 35.1,
+      "push": 2,
+      "tilt": 0.16,
+      "label": "Yasaka Pagoda"
+    },
+    {
+      "id": "sannenzaka-steps",
+      "t0": 35.1,
+      "t1": 42.7,
+      "moveEnd": 42.1,
+      "push": 6.4,
+      "label": "Sannenzaka steps"
+    },
+    {
+      "id": "kiyomizu-gate",
+      "t0": 42.7,
+      "t1": 53.9,
+      "moveEnd": 50.9,
+      "push": -5.2,
+      "tilt": -0.1,
+      "label": "Kiyomizu Nio-mon; Fable shows Saimon"
+    },
+    {
+      "id": "kiyomizu-stage",
+      "t0": 53.9,
+      "t1": 60.9,
+      "push": -3,
+      "label": "Codex-only extension: timber stage"
+    },
+    {
+      "id": "entire-scene",
+      "t0": 60.9,
+      "t1": 65.9,
+      "air": true,
+      "from": [
+        430,
+        265,
+        460
+      ],
+      "to": [
+        480,
+        330,
+        510
+      ],
+      "target": [
+        190,
+        18,
+        158
+      ],
+      "label": "Codex-only extension: entire model"
+    }
+  ],
+  "audits": [
+    {
+      "t": 0,
+      "shot": "over-the-roofs",
+      "pos": [
+        248,
+        62,
+        220
+      ],
+      "clearance": 39.68413985380001,
+      "colliders": 0
+    },
+    {
+      "t": 1,
+      "shot": "over-the-roofs",
+      "pos": [
+        247.10714285714286,
+        60.97959183673469,
+        218.78826530612244
+      ],
+      "clearance": 39.02128673280664,
+      "colliders": 0
+    },
+    {
+      "t": 2,
+      "shot": "over-the-roofs",
+      "pos": [
+        244.42857142857142,
+        57.91836734693877,
+        215.1530612244898
+      ],
+      "clearance": 36.87150871426404,
+      "colliders": 0
+    },
+    {
+      "t": 3,
+      "shot": "over-the-roofs",
+      "pos": [
+        240.03571428571428,
+        52.89795918367347,
+        209.19132653061226
+      ],
+      "clearance": 33.220446479770466,
+      "colliders": 0
+    },
+    {
+      "t": 4,
+      "shot": "over-the-roofs",
+      "pos": [
+        236.28571428571428,
+        48.61224489795919,
+        204.10204081632654
+      ],
+      "clearance": 29.954812742713106,
+      "colliders": 0
+    },
+    {
+      "t": 5,
+      "shot": "over-the-roofs",
+      "pos": [
+        234.32142857142858,
+        46.36734693877551,
+        201.4362244897959
+      ],
+      "clearance": 28.19565659123664,
+      "colliders": 0
+    },
+    {
+      "t": 6,
+      "shot": "over-the-roofs",
+      "pos": [
+        234,
+        46,
+        201
+      ],
+      "clearance": 27.904863741854733,
+      "colliders": 0
+    },
+    {
+      "t": 7,
+      "shot": "hanamikoji-north",
+      "pos": [
+        68.99750246548383,
+        2.044854559689226,
+        5.056194526613725
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 8,
+      "shot": "hanamikoji-north",
+      "pos": [
+        68.98886901283537,
+        2.0473255084721202,
+        5.250447211204376
+      ],
+      "clearance": 1.6799999999999995,
+      "colliders": 0
+    },
+    {
+      "t": 9,
+      "shot": "hanamikoji-north",
+      "pos": [
+        68.97406880829512,
+        2.051561420671368,
+        5.583451813359779
+      ],
+      "clearance": 1.6799999999999995,
+      "colliders": 0
+    },
+    {
+      "t": 10,
+      "shot": "hanamikoji-north",
+      "pos": [
+        68.95365685953337,
+        2.057403449579497,
+        6.042720660499105
+      ],
+      "clearance": 1.6799999999999995,
+      "colliders": 0
+    },
+    {
+      "t": 11,
+      "shot": "hanamikoji-north",
+      "pos": [
+        68.93638995423643,
+        2.0623453471452864,
+        6.431226029680408
+      ],
+      "clearance": 1.68,
+      "colliders": 0
+    },
+    {
+      "t": 12,
+      "shot": "hanamikoji-north",
+      "pos": [
+        68.92528980083125,
+        2.065522281294722,
+        6.68097948129696
+      ],
+      "clearance": 1.6799999999999995,
+      "colliders": 0
+    },
+    {
+      "t": 13,
+      "shot": "hanamikoji-north",
+      "pos": [
+        68.92035639931784,
+        2.0669342520278047,
+        6.791981015348762
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 14,
+      "shot": "yasaka-court",
+      "pos": [
+        161.95805507442248,
+        4.9799999999999995,
+        24.946407310732216
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 15,
+      "shot": "yasaka-court",
+      "pos": [
+        161.75555275920973,
+        4.9799999999999995,
+        24.68164185197307
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 16,
+      "shot": "yasaka-court",
+      "pos": [
+        161.39717124326998,
+        4.9799999999999995,
+        24.186683663206107
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 17,
+      "shot": "yasaka-court",
+      "pos": [
+        160.90783305346534,
+        4.9799999999999995,
+        23.448048111628978
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 18,
+      "shot": "yasaka-court",
+      "pos": [
+        160.48132532490936,
+        4.9799999999999995,
+        22.73221882017728
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 19,
+      "shot": "yasaka-court",
+      "pos": [
+        160.215591918676,
+        4.9799999999999995,
+        22.244363071104743
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 20,
+      "shot": "yasaka-court",
+      "pos": [
+        160.08840299949628,
+        4.9799999999999995,
+        21.99741785174421
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 21,
+      "shot": "maruyama-blossom",
+      "pos": [
+        203.7,
+        7.056444660508832,
+        35.8
+      ],
+      "clearance": 1.7282093663911846,
+      "colliders": 0
+    },
+    {
+      "t": 22,
+      "shot": "maruyama-blossom",
+      "pos": [
+        203.7,
+        7.442119591638308,
+        35.8
+      ],
+      "clearance": 2.113884297520661,
+      "colliders": 0
+    },
+    {
+      "t": 23,
+      "shot": "maruyama-blossom",
+      "pos": [
+        203.7,
+        8.213469453897261,
+        35.8
+      ],
+      "clearance": 2.885234159779614,
+      "colliders": 0
+    },
+    {
+      "t": 24,
+      "shot": "maruyama-blossom",
+      "pos": [
+        203.7,
+        9.355067250040511,
+        35.8
+      ],
+      "clearance": 4.026831955922864,
+      "colliders": 0
+    },
+    {
+      "t": 25,
+      "shot": "maruyama-blossom",
+      "pos": [
+        203.7,
+        10.35782207097715,
+        35.8
+      ],
+      "clearance": 5.029586776859503,
+      "colliders": 0
+    },
+    {
+      "t": 26,
+      "shot": "maruyama-blossom",
+      "pos": [
+        203.7,
+        10.974901960784313,
+        35.8
+      ],
+      "clearance": 5.6466666666666665,
+      "colliders": 0
+    },
+    {
+      "t": 27,
+      "shot": "maruyama-blossom",
+      "pos": [
+        203.7,
+        11.206306919462,
+        35.8
+      ],
+      "clearance": 5.878071625344353,
+      "colliders": 0
+    },
+    {
+      "t": 28,
+      "shot": "pagoda-classic",
+      "pos": [
+        220.4499718567375,
+        15.088211553283942,
+        177.507750839097
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 29,
+      "shot": "pagoda-classic",
+      "pos": [
+        220.27703506521286,
+        15.066480138044446,
+        177.53454386313604
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 30,
+      "shot": "pagoda-classic",
+      "pos": [
+        219.9805719940277,
+        15.02922628334816,
+        177.58047476148866
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 31,
+      "shot": "pagoda-classic",
+      "pos": [
+        219.5605826431821,
+        14.97644998919509,
+        177.64554353415488
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 32,
+      "shot": "pagoda-classic",
+      "pos": [
+        219.117123299201,
+        14.920724431545233,
+        177.71424850294068
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 33,
+      "shot": "pagoda-classic",
+      "pos": [
+        218.7959549720838,
+        14.880366088957594,
+        177.76400697615603
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 34,
+      "shot": "pagoda-classic",
+      "pos": [
+        218.59831292462704,
+        14.855530185826739,
+        177.79462757505777
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 35,
+      "shot": "pagoda-classic",
+      "pos": [
+        218.52419715683075,
+        14.846216722152668,
+        177.80611029964595
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 36,
+      "shot": "sannenzaka-steps",
+      "pos": [
+        226.9875748995185,
+        24.04,
+        232.21122670818528
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 37,
+      "shot": "sannenzaka-steps",
+      "pos": [
+        226.94462393489115,
+        24.2,
+        232.9413931068504
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 38,
+      "shot": "sannenzaka-steps",
+      "pos": [
+        226.87099370981568,
+        24.52,
+        234.19310693313352
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 39,
+      "shot": "sannenzaka-steps",
+      "pos": [
+        226.7715929059638,
+        24.84,
+        235.8829205986157
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 40,
+      "shot": "sannenzaka-steps",
+      "pos": [
+        226.6918268287987,
+        25.32,
+        237.2389439104224
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 41,
+      "shot": "sannenzaka-steps",
+      "pos": [
+        226.6427400120817,
+        25.48,
+        238.0734197946111
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 42,
+      "shot": "sannenzaka-steps",
+      "pos": [
+        226.62433245581283,
+        25.48,
+        238.3863482511819
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 43,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        277.98740466529955,
+        37.51903289452337,
+        270.9940727836704
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 44,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        277.7634876039577,
+        37.47582364810948,
+        270.8887000489213
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 45,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        277.25967421593856,
+        37.378602843678244,
+        270.6516113957358
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 46,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        276.4759645012422,
+        37.227370481229656,
+        270.28280682411395
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 47,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        275.4235543129356,
+        37.02428702308442,
+        269.7875549707932
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 48,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        274.4719068022328,
+        36.84064772582541,
+        269.33972084810955
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 49,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        273.8001556182073,
+        36.711019986583764,
+        269.02360264386226
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 50,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        273.4083007608591,
+        36.635403805359466,
+        268.83920035805136
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 51,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        273.29494274855483,
+        36.613529124362444,
+        268.78585541108464
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 52,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        273.29494274855483,
+        36.613529124362444,
+        268.78585541108464
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 53,
+      "shot": "kiyomizu-gate",
+      "pos": [
+        273.29494274855483,
+        36.613529124362444,
+        268.78585541108464
+      ],
+      "clearance": 1.6799999999999997,
+      "colliders": 0
+    },
+    {
+      "t": 54,
+      "shot": "kiyomizu-stage",
+      "pos": [
+        371.0008392220804,
+        43.000007172235534,
+        333.00089167346044
+      ],
+      "clearance": 9.702666166492449,
+      "colliders": 0
+    },
+    {
+      "t": 55,
+      "shot": "kiyomizu-stage",
+      "pos": [
+        371.10154587173014,
+        43.00082711867121,
+        333.1078924887133
+      ],
+      "clearance": 9.702666166492449,
+      "colliders": 0
+    },
+    {
+      "t": 56,
+      "shot": "kiyomizu-stage",
+      "pos": [
+        371.3700969374627,
+        43.002627783144305,
+        333.3932279960541
+      ],
+      "clearance": 9.702666166492449,
+      "colliders": 0
+    },
+    {
+      "t": 57,
+      "shot": "kiyomizu-stage",
+      "pos": [
+        371.80649241927813,
+        43.00441978931328,
+        333.856898195483
+      ],
+      "clearance": 9.702666166492449,
+      "colliders": 0
+    },
+    {
+      "t": 58,
+      "shot": "kiyomizu-stage",
+      "pos": [
+        372.3503083273866,
+        43.004865705932495,
+        334.43470259784823
+      ],
+      "clearance": 9.702666166492449,
+      "colliders": 0
+    },
+    {
+      "t": 59,
+      "shot": "kiyomizu-stage",
+      "pos": [
+        372.7531349259854,
+        43.004066238203976,
+        334.8627058588595
+      ],
+      "clearance": 9.702666166492449,
+      "colliders": 0
+    },
+    {
+      "t": 60,
+      "shot": "kiyomizu-stage",
+      "pos": [
+        372.9881171085014,
+        43.003208119553975,
+        335.11237442778275
+      ],
+      "clearance": 9.702666166492449,
+      "colliders": 0
+    },
+    {
+      "t": 61,
+      "shot": "entire-scene",
+      "pos": [
+        430.04,
+        265.052,
+        460.04
+      ],
+      "clearance": 172.13844579254453,
+      "colliders": 0
+    },
+    {
+      "t": 62,
+      "shot": "entire-scene",
+      "pos": [
+        434.84,
+        271.292,
+        464.84
+      ],
+      "clearance": 176.34230202624224,
+      "colliders": 0
+    },
+    {
+      "t": 63,
+      "shot": "entire-scene",
+      "pos": [
+        447.64,
+        287.93199999999996,
+        477.64
+      ],
+      "clearance": 190.47011774148493,
+      "colliders": 0
+    },
+    {
+      "t": 64,
+      "shot": "entire-scene",
+      "pos": [
+        465.55999999999995,
+        311.22799999999995,
+        495.55999999999995
+      ],
+      "clearance": 221.01829637317786,
+      "colliders": 0
+    },
+    {
+      "t": 65,
+      "shot": "entire-scene",
+      "pos": [
+        476.76,
+        325.78799999999995,
+        506.76
+      ],
+      "clearance": 245.63797474529335,
+      "colliders": 0
+    }
+  ],
+  "frameCount": 1977,
+  "minimumClearance": 1.6799999999999995,
+  "obstructedFrames": [],
+  "method": "Native Three.js canvas; fixed animation timestep; camera-only recording. Shot timing aligned with Fable; framing and coverage differ. No added post effects."
+}

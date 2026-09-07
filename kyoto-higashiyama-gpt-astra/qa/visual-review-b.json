@@ -1,0 +1,345 @@
+{
+  "capturedAt": "2026-09-05T00:19:09.133Z",
+  "source": "qa/final/manifest.json",
+  "reviewer": "reference_renderer",
+  "independentFor": [
+    "district architecture",
+    "facade generators",
+    "landmark generators",
+    "hero cameras"
+  ],
+  "selfReviewFor": [
+    "renderer",
+    "vegetation",
+    "terrain corrections"
+  ],
+  "mean": 7.8504901960784315,
+  "allHeroViewsAtLeast8": false,
+  "categories": [
+    "composition",
+    "Kyoto recognizability",
+    "architectural fidelity",
+    "pedestrian detail",
+    "toon rendering",
+    "ink quality",
+    "shadow color",
+    "vegetation suitability",
+    "lighting",
+    "material separation",
+    "human scale",
+    "environmental storytelling"
+  ],
+  "frames": [
+    {
+      "name": "18 pagoda-classic",
+      "scores": [
+        8,
+        8.5,
+        8,
+        8.5,
+        8,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        8
+      ],
+      "overall": 8.041666666666666
+    },
+    {
+      "name": "19 pagoda-close",
+      "scores": [
+        7.5,
+        8,
+        8,
+        7.5,
+        7.5,
+        8,
+        8,
+        7.5,
+        7.5,
+        7.5,
+        8,
+        7.5
+      ],
+      "overall": 7.708333333333333
+    },
+    {
+      "name": "20 pagoda-reverse",
+      "scores": [
+        7.5,
+        8,
+        8,
+        8.5,
+        7.5,
+        8,
+        8,
+        7.5,
+        7.5,
+        8,
+        8,
+        8
+      ],
+      "overall": 7.875
+    },
+    {
+      "name": "21 ninenzaka-lower",
+      "scores": [
+        7.5,
+        7.5,
+        7.5,
+        8,
+        7.5,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        7.5
+      ],
+      "overall": 7.75
+    },
+    {
+      "name": "22 ninenzaka-shop",
+      "scores": [
+        8,
+        8,
+        7.5,
+        8.5,
+        7.5,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        8
+      ],
+      "overall": 7.916666666666667
+    },
+    {
+      "name": "23 ninenzaka-steps",
+      "scores": [
+        8.5,
+        8,
+        7.5,
+        8.5,
+        7.5,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        8.5
+      ],
+      "overall": 8
+    },
+    {
+      "name": "24 ninenzaka-reverse",
+      "scores": [
+        8,
+        8,
+        7.5,
+        8.5,
+        7.5,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        8
+      ],
+      "overall": 7.916666666666667
+    },
+    {
+      "name": "25 sannenzaka-lower",
+      "scores": [
+        8,
+        8,
+        7.5,
+        8.5,
+        7.5,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        8
+      ],
+      "overall": 7.916666666666667
+    },
+    {
+      "name": "26 sannenzaka-steps",
+      "scores": [
+        8,
+        8,
+        7.5,
+        8.5,
+        7.5,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        8
+      ],
+      "overall": 7.916666666666667
+    },
+    {
+      "name": "27 sannenzaka-reverse",
+      "scores": [
+        8,
+        8,
+        7.5,
+        8.5,
+        7.5,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        8
+      ],
+      "overall": 7.916666666666667
+    },
+    {
+      "name": "28 kiyomizuzaka",
+      "scores": [
+        8,
+        8,
+        7.5,
+        8.5,
+        7.5,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        8
+      ],
+      "overall": 7.916666666666667
+    },
+    {
+      "name": "29 kiyomizu-gate",
+      "scores": [
+        8,
+        8,
+        8,
+        7.5,
+        7.5,
+        8,
+        8,
+        7,
+        8,
+        8,
+        8,
+        8
+      ],
+      "overall": 7.833333333333333
+    },
+    {
+      "name": "30 kiyomizu-precinct",
+      "scores": [
+        7.5,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        6.5,
+        7.5,
+        7.5,
+        8,
+        7.5
+      ],
+      "overall": 7.666666666666667
+    },
+    {
+      "name": "31 kiyomizu-stage",
+      "scores": [
+        8.5,
+        8.5,
+        8,
+        8,
+        8,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        8.5
+      ],
+      "overall": 8.083333333333334
+    },
+    {
+      "name": "32 kyoto-overlook",
+      "scores": [
+        7.5,
+        7.5,
+        7,
+        7,
+        8,
+        8,
+        8,
+        7.5,
+        8,
+        7.5,
+        8,
+        7.5
+      ],
+      "overall": 7.625
+    },
+    {
+      "name": "33 kiyomizu-veranda",
+      "scores": [
+        7.5,
+        8,
+        8,
+        7.5,
+        8,
+        8,
+        8,
+        6.5,
+        7.5,
+        7.5,
+        8,
+        7.5
+      ],
+      "overall": 7.666666666666667
+    },
+    {
+      "name": "34 pagoda-postcard",
+      "scores": [
+        7.5,
+        8,
+        8,
+        7.5,
+        7.5,
+        8,
+        8,
+        7.5,
+        7.5,
+        7.5,
+        8,
+        7.5
+      ],
+      "overall": 7.708333333333333
+    }
+  ],
+  "remaining": [
+    "Repeated shell/window arrangements and approximate shop order",
+    "Sparse opposite-bank undergrowth in veranda views",
+    "Near-duplicate upward pagoda and veranda photo compositions"
+  ]
+}

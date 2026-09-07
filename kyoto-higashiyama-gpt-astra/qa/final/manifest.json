@@ -1,0 +1,3112 @@
+{
+  "capturedAt": "2026-09-05T00:19:09.133Z",
+  "base": "http://localhost:5173",
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+    "viewport": [
+      1600,
+      900
+    ],
+    "devicePixelRatio": 1,
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)"
+  },
+  "softwareFlag": false,
+  "heroCount": 34,
+  "errors": [],
+  "shots": [
+    {
+      "id": "gion-opening",
+      "file": "01-gion-opening.png",
+      "camera": {
+        "id": "gion-opening",
+        "name": "Gion, before the day begins",
+        "pos": [
+          12,
+          1.7314285714285713,
+          0
+        ],
+        "target": [
+          64,
+          2.8742857142857146,
+          0
+        ],
+        "fov": 54
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 0.8510931653388903,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 2185,
+        "submittedTriangles": 4626485,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 130,
+        "geometries": 2269,
+        "pipeline": {
+          "sceneCpuMs": 7.099999904632568,
+          "postCpuMs": 0,
+          "calls": 2182,
+          "triangles": 4626482
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 0.05142857142857143,
+        "clearance": 1.68,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "hanamikoji-north",
+      "file": "02-hanamikoji-north.png",
+      "camera": {
+        "id": "hanamikoji-north",
+        "name": "The Hanamikoji lanterns",
+        "pos": [
+          69,
+          2.044139749505603,
+          5
+        ],
+        "target": [
+          67,
+          3.536552406064601,
+          50
+        ],
+        "fov": 52
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 1.6495396341073658,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 1501,
+        "submittedTriangles": 3229163,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 134,
+        "geometries": 2705,
+        "pipeline": {
+          "sceneCpuMs": 5.599999904632568,
+          "postCpuMs": 0,
+          "calls": 1498,
+          "triangles": 3229160
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 0.3641397495056031,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "hanamikoji-lattice",
+      "file": "03-hanamikoji-lattice.png",
+      "camera": {
+        "id": "hanamikoji-lattice",
+        "name": "Timber and lattice",
+        "pos": [
+          69,
+          2.259861568885959,
+          22
+        ],
+        "target": [
+          65,
+          3.3475939353988133,
+          35
+        ],
+        "fov": 50
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 2.237392193291158,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 488,
+        "submittedTriangles": 1192493,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 134,
+        "geometries": 2705,
+        "pipeline": {
+          "sceneCpuMs": 3.200000286102295,
+          "postCpuMs": 0,
+          "calls": 485,
+          "triangles": 1192490
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 0.5798615688859591,
+        "clearance": 1.6800000000000002,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "gion-alley",
+      "file": "04-gion-alley.png",
+      "camera": {
+        "id": "gion-alley",
+        "name": "A turn into Gion",
+        "pos": [
+          70,
+          2.6995652173913043,
+          55
+        ],
+        "target": [
+          107,
+          3.860869565217391,
+          55
+        ],
+        "fov": 53
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 2.800090722939422,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 1572,
+        "submittedTriangles": 3908469,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 134,
+        "geometries": 2705,
+        "pipeline": {
+          "sceneCpuMs": 4.700000286102295,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 1569,
+          "triangles": 3908466
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 1.0195652173913043,
+        "clearance": 1.68,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "gion-bicycle",
+      "file": "05-gion-bicycle.png",
+      "camera": {
+        "id": "gion-bicycle",
+        "name": "The bicycle in the lane",
+        "pos": [
+          99,
+          2.8886956521739133,
+          55
+        ],
+        "target": [
+          107,
+          3.860869565217391,
+          52
+        ],
+        "fov": 48
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 3.541119678434854,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 858,
+        "submittedTriangles": 1319089,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 134,
+        "geometries": 2705,
+        "pipeline": {
+          "sceneCpuMs": 4.300000190734863,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 855,
+          "triangles": 1319086
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 1.2086956521739132,
+        "clearance": 1.6800000000000002,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "shijo-east",
+      "file": "06-shijo-east.png",
+      "camera": {
+        "id": "shijo-east",
+        "name": "Toward the vermilion gate",
+        "pos": [
+          121,
+          2.9688888888888885,
+          0
+        ],
+        "target": [
+          149,
+          9,
+          5
+        ],
+        "fov": 52
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 4.077877359974426,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 776,
+        "submittedTriangles": 2464885,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 134,
+        "geometries": 2705,
+        "pipeline": {
+          "sceneCpuMs": 3.799999713897705,
+          "postCpuMs": 0.10000038146972656,
+          "calls": 773,
+          "triangles": 2464882
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 1.2888888888888888,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "yasaka-gate",
+      "file": "07-yasaka-gate.png",
+      "camera": {
+        "id": "yasaka-gate",
+        "name": "Yasaka west gate",
+        "pos": [
+          131,
+          3.08,
+          3
+        ],
+        "target": [
+          149,
+          9,
+          5
+        ],
+        "fov": 52
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 4.777248373729105,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 586,
+        "submittedTriangles": 2069529,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 134,
+        "geometries": 2705,
+        "pipeline": {
+          "sceneCpuMs": 3.1999998092651367,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 583,
+          "triangles": 2069526
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 1.4,
+        "clearance": 1.6800000000000002,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "yasaka-oblique",
+      "file": "08-yasaka-oblique.png",
+      "camera": {
+        "id": "yasaka-oblique",
+        "name": "The shrine in spring",
+        "pos": [
+          140,
+          4.156661163182224,
+          17
+        ],
+        "target": [
+          151,
+          8,
+          5
+        ],
+        "fov": 56
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 5.283280041390721,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 149,
+        "submittedTriangles": 425445,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 134,
+        "geometries": 2705,
+        "pipeline": {
+          "sceneCpuMs": 2,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 146,
+          "triangles": 425442
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 2.4766611631822237,
+        "clearance": 1.6800000000000002,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "yasaka-court",
+      "file": "09-yasaka-court.png",
+      "camera": {
+        "id": "yasaka-court",
+        "name": "The lantern court",
+        "pos": [
+          162,
+          4.9799999999999995,
+          25
+        ],
+        "target": [
+          176,
+          6.8,
+          14
+        ],
+        "fov": 54
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 5.944488140560388,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 185,
+        "submittedTriangles": 561677,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 134,
+        "geometries": 2705,
+        "pipeline": {
+          "sceneCpuMs": 2.4000000953674316,
+          "postCpuMs": 0,
+          "calls": 182,
+          "triangles": 561674
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 3.3,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "yasaka-honden",
+      "file": "10-yasaka-honden.png",
+      "camera": {
+        "id": "yasaka-honden",
+        "name": "A quiet wish",
+        "pos": [
+          163,
+          4.9799999999999995,
+          10
+        ],
+        "target": [
+          176,
+          7.8,
+          -3
+        ],
+        "fov": 57
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 6.422327091687702,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 112,
+        "submittedTriangles": 388006,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 134,
+        "geometries": 2705,
+        "pipeline": {
+          "sceneCpuMs": 2.5,
+          "postCpuMs": 0.19999980926513672,
+          "calls": 109,
+          "triangles": 388003
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 3.3,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "maruyama-blossom",
+      "file": "11-maruyama-blossom.png",
+      "camera": {
+        "id": "maruyama-blossom",
+        "name": "Under the Maruyama blossoms",
+        "pos": [
+          203.7,
+          7.008235294117647,
+          35.8
+        ],
+        "target": [
+          208,
+          7.7,
+          47.3
+        ],
+        "fov": 61
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 7.207417585882678,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 1666,
+        "submittedTriangles": 4426625,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 138,
+        "geometries": 2734,
+        "pipeline": {
+          "sceneCpuMs": 6,
+          "postCpuMs": 0,
+          "calls": 1663,
+          "triangles": 4426622
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 5.328235294117647,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "maruyama-garden",
+      "file": "12-maruyama-garden.png",
+      "camera": {
+        "id": "maruyama-garden",
+        "name": "The garden path",
+        "pos": [
+          210.9,
+          7.805123595505618,
+          51.3
+        ],
+        "target": [
+          205.4,
+          6.258150855525213,
+          47.3
+        ],
+        "fov": 62
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 7.810921727818481,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 1583,
+        "submittedTriangles": 2191871,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 6,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 1580,
+          "triangles": 2191868
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 6.1251235955056185,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "nene-north",
+      "file": "13-nene-north.png",
+      "camera": {
+        "id": "nene-north",
+        "name": "Nene-no-michi",
+        "pos": [
+          201,
+          8.801951219512196,
+          70
+        ],
+        "target": [
+          201,
+          11.799349064279902,
+          112
+        ],
+        "fov": 52
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 8.245993061435442,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 1549,
+        "submittedTriangles": 4126653,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 6.199999809265137,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 1546,
+          "triangles": 4126650
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 7.121951219512195,
+        "clearance": 1.6800000000000006,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "nene-walls",
+      "file": "14-nene-walls.png",
+      "camera": {
+        "id": "nene-walls",
+        "name": "A garden beyond the wall",
+        "pos": [
+          201,
+          10.089756097560976,
+          94
+        ],
+        "target": [
+          202,
+          12.085760781122863,
+          122
+        ],
+        "fov": 50
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 8.67086405854011,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 1436,
+        "submittedTriangles": 4046929,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 6,
+          "postCpuMs": 0.10000038146972656,
+          "calls": 1433,
+          "triangles": 4046926
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 8.409756097560976,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "ishibe-alley",
+      "file": "15-ishibe-alley.png",
+      "camera": {
+        "id": "ishibe-alley",
+        "name": "Ishibe-kōji",
+        "pos": [
+          187.5,
+          9.48,
+          100
+        ],
+        "target": [
+          183.3,
+          9.1,
+          107.7
+        ],
+        "fov": 57
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 9.086018537535013,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 822,
+        "submittedTriangles": 2068493,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 4.400000095367432,
+          "postCpuMs": 0,
+          "calls": 819,
+          "triangles": 2068490
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 7.8,
+        "clearance": 1.6800000000000006,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "kodaiji-edge",
+      "file": "16-kodaiji-edge.png",
+      "camera": {
+        "id": "kodaiji-edge",
+        "name": "The temple walls",
+        "pos": [
+          203,
+          11.395215622457282,
+          130
+        ],
+        "target": [
+          215,
+          14.474239350912779,
+          157
+        ],
+        "fov": 52
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 9.46515454062054,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 1115,
+        "submittedTriangles": 3668639,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 4.400000095367432,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 1112,
+          "triangles": 3668636
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 9.715215622457283,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "pagoda-glimpse",
+      "file": "17-pagoda-glimpse.png",
+      "camera": {
+        "id": "pagoda-glimpse",
+        "name": "Five roofs above the town",
+        "pos": [
+          222,
+          15.068773388773389,
+          172
+        ],
+        "target": [
+          185,
+          25,
+          182
+        ],
+        "fov": 53
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 9.86121097676463,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 537,
+        "submittedTriangles": 1182549,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 3.5999999046325684,
+          "postCpuMs": 0.10000038146972656,
+          "calls": 534,
+          "triangles": 1182546
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 13.388773388773389,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "pagoda-classic",
+      "file": "18-pagoda-classic.png",
+      "camera": {
+        "id": "pagoda-classic",
+        "name": "Yasaka-dōri",
+        "pos": [
+          220.5,
+          15.09449814126394,
+          177.5
+        ],
+        "target": [
+          185,
+          20.6,
+          183
+        ],
+        "fov": 56
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 10.385006819487792,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 562,
+        "submittedTriangles": 1272391,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 3.299999713897705,
+          "postCpuMs": 0.10000038146972656,
+          "calls": 559,
+          "triangles": 1272388
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 13.414498141263941,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "pagoda-close",
+      "file": "19-pagoda-close.png",
+      "camera": {
+        "id": "pagoda-close",
+        "name": "The Yasaka Pagoda",
+        "pos": [
+          201,
+          12.595151515151516,
+          175
+        ],
+        "target": [
+          185,
+          24,
+          182
+        ],
+        "fov": 58
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 10.894595922689327,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 299,
+        "submittedTriangles": 968463,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 2.5,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 296,
+          "triangles": 968460
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 10.915151515151516,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "pagoda-reverse",
+      "file": "20-pagoda-reverse.png",
+      "camera": {
+        "id": "pagoda-reverse",
+        "name": "A lane below the pagoda",
+        "pos": [
+          171,
+          10.049696969696969,
+          174
+        ],
+        "target": [
+          195,
+          18,
+          178
+        ],
+        "fov": 55
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 11.390731281739608,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 1082,
+        "submittedTriangles": 3547395,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 4.800000190734863,
+          "postCpuMs": 0,
+          "calls": 1079,
+          "triangles": 3547392
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 8.36969696969697,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "ninenzaka-lower",
+      "file": "21-ninenzaka-lower.png",
+      "camera": {
+        "id": "ninenzaka-lower",
+        "name": "Ninenzaka",
+        "pos": [
+          225,
+          15.74,
+          179
+        ],
+        "target": [
+          225,
+          18,
+          197
+        ],
+        "fov": 53
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 11.777741914023096,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 763,
+        "submittedTriangles": 2656093,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 3.3000001907348633,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 760,
+          "triangles": 2656090
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 14.06,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "ninenzaka-shop",
+      "file": "22-ninenzaka-shop.png",
+      "camera": {
+        "id": "ninenzaka-shop",
+        "name": "Incense on the steps",
+        "pos": [
+          226.2,
+          19.509266666666665,
+          204.5
+        ],
+        "target": [
+          115.03365177591738,
+          3.3932935280103282,
+          50.7872750125773
+        ],
+        "fov": 62
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 12.063221306218113,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 2569,
+        "submittedTriangles": 3699059,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 8,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 2566,
+          "triangles": 3699056
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 17.829266666666665,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "ninenzaka-steps",
+      "file": "23-ninenzaka-steps.png",
+      "camera": {
+        "id": "ninenzaka-steps",
+        "name": "The Ninenzaka steps",
+        "pos": [
+          225,
+          16.28,
+          188
+        ],
+        "target": [
+          225,
+          19,
+          202
+        ],
+        "fov": 52
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 12.526216133209632,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 738,
+        "submittedTriangles": 2550575,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 3.700000286102295,
+          "postCpuMs": 0,
+          "calls": 735,
+          "triangles": 2550572
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 14.6,
+        "clearance": 1.6800000000000015,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "ninenzaka-reverse",
+      "file": "24-ninenzaka-reverse.png",
+      "camera": {
+        "id": "ninenzaka-reverse",
+        "name": "Looking back from Ninenzaka",
+        "pos": [
+          226,
+          19.546666666666667,
+          205
+        ],
+        "target": [
+          225,
+          16.2,
+          183
+        ],
+        "fov": 53
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 12.944613198205754,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 2125,
+        "submittedTriangles": 3168145,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 6,
+          "postCpuMs": 0,
+          "calls": 2122,
+          "triangles": 3168142
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 17.866666666666667,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "sannenzaka-lower",
+      "file": "25-sannenzaka-lower.png",
+      "camera": {
+        "id": "sannenzaka-lower",
+        "name": "Sannenzaka in bloom",
+        "pos": [
+          228,
+          20.600666666666665,
+          218
+        ],
+        "target": [
+          226,
+          28,
+          244
+        ],
+        "fov": 54
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 13.350457920706651,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 503,
+        "submittedTriangles": 1621639,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 3.5,
+          "postCpuMs": 0,
+          "calls": 500,
+          "triangles": 1621636
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 18.920666666666666,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "sannenzaka-steps",
+      "file": "26-sannenzaka-steps.png",
+      "camera": {
+        "id": "sannenzaka-steps",
+        "name": "A little closer to the sky",
+        "pos": [
+          227,
+          23.88,
+          232
+        ],
+        "target": [
+          226,
+          28.5,
+          249
+        ],
+        "fov": 53
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 13.778312580429013,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 379,
+        "submittedTriangles": 1547719,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 2.9000000953674316,
+          "postCpuMs": 0,
+          "calls": 376,
+          "triangles": 1547716
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 22.2,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "sannenzaka-reverse",
+      "file": "27-sannenzaka-reverse.png",
+      "camera": {
+        "id": "sannenzaka-reverse",
+        "name": "A thousand roofs below",
+        "pos": [
+          226,
+          28.139529411764705,
+          249
+        ],
+        "target": [
+          228,
+          21,
+          218
+        ],
+        "fov": 54
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 14.005317302994538,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 2461,
+        "submittedTriangles": 3537223,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 7.5,
+          "postCpuMs": 0,
+          "calls": 2458,
+          "triangles": 3537220
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 26.459529411764706,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "kiyomizuzaka",
+      "file": "28-kiyomizuzaka.png",
+      "camera": {
+        "id": "kiyomizuzaka",
+        "name": "Tea and temple roofs",
+        "pos": [
+          251,
+          32.387764705882354,
+          259
+        ],
+        "target": [
+          285,
+          41,
+          275
+        ],
+        "fov": 54
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 14.313933182559868,
+        "onePercentLow": 0.2222302225102326,
+        "drawCalls": 301,
+        "submittedTriangles": 2404065,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 3,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 298,
+          "triangles": 2404062
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 30.707764705882354,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "kiyomizu-gate",
+      "file": "29-kiyomizu-gate.png",
+      "camera": {
+        "id": "kiyomizu-gate",
+        "name": "The Nio-mon gate",
+        "pos": [
+          278,
+          37.52146341463415,
+          271
+        ],
+        "target": [
+          295,
+          47,
+          279
+        ],
+        "fov": 58
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 14.787140533855545,
+        "onePercentLow": 0.4316635579696101,
+        "drawCalls": 181,
+        "submittedTriangles": 2245013,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 2.700000286102295,
+          "postCpuMs": 0,
+          "calls": 178,
+          "triangles": 2245010
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 35.84146341463415,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "kiyomizu-precinct",
+      "file": "30-kiyomizu-precinct.png",
+      "camera": {
+        "id": "kiyomizu-precinct",
+        "name": "The final approach",
+        "pos": [
+          325.2,
+          45.68,
+          309
+        ],
+        "target": [
+          342,
+          49.5,
+          294
+        ],
+        "fov": 66
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 15.070978675551087,
+        "onePercentLow": 0.4316635579696101,
+        "drawCalls": 71,
+        "submittedTriangles": 1668530,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 2,
+          "postCpuMs": 0,
+          "calls": 68,
+          "triangles": 1668527
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 44,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "kiyomizu-stage",
+      "file": "31-kiyomizu-stage.png",
+      "camera": {
+        "id": "kiyomizu-stage",
+        "name": "A forest of timber",
+        "pos": [
+          371,
+          43,
+          333
+        ],
+        "target": [
+          339,
+          45,
+          299
+        ],
+        "fov": 56
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 15.34624869937082,
+        "onePercentLow": 0.4316635579696101,
+        "drawCalls": 3138,
+        "submittedTriangles": 5986931,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 10,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 3135,
+          "triangles": 5986928
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 33.29733383350755,
+        "clearance": 9.702666166492449,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "kyoto-overlook",
+      "file": "32-kyoto-overlook.png",
+      "camera": {
+        "id": "kyoto-overlook",
+        "name": "Kyoto, unhurried",
+        "pos": [
+          325,
+          48.5,
+          309
+        ],
+        "target": [
+          75,
+          15,
+          354
+        ],
+        "fov": 60
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 15.818818885160516,
+        "onePercentLow": 0.4316635579696101,
+        "drawCalls": 684,
+        "submittedTriangles": 2361457,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 4,
+          "postCpuMs": 0,
+          "calls": 681,
+          "triangles": 2361454
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 44,
+        "clearance": 4.5,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "kiyomizu-veranda",
+      "file": "33-kiyomizu-veranda.png",
+      "camera": {
+        "id": "kiyomizu-veranda",
+        "name": "The wooden veranda",
+        "pos": [
+          329,
+          45.68,
+          303
+        ],
+        "target": [
+          347,
+          47,
+          298
+        ],
+        "fov": 60
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 16.081650458435107,
+        "onePercentLow": 0.4316635579696101,
+        "drawCalls": 67,
+        "submittedTriangles": 1652800,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 2.3000001907348633,
+          "postCpuMs": 0,
+          "calls": 64,
+          "triangles": 1652797
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 44,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    },
+    {
+      "id": "pagoda-postcard",
+      "file": "34-pagoda-postcard.png",
+      "camera": {
+        "id": "pagoda-postcard",
+        "name": "An afternoon postcard",
+        "pos": [
+          202,
+          11.68,
+          192
+        ],
+        "target": [
+          185,
+          25,
+          182
+        ],
+        "fov": 60
+      },
+      "stats": {
+        "districts": 19,
+        "buildings": 166,
+        "shopfronts": 148,
+        "landmarks": 5,
+        "props": 518,
+        "interactions": 258,
+        "pavingStones": 4829,
+        "contextBuildings": 385,
+        "propAssemblies": {
+          "paper-lantern": 105,
+          "shop-display": 241,
+          "handwritten-menu": 66,
+          "doorstep-plant": 59,
+          "timber-bench": 31,
+          "city-bicycle": 5,
+          "quiet-tea-vending-machine": 3,
+          "sleepy-lane-cat": 2,
+          "bamboo-garden-screen": 2,
+          "garden-tsukubai": 2
+        },
+        "standaloneDetailPlacements": 29,
+        "sourceMeshes": 44673,
+        "staticBatches": 2231,
+        "vegetation": {
+          "trees": 824,
+          "canopyClusters": 21536,
+          "branches": 11988,
+          "groundPetals": 3690,
+          "fallingPetals": 150,
+          "instancedMeshes": 94,
+          "drawCalls": 128,
+          "types": {
+            "shrub": 169,
+            "maple": 315,
+            "bamboo": 8,
+            "sakura": 82,
+            "pine": 131,
+            "cedar": 119
+          },
+          "spatialCells": 29
+        },
+        "heroViews": 34,
+        "routeLength": 688.0380059231638,
+        "averageFPS": 16.47371879335229,
+        "onePercentLow": 0.4316635579696101,
+        "drawCalls": 484,
+        "submittedTriangles": 1596583,
+        "worldTriangles": 6243640,
+        "meshCount": 3069,
+        "instancedMeshes": 102,
+        "shadowCasters": 1153,
+        "textures": 139,
+        "geometries": 2758,
+        "pipeline": {
+          "sceneCpuMs": 2.9000000953674316,
+          "postCpuMs": 0.09999990463256836,
+          "calls": 481,
+          "triangles": 1596580
+        },
+        "renderSize": [
+          2065,
+          1161
+        ],
+        "renderer": "WebKit WebGL"
+      },
+      "frameTiming": null,
+      "cameraSurface": {
+        "heightAt": 10,
+        "clearance": 1.6799999999999997,
+        "intersectingColliders": 0
+      }
+    }
+  ]
+}

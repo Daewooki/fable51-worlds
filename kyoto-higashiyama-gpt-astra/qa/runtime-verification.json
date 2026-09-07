@@ -1,0 +1,3984 @@
+{
+  "createdAt": "2026-09-05T00:30:59.338Z",
+  "url": "http://localhost:5173",
+  "viewport": [
+    1920,
+    1080
+  ],
+  "softwareFlag": false,
+  "checks": [
+    {
+      "name": "World initializes",
+      "pass": true
+    },
+    {
+      "name": "At least 30 authored cameras",
+      "pass": true,
+      "count": 34
+    },
+    {
+      "name": "Settings opens",
+      "pass": true
+    },
+    {
+      "name": "Ink button changes renderer",
+      "pass": true
+    },
+    {
+      "name": "Grade button changes shader while retaining output conversion",
+      "pass": true,
+      "enabled": false,
+      "uniform": 0
+    },
+    {
+      "name": "Autumn changes actual foliage colors",
+      "pass": true,
+      "label": "Autumn"
+    },
+    {
+      "name": "Spring restores original foliage",
+      "pass": true
+    },
+    {
+      "name": "Time-of-day keyboard control",
+      "pass": true
+    },
+    {
+      "name": "Photo mode opens and freezes walker",
+      "pass": true
+    },
+    {
+      "name": "Photo camera advances",
+      "pass": true
+    },
+    {
+      "name": "Route panel opens",
+      "pass": true
+    },
+    {
+      "name": "Map destination moves player to Ninenzaka",
+      "pass": true
+    },
+    {
+      "name": "Coordinate and performance HUD toggles",
+      "pass": true
+    },
+    {
+      "name": "Ambient sound control changes state",
+      "pass": true
+    },
+    {
+      "name": "At least 30 registered interactions",
+      "pass": true,
+      "count": 258
+    },
+    {
+      "name": "At least 30 interactions can be approached",
+      "pass": true,
+      "approachable": 241,
+      "total": 258
+    },
+    {
+      "name": "E invokes a nearby discovery and displays its response",
+      "pass": true,
+      "selected": "Read the shrine gate",
+      "result": {
+        "count": 1,
+        "visible": true,
+        "title": "Read the shrine gate"
+      }
+    },
+    {
+      "name": "Painted foliage screenshots remain opaque with ink off and grade on or off",
+      "pass": true,
+      "samples": [
+        {
+          "ink": false,
+          "grade": false,
+          "transparentPixels": 0,
+          "totalPixels": 57600
+        },
+        {
+          "ink": false,
+          "grade": true,
+          "transparentPixels": 0,
+          "totalPixels": 57600
+        }
+      ]
+    },
+    {
+      "name": "WebGL compiles scene without reported shader errors",
+      "pass": true,
+      "glError": 0,
+      "programCount": 37
+    },
+    {
+      "name": "Measured desktop frame-rate minimum",
+      "pass": true,
+      "averageFPS": 60.03677252173791,
+      "onePercentLow": 59.52380952380565
+    },
+    {
+      "name": "No browser runtime errors",
+      "pass": true,
+      "pageErrors": [],
+      "consoleErrors": []
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "initialStats": {
+    "districts": 19,
+    "buildings": 166,
+    "shopfronts": 148,
+    "landmarks": 5,
+    "props": 518,
+    "interactions": 258,
+    "pavingStones": 4829,
+    "contextBuildings": 385,
+    "propAssemblies": {
+      "paper-lantern": 105,
+      "shop-display": 241,
+      "handwritten-menu": 66,
+      "doorstep-plant": 59,
+      "timber-bench": 31,
+      "city-bicycle": 5,
+      "quiet-tea-vending-machine": 3,
+      "sleepy-lane-cat": 2,
+      "bamboo-garden-screen": 2,
+      "garden-tsukubai": 2
+    },
+    "standaloneDetailPlacements": 29,
+    "sourceMeshes": 44673,
+    "staticBatches": 2231,
+    "vegetation": {
+      "trees": 824,
+      "canopyClusters": 21536,
+      "branches": 11988,
+      "groundPetals": 3690,
+      "fallingPetals": 150,
+      "instancedMeshes": 94,
+      "drawCalls": 128,
+      "types": {
+        "shrub": 169,
+        "maple": 315,
+        "bamboo": 8,
+        "sakura": 82,
+        "pine": 131,
+        "cedar": 119
+      },
+      "spatialCells": 29
+    },
+    "heroViews": 34,
+    "routeLength": 688.0380059231638,
+    "averageFPS": 0.241945044602569,
+    "onePercentLow": 0.241945044602569,
+    "drawCalls": 562,
+    "submittedTriangles": 1272391,
+    "worldTriangles": 6243640,
+    "meshCount": 3069,
+    "instancedMeshes": 102,
+    "shadowCasters": 1153,
+    "textures": 64,
+    "geometries": 607,
+    "pipeline": {
+      "sceneCpuMs": 5.299999713897705,
+      "postCpuMs": 0.10000038146972656,
+      "calls": 559,
+      "triangles": 1272388
+    },
+    "renderSize": [
+      2065,
+      1161
+    ],
+    "renderer": "WebKit WebGL"
+  },
+  "interactions": {
+    "total": 258,
+    "approachable": 241,
+    "reachable": [
+      {
+        "id": 0,
+        "label": "Read the shrine gate",
+        "kind": "read",
+        "pose": {
+          "pos": [
+            148.1,
+            3.1247808,
+            5.000000000000001
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.07470415025332582
+        }
+      },
+      {
+        "id": 1,
+        "label": "Rinse at the temizuya",
+        "kind": "water",
+        "pose": {
+          "pos": [
+            153.53575680531114,
+            3.3,
+            -2.2065686544841987
+          ],
+          "yaw": 0.39269908169873224,
+          "pitch": -0.33029735482925254
+        }
+      },
+      {
+        "id": 2,
+        "label": "Ring the shrine bell",
+        "kind": "bell",
+        "pose": {
+          "pos": [
+            177.4,
+            3.3,
+            3.499999999999994
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1973955598498803
+        }
+      },
+      {
+        "id": 3,
+        "label": "Draw an omikuji",
+        "kind": "fortune",
+        "pose": {
+          "pos": [
+            162.48994949366116,
+            3.3,
+            23.989949493661165
+          ],
+          "yaw": 0.785398163397443,
+          "pitch": -0.2650428598974556
+        }
+      },
+      {
+        "id": 4,
+        "label": "Read the ema",
+        "kind": "read",
+        "pose": {
+          "pos": [
+            160.20000000000002,
+            3.3,
+            18.5
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1973955598498803
+        }
+      },
+      {
+        "id": 5,
+        "label": "Listen beside the lantern stage",
+        "kind": "lantern",
+        "pose": {
+          "pos": [
+            169.69343134551582,
+            3.3,
+            14.535756805311122
+          ],
+          "yaw": 1.1780972450961757,
+          "pitch": -0.1973955598498796
+        }
+      },
+      {
+        "id": 6,
+        "label": "Stamp the Yasaka page",
+        "kind": "stamp",
+        "pose": {
+          "pos": [
+            177.4,
+            3.3211839142091146,
+            25.999999999999993
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.2790813143777682
+        }
+      },
+      {
+        "id": 7,
+        "label": "Read the Hōkan-ji stone",
+        "kind": "read",
+        "pose": {
+          "pos": [
+            186.4,
+            9.174497197122042,
+            186.7
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": 0.03249056448113079
+        }
+      },
+      {
+        "id": 8,
+        "label": "Read about the wooden stage",
+        "kind": "read",
+        "pose": {
+          "pos": [
+            328.2,
+            44,
+            300.1
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.19739555984988483
+        }
+      },
+      {
+        "id": 9,
+        "label": "Pause before the main hall",
+        "kind": "bell",
+        "pose": {
+          "pos": [
+            340.4,
+            44,
+            296.2
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.26504285989746046
+        }
+      },
+      {
+        "id": 10,
+        "label": "Rest on the veranda bench",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            331.4,
+            44,
+            300.6
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.3927606656373263
+        }
+      },
+      {
+        "id": 11,
+        "label": "Find Kyoto in the haze",
+        "kind": "photo",
+        "pose": {
+          "pos": [
+            350.8,
+            44,
+            309
+          ],
+          "yaw": 0,
+          "pitch": -0.26504285989746046
+        }
+      },
+      {
+        "id": 12,
+        "label": "Listen from the stage",
+        "kind": "chime",
+        "pose": {
+          "pos": [
+            340.4,
+            44,
+            310.5
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.3302973548292568
+        }
+      },
+      {
+        "id": 13,
+        "label": "Stamp the Kiyomizu page",
+        "kind": "stamp",
+        "pose": {
+          "pos": [
+            349.4,
+            44,
+            300.6
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.3302973548292568
+        }
+      },
+      {
+        "id": 14,
+        "label": "Read the Nio-mon plaque",
+        "kind": "read",
+        "pose": {
+          "pos": [
+            292.9,
+            37.76,
+            279
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.02856365783876001
+        }
+      },
+      {
+        "id": 15,
+        "label": "Read the Hōkan-ji stone",
+        "kind": "read",
+        "pose": {
+          "pos": [
+            314.4,
+            43.578378378378375,
+            298.7
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.35089885145327554
+        }
+      },
+      {
+        "id": 16,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            3.4714986174011138,
+            0.014877851217433343,
+            -4.579999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12778716877554977
+        }
+      },
+      {
+        "id": 17,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            3.471498617401114,
+            0.014877851217433347,
+            4.579999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1277871687755499
+        }
+      },
+      {
+        "id": 18,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            7.35795354041271,
+            0.031534086601768756,
+            4.5
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13947315061903137
+        }
+      },
+      {
+        "id": 19,
+        "label": "Sample the incense · 香の庭",
+        "kind": "incense",
+        "pose": {
+          "pos": [
+            9.59578285008145,
+            0.041124783643206216,
+            -4.58
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12688958308215603
+        }
+      },
+      {
+        "id": 20,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            9.59578285008145,
+            0.041124783643206216,
+            4.58
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12688958308215603
+        }
+      },
+      {
+        "id": 21,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            16.057511763181886,
+            0.0688179075564938,
+            -4.579999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12859761747169982
+        }
+      },
+      {
+        "id": 22,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            19.147085331808775,
+            0.08205893713632331,
+            -4.499999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13788850418907184
+        }
+      },
+      {
+        "id": 23,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            16.057511763181886,
+            0.0688179075564938,
+            4.579999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12859761747169982
+        }
+      },
+      {
+        "id": 24,
+        "label": "Sample the incense · 香の庭",
+        "kind": "incense",
+        "pose": {
+          "pos": [
+            21.175874807155807,
+            0.09075374917352488,
+            -4.579999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1275448987473355
+        }
+      },
+      {
+        "id": 25,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            21.17587480715581,
+            0.0907537491735249,
+            4.579999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1275448987473355
+        }
+      },
+      {
+        "id": 26,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            25.300511761796663,
+            0.10843076469341427,
+            4.5
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13994665343448037
+        }
+      },
+      {
+        "id": 27,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            27.232168987580458,
+            0.11670929566105911,
+            -4.579999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1278493596566271
+        }
+      },
+      {
+        "id": 28,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            27.232168987580458,
+            0.11670929566105911,
+            4.579999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1278493596566271
+        }
+      },
+      {
+        "id": 29,
+        "label": "Sample the incense · 香の庭",
+        "kind": "incense",
+        "pose": {
+          "pos": [
+            32.79858016320831,
+            0.14056534355660702,
+            -4.580000000000001
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12844659133033595
+        }
+      },
+      {
+        "id": 30,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            36.03666424624622,
+            0.15444284676962663,
+            -4.500000000000001
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13818387935248558
+        }
+      },
+      {
+        "id": 31,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            32.79858016320831,
+            0.14056534355660702,
+            4.580000000000001
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12844659133033595
+        }
+      },
+      {
+        "id": 32,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            38.24691048624855,
+            0.16391533065535094,
+            -4.58
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12697605909807846
+        }
+      },
+      {
+        "id": 33,
+        "label": "Taste Uji tea · 京の茶",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            48.21012067402829,
+            0.2066148028886927,
+            -4.58
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1368551019891035
+        }
+      },
+      {
+        "id": 34,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            43.85073053197004,
+            0.18793170227987158,
+            -4.5
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12373550632636764
+        }
+      },
+      {
+        "id": 35,
+        "label": "Open a folding fan · 風のいろ",
+        "kind": "fan",
+        "pose": {
+          "pos": [
+            51.61878096723335,
+            0.22122334700242866,
+            -4.58
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1269339033925096
+        }
+      },
+      {
+        "id": 36,
+        "label": "Browse the postcards · 東山だより",
+        "kind": "postcard",
+        "pose": {
+          "pos": [
+            51.61878096723335,
+            0.22122334700242866,
+            4.58
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1269339033925096
+        }
+      },
+      {
+        "id": 37,
+        "label": "Sample yatsuhashi · 八つ橋",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            58.25252814121846,
+            0.2496536920337934,
+            -4.579999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12792197286871815
+        }
+      },
+      {
+        "id": 38,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            62.006447198293166,
+            0.26574191656411356,
+            -4.499999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13920964374590902
+        }
+      },
+      {
+        "id": 39,
+        "label": "Taste Uji tea · 京の茶",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            58.25252814121846,
+            0.2496536920337934,
+            4.579999999999999
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12792197286871815
+        }
+      },
+      {
+        "id": 40,
+        "label": "Open a folding fan · 風のいろ",
+        "kind": "fan",
+        "pose": {
+          "pos": [
+            64.06356433268601,
+            0.27455813285436864,
+            -4.58
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1274561012564015
+        }
+      },
+      {
+        "id": 41,
+        "label": "Sample yatsuhashi · 八つ橋",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            74.20376469610667,
+            0.3903651856268973,
+            7.350542313086505
+          ],
+          "yaw": 0,
+          "pitch": -0.15536713721085563
+        }
+      },
+      {
+        "id": 42,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            74.37838262083588,
+            0.33098204330870673,
+            2.680366828633027
+          ],
+          "yaw": 0,
+          "pitch": -0.11372016055653561
+        }
+      },
+      {
+        "id": 43,
+        "label": "Try a spring sweet · 花ごよみ",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            73.94032152813912,
+            0.43074029886954,
+            10.51794135011108
+          ],
+          "yaw": 0,
+          "pitch": -0.12817393026039692
+        }
+      },
+      {
+        "id": 44,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            73.40909141929937,
+            0.5358796071842038,
+            18.774488835776705
+          ],
+          "yaw": 0,
+          "pitch": -0.1523203440870645
+        }
+      },
+      {
+        "id": 45,
+        "label": "Taste the soba · 石畳そば",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            66.12135760170955,
+            0.5171452630840061,
+            16.900612445726352
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13922120958831755
+        }
+      },
+      {
+        "id": 46,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            66.40031108863265,
+            0.4706950760166593,
+            13.255312049887603
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.10654403203829575
+        }
+      },
+      {
+        "id": 47,
+        "label": "Read today’s menu · 祇園こみち",
+        "kind": "menu",
+        "pose": {
+          "pos": [
+            72.51806136169753,
+            0.6,
+            23.7784605311421
+          ],
+          "yaw": -0.39269908169872253,
+          "pitch": -0.1504131654218125
+        }
+      },
+      {
+        "id": 48,
+        "label": "Inspect the tea bowls · 清水焼",
+        "kind": "pottery",
+        "pose": {
+          "pos": [
+            72.81804612549645,
+            0.6371675904968958,
+            26.724269257951278
+          ],
+          "yaw": 0,
+          "pitch": -0.1269298439250437
+        }
+      },
+      {
+        "id": 49,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            71.72125105217775,
+            0.7472380372631561,
+            35.33856707184387
+          ],
+          "yaw": -0.3926990816987235,
+          "pitch": -0.15179352249315153
+        }
+      },
+      {
+        "id": 50,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            72.37907427923969,
+            0.7010983901927061,
+            31.73840446314477
+          ],
+          "yaw": 0,
+          "pitch": -0.1194420534955413
+        }
+      },
+      {
+        "id": 51,
+        "label": "Try Kyoto yuba · ゆばの里",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            65.45338480953372,
+            0.7294851710490784,
+            33.59766537825779
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1393799519291746
+        }
+      },
+      {
+        "id": 52,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            71.83114695193144,
+            0.8272492369422553,
+            41.64985957095737
+          ],
+          "yaw": 0,
+          "pitch": -0.154326800279071
+        }
+      },
+      {
+        "id": 53,
+        "label": "Inspect the tea bowls · 清水焼",
+        "kind": "pottery",
+        "pose": {
+          "pos": [
+            65.20184809972275,
+            0.8085148928420576,
+            39.81189781538235
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14123544991143908
+        }
+      },
+      {
+        "id": 54,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            65.51729693882378,
+            0.7535491235998625,
+            35.497515962948384
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.10255972517821493
+        }
+      },
+      {
+        "id": 55,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            71.38918799088394,
+            0.90867775053931,
+            48.04274259524995
+          ],
+          "yaw": 0,
+          "pitch": -0.154292216566345
+        }
+      },
+      {
+        "id": 56,
+        "label": "Try Kyoto yuba · ゆばの里",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            64.9458483727955,
+            0.8899434064391123,
+            46.21492407062694
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14120073115129791
+        }
+      },
+      {
+        "id": 57,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            64.86460074965005,
+            0.929612470137545,
+            49.33662067458641
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.11442063897584397
+        }
+      },
+      {
+        "id": 58,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            64.73282849612539,
+            0.9789982891746754,
+            53.22129218695658
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1490837685598196
+        }
+      },
+      {
+        "id": 59,
+        "label": "Taste the soba · 石畳そば",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            74.19521963887301,
+            1.0469253454709109,
+            58.647141816033546
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14214464191606083
+        }
+      },
+      {
+        "id": 60,
+        "label": "Read today’s menu · 祇園こみち",
+        "kind": "menu",
+        "pose": {
+          "pos": [
+            77.37919778949617,
+            1.0676904203662794,
+            58.44339881577025
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12813002676366086
+        }
+      },
+      {
+        "id": 61,
+        "label": "Inspect the tea bowls · 清水焼",
+        "kind": "pottery",
+        "pose": {
+          "pos": [
+            83.251434844833,
+            1.1059876185532587,
+            51.76046276374869
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1263905638946349
+        }
+      },
+      {
+        "id": 62,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            88.01214549377096,
+            1.137035731481115,
+            51.84046276374869
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14815160452805615
+        }
+      },
+      {
+        "id": 63,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            83.251434844833,
+            1.1059876185532587,
+            58.23953723625131
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1263905638946349
+        }
+      },
+      {
+        "id": 64,
+        "label": "Try Kyoto yuba · ゆばの里",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            89.7056780118189,
+            1.148080508772732,
+            51.952543288154104
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12897425416072228
+        }
+      },
+      {
+        "id": 65,
+        "label": "Read today’s menu · 祇園こみち",
+        "kind": "menu",
+        "pose": {
+          "pos": [
+            89.7056780118189,
+            1.148080508772732,
+            58.047456711845896
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12897425416072228
+        }
+      },
+      {
+        "id": 66,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            92.79717617968097,
+            1.1682424533457456,
+            57.9674567118459
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14311050062217578
+        }
+      },
+      {
+        "id": 67,
+        "label": "Inspect the tea bowls · 清水焼",
+        "kind": "pottery",
+        "pose": {
+          "pos": [
+            94.66611276032987,
+            1.1804311701760644,
+            52.12024974991299
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12813778137742482
+        }
+      },
+      {
+        "id": 68,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            94.66611276032987,
+            1.1804311701760644,
+            57.87975025008701
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12813778137742482
+        }
+      },
+      {
+        "id": 69,
+        "label": "Try Kyoto yuba · ゆばの里",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            100.01998484409626,
+            1.215347727244106,
+            52.28984022971086
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12883925829566972
+        }
+      },
+      {
+        "id": 70,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            103.19872560728344,
+            1.236078645264892,
+            52.36984022971086
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1433741612975292
+        }
+      },
+      {
+        "id": 71,
+        "label": "Read today’s menu · 祇園こみち",
+        "kind": "menu",
+        "pose": {
+          "pos": [
+            100.01998484409626,
+            1.215347727244106,
+            57.71015977028914
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12883925829566972
+        }
+      },
+      {
+        "id": 72,
+        "label": "Inspect the tea bowls · 清水焼",
+        "kind": "pottery",
+        "pose": {
+          "pos": [
+            105.06030206552649,
+            1.248219361296912,
+            52.45894090544445
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12817288420889422
+        }
+      },
+      {
+        "id": 73,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            105.06030206552649,
+            1.248219361296912,
+            57.54105909455555
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12817288420889422
+        }
+      },
+      {
+        "id": 74,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            108.66964992664289,
+            1.2717585864781058,
+            57.46105909455555
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14467522817867629
+        }
+      },
+      {
+        "id": 75,
+        "label": "Inspect the tea bowls · 清水焼",
+        "kind": "pottery",
+        "pose": {
+          "pos": [
+            115.33365177591737,
+            1.2930677727501405,
+            51.187275012577295
+          ],
+          "yaw": 0,
+          "pitch": -0.127711283844138
+        }
+      },
+      {
+        "id": 76,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            115.4154024778931,
+            1.2878379967995823,
+            48.310898239770204
+          ],
+          "yaw": 0,
+          "pitch": -0.13121549966074697
+        }
+      },
+      {
+        "id": 77,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            111.90772011058921,
+            1.2759255513625931,
+            41.75905324942619
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12959847886409723
+        }
+      },
+      {
+        "id": 78,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            111.98772011058921,
+            1.2692586122321388,
+            38.09223672767635
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1249130906966107
+        }
+      },
+      {
+        "id": 79,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            115.4922798894108,
+            1.2784710059080477,
+            43.15905324942619
+          ],
+          "yaw": 0,
+          "pitch": -0.13138587513793137
+        }
+      },
+      {
+        "id": 80,
+        "label": "Sample the incense · 香の庭",
+        "kind": "incense",
+        "pose": {
+          "pos": [
+            111.83122604184982,
+            1.2660966691198732,
+            36.353168015930216
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.129410858445654
+        }
+      },
+      {
+        "id": 81,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            115.56877395815019,
+            1.2686421236653276,
+            37.753168015930214
+          ],
+          "yaw": 0,
+          "pitch": -0.13119834265889432
+        }
+      },
+      {
+        "id": 82,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            115.48877395815019,
+            1.262766080048494,
+            34.52134402667172
+          ],
+          "yaw": 0,
+          "pitch": -0.1270707775771103
+        }
+      },
+      {
+        "id": 83,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            111.75338759305902,
+            1.256719690899596,
+            31.1958299947778
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12965867324972097
+        }
+      },
+      {
+        "id": 84,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            115.64661240694099,
+            1.2592651454450505,
+            32.5958299947778
+          ],
+          "yaw": 0,
+          "pitch": -0.13144604128370999
+        }
+      },
+      {
+        "id": 85,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            116.08656190060216,
+            1.2541874106546491,
+            29.803075860056957
+          ],
+          "yaw": 0.7853981633974519,
+          "pitch": -0.6107326573215487
+        }
+      },
+      {
+        "id": 86,
+        "label": "Sample the incense · 香の庭",
+        "kind": "incense",
+        "pose": {
+          "pos": [
+            111.66190336723693,
+            1.245801253079008,
+            25.190689193454336
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13002183176004567
+        }
+      },
+      {
+        "id": 87,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            111.74190336723693,
+            1.2373495690475218,
+            20.54226297613699
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12408185864765477
+        }
+      },
+      {
+        "id": 88,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            115.73809663276307,
+            1.2483467076244623,
+            26.590689193454335
+          ],
+          "yaw": 0,
+          "pitch": -0.1318090291504832
+        }
+      },
+      {
+        "id": 89,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            111.5712297966699,
+            1.2338982870784494,
+            18.644057893147224
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12962237641314822
+        }
+      },
+      {
+        "id": 90,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            115.82877020333011,
+            1.236443741623904,
+            20.044057893147222
+          ],
+          "yaw": 0,
+          "pitch": -0.13140976147710925
+        }
+      },
+      {
+        "id": 91,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            115.7487702033301,
+            1.2296760619381357,
+            16.321834065974688
+          ],
+          "yaw": 0,
+          "pitch": -0.12665575268180893
+        }
+      },
+      {
+        "id": 92,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            116.26871969699127,
+            1.2314546722520225,
+            17.300069738612386
+          ],
+          "yaw": 0.78539816339745,
+          "pitch": -0.610750387590195
+        }
+      },
+      {
+        "id": 93,
+        "label": "Sample the incense · 香の庭",
+        "kind": "incense",
+        "pose": {
+          "pos": [
+            111.47967971747664,
+            1.223079174283893,
+            12.693545856141128
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13006107305191864
+        }
+      },
+      {
+        "id": 94,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            115.92032028252336,
+            1.2256246288293475,
+            14.093545856141128
+          ],
+          "yaw": 0,
+          "pitch": -0.13184825197565977
+        }
+      },
+      {
+        "id": 95,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            111.39388741398513,
+            1.211363431041864,
+            6.2498870730252145
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12936456392120135
+        }
+      },
+      {
+        "id": 96,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            111.47388741398512,
+            1.2056825315198014,
+            3.125392335890783
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1253722571932973
+        }
+      },
+      {
+        "id": 97,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            119.54354417865747,
+            1.2727060464295274,
+            -3.3498329251242316
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.15044816233072453
+        }
+      },
+      {
+        "id": 98,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            117.00427208932874,
+            1.2444919121036526,
+            -2.7998329251242318
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6126490520635762
+        }
+      },
+      {
+        "id": 99,
+        "label": "Try Kyoto yuba · ゆばの里",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            122.88655455089291,
+            1.3098506061210322,
+            -3.8366976828317805
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1253014870671677
+        }
+      },
+      {
+        "id": 100,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            131.68389076254073,
+            1.4075987862504524,
+            -4.274261392012446
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14781368449973042
+        }
+      },
+      {
+        "id": 101,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            128.58534845810382,
+            1.3731705384233759,
+            -4.194261392012446
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1236736739486132
+        }
+      },
+      {
+        "id": 102,
+        "label": "Inspect the tea bowls · 清水焼",
+        "kind": "pottery",
+        "pose": {
+          "pos": [
+            131.68389076254073,
+            1.4075987862504524,
+            4.274261392012446
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14781368449973042
+        }
+      },
+      {
+        "id": 103,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            137.0591329915236,
+            1.4673236999058177,
+            -4.657894758199756
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1493366421851656
+        }
+      },
+      {
+        "id": 104,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            134.74999664574216,
+            1.441666629397135,
+            -4.107894758199755
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.613110475312888
+        }
+      },
+      {
+        "id": 105,
+        "label": "Try Kyoto yuba · ゆばの里",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            137.0591329915236,
+            1.4673236999058177,
+            4.657894758199756
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1493366421851656
+        }
+      },
+      {
+        "id": 106,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            133.3797091262322,
+            1.4264412125136912,
+            4.577894758199755
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12066592542600034
+        }
+      },
+      {
+        "id": 107,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            168.61426777056099,
+            3.628602791627777,
+            29.74774207633463
+          ],
+          "yaw": -1.9634954084936163,
+          "pitch": -0.24306913533337682
+        }
+      },
+      {
+        "id": 109,
+        "label": "Open a folding fan · 風のいろ",
+        "kind": "fan",
+        "pose": {
+          "pos": [
+            178.92770745631086,
+            4.339870891141065,
+            33.82973892502798
+          ],
+          "yaw": -1.9634954084936163,
+          "pitch": 0.005919787017849177
+        }
+      },
+      {
+        "id": 110,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            185.74721122314835,
+            4.785128902238368,
+            36.09356599390466
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.30254007880173023
+        }
+      },
+      {
+        "id": 111,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            182.93578778406928,
+            4.561428035352158,
+            33.55905527004096
+          ],
+          "yaw": -3.141592653589793,
+          "pitch": -0.6264974372824955
+        }
+      },
+      {
+        "id": 112,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            192.42403098208703,
+            5.6676224282388254,
+            46.38423299847561
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.2012557574642691
+        }
+      },
+      {
+        "id": 114,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            196.62917318682568,
+            6.355736607196061,
+            57.47051699278662
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.19878363614316538
+        }
+      },
+      {
+        "id": 115,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            195.49997790052942,
+            6.158719229093969,
+            54.2679757846344
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.06064285382924779
+        }
+      },
+      {
+        "id": 117,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            198.91701044183165,
+            6.6459601988284405,
+            61.95128169587535
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6494347822956252
+        }
+      },
+      {
+        "id": 118,
+        "label": "Try Kyoto yuba · ゆばの里",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            200.70109923873042,
+            10.04405559935764,
+            142.26363417434237
+          ],
+          "yaw": -2.356194490192345,
+          "pitch": 0.03876788963029849
+        }
+      },
+      {
+        "id": 119,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            205.07005508507427,
+            10.536870886937582,
+            145.85710875134157
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.3035439519359893
+        }
+      },
+      {
+        "id": 120,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            204.7497598163903,
+            10.428976347548057,
+            144.610877336529
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6793486420722855
+        }
+      },
+      {
+        "id": 121,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            207.94445075992533,
+            10.985946908590872,
+            149.9310029493678
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.27026650601225327
+        }
+      },
+      {
+        "id": 123,
+        "label": "Examine the handcrafts · 手のひら",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            211.60615622079203,
+            11.54582148089211,
+            154.95360912053383
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.27309871773868133
+        }
+      },
+      {
+        "id": 124,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            207.27268051764915,
+            10.970426118012593,
+            150.20362174225917
+          ],
+          "yaw": -2.748893571891064,
+          "pitch": 0.13015956481091573
+        }
+      },
+      {
+        "id": 126,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            219.13748255503862,
+            12.341469771530921,
+            160.69430685289194
+          ],
+          "yaw": 0,
+          "pitch": -0.6233790476403724
+        }
+      },
+      {
+        "id": 127,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            216.7664910230981,
+            12.495240843058049,
+            163.6103501773789
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.25195975924627906
+        }
+      },
+      {
+        "id": 129,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            221.33767969534168,
+            12.735157334391088,
+            164.43831108314907
+          ],
+          "yaw": 0,
+          "pitch": -0.03874850997896335
+        }
+      },
+      {
+        "id": 130,
+        "label": "Open a folding fan · 風のいろ",
+        "kind": "fan",
+        "pose": {
+          "pos": [
+            223.87021747759343,
+            13.371877268815325,
+            170.95522629258724
+          ],
+          "yaw": -0.39269908169872897,
+          "pitch": -0.09530216391933122
+        }
+      },
+      {
+        "id": 131,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            227.85028022680407,
+            14.331841145155005,
+            183.53068575258342
+          ],
+          "yaw": 0,
+          "pitch": -0.2338710511886463
+        }
+      },
+      {
+        "id": 132,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            228.29022972046522,
+            14.189159305496112,
+            181.15265509160187
+          ],
+          "yaw": 0.7853981633974483,
+          "pitch": -0.6159039492746626
+        }
+      },
+      {
+        "id": 133,
+        "label": "Taste the soba · 石畳そば",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            227.54461797941514,
+            15.4,
+            191.40467414409426
+          ],
+          "yaw": 0,
+          "pitch": -0.12786991856000057
+        }
+      },
+      {
+        "id": 134,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            228.45456747307628,
+            16.36,
+            194.67515008180087
+          ],
+          "yaw": 0.7853981633974483,
+          "pitch": -0.6833912454873411
+        }
+      },
+      {
+        "id": 135,
+        "label": "Sample yatsuhashi · 八つ橋",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            223.85538202058487,
+            15.08,
+            190.00467414409425
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": 0.09966865249116061
+        }
+      },
+      {
+        "id": 136,
+        "label": "Taste Uji tea · 京の茶",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            227.50340091726738,
+            17.591343433643214,
+            201.31476751992668
+          ],
+          "yaw": 0,
+          "pitch": -0.1150739871668951
+        }
+      },
+      {
+        "id": 137,
+        "label": "Sample the incense · 香の庭",
+        "kind": "incense",
+        "pose": {
+          "pos": [
+            224.5328700250028,
+            17.496143433643212,
+            200.53912907596444
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.047548763026744705
+        }
+      },
+      {
+        "id": 138,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            225.23929331086714,
+            17.851572251920352,
+            204.9184066520654
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.2927978657464245
+        }
+      },
+      {
+        "id": 139,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            225.45989882086786,
+            17.712925492442338,
+            203.13924335049373
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6585959076542026
+        }
+      },
+      {
+        "id": 140,
+        "label": "Browse the postcards · 東山だより",
+        "kind": "postcard",
+        "pose": {
+          "pos": [
+            228.64192028159812,
+            18.11576844383941,
+            207.76252118463822
+          ],
+          "yaw": 0,
+          "pitch": -0.11629453296092346
+        }
+      },
+      {
+        "id": 141,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            225.24526246136452,
+            18.02056844383941,
+            207.04775801610015
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.048782922427685144
+        }
+      },
+      {
+        "id": 142,
+        "label": "Taste Uji tea · 京の茶",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            229.784391415056,
+            18.640605674643243,
+            214.21490636898244
+          ],
+          "yaw": 0,
+          "pitch": -0.11222955114059217
+        }
+      },
+      {
+        "id": 143,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            231.64693193308653,
+            18.95407417791808,
+            217.9001128068458
+          ],
+          "yaw": 1.1780972450961675,
+          "pitch": -0.32469593645505657
+        }
+      },
+      {
+        "id": 144,
+        "label": "Sample the incense · 香の庭",
+        "kind": "incense",
+        "pose": {
+          "pos": [
+            225.95515802486133,
+            18.54540567464324,
+            213.56193971043882
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.0446733898560611
+        }
+      },
+      {
+        "id": 145,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            226.89272572354446,
+            18.76815977837262,
+            216.23582630469474
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6594611025981475
+        }
+      },
+      {
+        "id": 146,
+        "label": "Open a folding fan · 風のいろ",
+        "kind": "fan",
+        "pose": {
+          "pos": [
+            230.53372456269847,
+            19.8,
+            222.76265138722522
+          ],
+          "yaw": 0,
+          "pitch": -0.12786991855999932
+        }
+      },
+      {
+        "id": 147,
+        "label": "Browse the postcards · 東山だより",
+        "kind": "postcard",
+        "pose": {
+          "pos": [
+            226.56592305337665,
+            19.48,
+            220.9924581796858
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": 0.09966865249116187
+        }
+      },
+      {
+        "id": 148,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            226.35475427442046,
+            20.6,
+            225.2171608228506
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.610725964389207
+        }
+      },
+      {
+        "id": 149,
+        "label": "Sample yatsuhashi · 八つ橋",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            229.93337648314312,
+            21.4,
+            229.1667470639231
+          ],
+          "yaw": 0,
+          "pitch": -0.014284742587396426
+        }
+      },
+      {
+        "id": 150,
+        "label": "Taste Uji tea · 京の茶",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            226.28144523573272,
+            21.08,
+            227.4183380123776
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": 0.21109333322274604
+        }
+      },
+      {
+        "id": 151,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            226.636452272021,
+            21.88,
+            230.26467900575943
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.7483780475235167
+        }
+      },
+      {
+        "id": 152,
+        "label": "Open a folding fan · 風のいろ",
+        "kind": "fan",
+        "pose": {
+          "pos": [
+            229.35797811011844,
+            23.16,
+            235.48037055728008
+          ],
+          "yaw": 0,
+          "pitch": -0.23824475817874416
+        }
+      },
+      {
+        "id": 153,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            228.53196173557438,
+            23.8,
+            238.4198103083733
+          ],
+          "yaw": -0.39269908169872897,
+          "pitch": -0.6107259643892037
+        }
+      },
+      {
+        "id": 154,
+        "label": "Browse the postcards · 東山だより",
+        "kind": "postcard",
+        "pose": {
+          "pos": [
+            225.9846737718182,
+            22.68,
+            233.7511771546387
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": 0.09966865249116187
+        }
+      },
+      {
+        "id": 155,
+        "label": "Sample yatsuhashi · 八つ橋",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            228.884988059598,
+            24.28,
+            240.4800599865386
+          ],
+          "yaw": 0,
+          "pitch": -0.014284742587396426
+        }
+      },
+      {
+        "id": 156,
+        "label": "Taste Uji tea · 京の茶",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            225.76683791204496,
+            23.96,
+            238.7684634246384
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": 0.21109333322274604
+        }
+      },
+      {
+        "id": 157,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            225.57710536667872,
+            24.92,
+            242.68234068074898
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.4405303406165118
+        }
+      },
+      {
+        "id": 158,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            226.14722208719508,
+            24.6,
+            241.24683590452372
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6833912454873347
+        }
+      },
+      {
+        "id": 160,
+        "label": "Open a folding fan · 風のいろ",
+        "kind": "fan",
+        "pose": {
+          "pos": [
+            238.55466253641777,
+            28.365440804080365,
+            250.20030823014275
+          ],
+          "yaw": 1.1780972450961675,
+          "pitch": -0.4209018869539728
+        }
+      },
+      {
+        "id": 162,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            233.03878157658824,
+            27.734129351736794,
+            253.13425448940743
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": 0.0032820098548439845
+        }
+      },
+      {
+        "id": 163,
+        "label": "Sample yatsuhashi · 八つ橋",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            243.49541057787474,
+            29.184514826174023,
+            251.83216617541262
+          ],
+          "yaw": 1.1780972450961675,
+          "pitch": -0.3997240699828407
+        }
+      },
+      {
+        "id": 164,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            241.38732824322003,
+            28.86071417378482,
+            251.56721106539862
+          ],
+          "yaw": 1.1780972450961675,
+          "pitch": -0.6515230313382881
+        }
+      },
+      {
+        "id": 165,
+        "label": "Taste Uji tea · 京の茶",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            239.89278886954645,
+            28.880287217395423,
+            255.56442207882296
+          ],
+          "yaw": -3.141592653589793,
+          "pitch": -0.20235460368407654
+        }
+      },
+      {
+        "id": 166,
+        "label": "Open a folding fan · 風のいろ",
+        "kind": "fan",
+        "pose": {
+          "pos": [
+            248.18653513723567,
+            29.963013850478852,
+            253.3951404913509
+          ],
+          "yaw": 1.1780972450961675,
+          "pitch": -0.3983524471208271
+        }
+      },
+      {
+        "id": 167,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            243.9052937151119,
+            29.321576702127906,
+            253.12851220141943
+          ],
+          "yaw": 0,
+          "pitch": 0.037299575156735994
+        }
+      },
+      {
+        "id": 168,
+        "label": "Browse the postcards · 東山だより",
+        "kind": "postcard",
+        "pose": {
+          "pos": [
+            244.34056589985096,
+            29.658786241700263,
+            257.72470396608173
+          ],
+          "yaw": -3.141592653589793,
+          "pitch": -0.20080387006800335
+        }
+      },
+      {
+        "id": 169,
+        "label": "Browse the postcards · 東山だより",
+        "kind": "postcard",
+        "pose": {
+          "pos": [
+            260.5096742033624,
+            32.11794943590793,
+            258.0076815167899
+          ],
+          "yaw": 1.1780972450961786,
+          "pitch": -0.4510345842317505
+        }
+      },
+      {
+        "id": 170,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            257.27942836879043,
+            31.622098883379692,
+            258.22992327380985
+          ],
+          "yaw": 0.392699081698718,
+          "pitch": -0.6117864552249744
+        }
+      },
+      {
+        "id": 172,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            253.70475550974993,
+            31.40354309641229,
+            262.98811871317645
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": 0.02595271369407012
+        }
+      },
+      {
+        "id": 173,
+        "label": "Taste Uji tea · 京の茶",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            265.77745077917234,
+            33.12933920886782,
+            260.4164924996535
+          ],
+          "yaw": 1.1780972450961786,
+          "pitch": -0.44597372571557337
+        }
+      },
+      {
+        "id": 175,
+        "label": "Browse the postcards · 東山だより",
+        "kind": "postcard",
+        "pose": {
+          "pos": [
+            270.94719769680927,
+            34.12191583344142,
+            262.78058804727937
+          ],
+          "yaw": 1.1780972450961786,
+          "pitch": -0.44392375569336445
+        }
+      },
+      {
+        "id": 176,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            265.67414458400816,
+            33.231527515947874,
+            262.03689611926995
+          ],
+          "yaw": -0.392699081698718,
+          "pitch": 0.15905386968538113
+        }
+      },
+      {
+        "id": 177,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            268.2763164216672,
+            33.69609080948529,
+            262.74788881602
+          ],
+          "yaw": 0.7853981633974483,
+          "pitch": -0.6389098058009959
+        }
+      },
+      {
+        "id": 179,
+        "label": "Taste Uji tea · 京の茶",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            275.91969263572844,
+            35.076607343284486,
+            265.0542996474764
+          ],
+          "yaw": 1.1780972450961786,
+          "pitch": -0.43711391149024414
+        }
+      },
+      {
+        "id": 181,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            269.4327610030542,
+            34.43296671320311,
+            270.3128962404916
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.007516108026910909
+        }
+      },
+      {
+        "id": 182,
+        "label": "Sample the incense · 香の庭",
+        "kind": "incense",
+        "pose": {
+          "pos": [
+            277.6798209403349,
+            36,
+            275.48846206899
+          ],
+          "yaw": -1.9634954084936147,
+          "pitch": 0.0996686524911638
+        }
+      },
+      {
+        "id": 184,
+        "label": "Taste the soba · 石畳そば",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            55.0787928739821,
+            0.4710999340183528,
+            25.08
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14441489121705584
+        }
+      },
+      {
+        "id": 185,
+        "label": "Sample yatsuhashi · 八つ橋",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            55.0787928739821,
+            0.4710999340183528,
+            20.92
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14441489121705584
+        }
+      },
+      {
+        "id": 186,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            52.01801581921987,
+            0.4427594057335173,
+            21
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12453621805072583
+        }
+      },
+      {
+        "id": 187,
+        "label": "Try a spring sweet · 花ごよみ",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            49.96134392104717,
+            0.4237161474171034,
+            25.080000000000002
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.14692914162963785
+        }
+      },
+      {
+        "id": 188,
+        "label": "Try a spring sweet · 花ごよみ",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            41.32,
+            0.3024018820586928,
+            17.526216436749674
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1180060795555145
+        }
+      },
+      {
+        "id": 189,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            41.31999999999999,
+            0.27448056925037045,
+            14.315265463792603
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13690147916963755
+        }
+      },
+      {
+        "id": 190,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            41.4,
+            0.23933625650551654,
+            10.273669498134403
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.11218708760520057
+        }
+      },
+      {
+        "id": 191,
+        "label": "Sample the incense · 香の庭",
+        "kind": "incense",
+        "pose": {
+          "pos": [
+            214.3471710901383,
+            12.654633941127134,
+            179.24869501187285
+          ],
+          "yaw": -1.9634954084936256,
+          "pitch": -0.1435509311866766
+        }
+      },
+      {
+        "id": 192,
+        "label": "Browse the postcards · 東山だより",
+        "kind": "postcard",
+        "pose": {
+          "pos": [
+            208.33987712239966,
+            11.874159280422456,
+            178.6495746024117
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13064241662821297
+        }
+      },
+      {
+        "id": 193,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            209.00417000495938,
+            11.86945402779865,
+            173.27539295705293
+          ],
+          "yaw": 1.1780972450961675,
+          "pitch": -0.12733713539153393
+        }
+      },
+      {
+        "id": 194,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            212.74940754621804,
+            12.350117891922444,
+            173.29492279613666
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.4404752236383426
+        }
+      },
+      {
+        "id": 195,
+        "label": "Sample yatsuhashi · 八つ橋",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            201.48019131832336,
+            10.955895020948649,
+            172.01999999999998
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.28259423390499533
+        }
+      },
+      {
+        "id": 196,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            199.3219615296151,
+            10.772772493421886,
+            172.57
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6312245515580163
+        }
+      },
+      {
+        "id": 197,
+        "label": "Try a spring sweet · 花ごよみ",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            193.0834662367853,
+            10.243445620090874,
+            172.02
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12277959768570045
+        }
+      },
+      {
+        "id": 198,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            190.30577170431883,
+            10.007762447639173,
+            172.02
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.2762304745182294
+        }
+      },
+      {
+        "id": 199,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            187.22325218717103,
+            9.746215337093298,
+            172.1
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.09635879982935264
+        }
+      },
+      {
+        "id": 200,
+        "label": "Try Kyoto yuba · ゆばの里",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            182.47925953480276,
+            9.343694748407508,
+            172.01999999999998
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.1274894243504068
+        }
+      },
+      {
+        "id": 201,
+        "label": "Try matcha sweets · 抹茶日和",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            179.72878381968033,
+            9.110321051366816,
+            172.02
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.27906742851050653
+        }
+      },
+      {
+        "id": 202,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            177.6787011207986,
+            8.936374640552607,
+            172.57
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6330041650745707
+        }
+      },
+      {
+        "id": 203,
+        "label": "Read today’s menu · 祇園こみち",
+        "kind": "menu",
+        "pose": {
+          "pos": [
+            168.47735249876897,
+            8.174400938715214,
+            177.9995624427476
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.21852557102432038
+        }
+      },
+      {
+        "id": 204,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            165.04960203579162,
+            8.006511120120406,
+            177.91956244274758
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.10179737714913878
+        }
+      },
+      {
+        "id": 205,
+        "label": "Try a spring sweet · 花ごよみ",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            168.47735249876897,
+            8.174400938715214,
+            172.0004375572524
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.21852557102432038
+        }
+      },
+      {
+        "id": 206,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            163.1028652484892,
+            7.911160746864776,
+            178.03338565334982
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.22352017529942717
+        }
+      },
+      {
+        "id": 207,
+        "label": "Taste the soba · 石畳そば",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            163.1028652484892,
+            7.911160746864776,
+            171.96661434665018
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.22352017529942717
+        }
+      },
+      {
+        "id": 208,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            159.23108453659808,
+            7.721522507915007,
+            172.04661434665016
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.09160556615169281
+        }
+      },
+      {
+        "id": 209,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            160.68226384259202,
+            7.792600678004507,
+            172.51661434665016
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.620100911679151
+        }
+      },
+      {
+        "id": 210,
+        "label": "Read today’s menu · 祇園こみち",
+        "kind": "menu",
+        "pose": {
+          "pos": [
+            157.17631245778327,
+            7.620880610177139,
+            178.07035910856996
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.22725761929586696
+        }
+      },
+      {
+        "id": 211,
+        "label": "Try a spring sweet · 花ごよみ",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            157.17631245778327,
+            7.620880610177139,
+            171.92964089143004
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.22725761929586696
+        }
+      },
+      {
+        "id": 212,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            151.27418669767073,
+            7.33179689947775,
+            178.10421740151077
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.21487101381874174
+        }
+      },
+      {
+        "id": 213,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            148.1707088426035,
+            7.1797898208622115,
+            178.02421740151075
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.10922713143283191
+        }
+      },
+      {
+        "id": 214,
+        "label": "Taste the soba · 石畳そば",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            151.27418669767073,
+            7.33179689947775,
+            171.89578259848923
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.21487101381874174
+        }
+      },
+      {
+        "id": 215,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            149.29879390086023,
+            7.235042966572745,
+            172.44578259848925
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6243909079834676
+        }
+      },
+      {
+        "id": 216,
+        "label": "Read today’s menu · 祇園こみち",
+        "kind": "menu",
+        "pose": {
+          "pos": [
+            146.01507597545034,
+            7.0742078028792,
+            178.13933592920796
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.2307410444485103
+        }
+      },
+      {
+        "id": 217,
+        "label": "Try a spring sweet · 花ごよみ",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            146.01507597545034,
+            7.0742078028792,
+            171.86066407079204
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.2307410444485103
+        }
+      },
+      {
+        "id": 218,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            141.4995542827947,
+            6.853039393443005,
+            171.94066407079202
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.07679640290858263
+        }
+      },
+      {
+        "id": 219,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            139.37395022368676,
+            6.748928174221392,
+            178.1798045288697
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.22970453252937653
+        }
+      },
+      {
+        "id": 220,
+        "label": "Taste the soba · 石畳そば",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            139.37395022368676,
+            6.748928174221392,
+            171.8201954711303
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.22970453252937653
+        }
+      },
+      {
+        "id": 221,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            136.67495825506123,
+            6.6167326492274885,
+            172.3701954711303
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6179607653697758
+        }
+      },
+      {
+        "id": 222,
+        "label": "Read today’s menu · 祇園こみち",
+        "kind": "menu",
+        "pose": {
+          "pos": [
+            133.09649604816025,
+            6.441461030930298,
+            178.21651016357254
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.2203232057631411
+        }
+      },
+      {
+        "id": 223,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            129.50904694653582,
+            6.265749238197673,
+            178.13651016357255
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.0981341514854658
+        }
+      },
+      {
+        "id": 224,
+        "label": "Try a spring sweet · 花ごよみ",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            133.09649604816025,
+            6.441461030930298,
+            171.78348983642746
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.2203232057631411
+        }
+      },
+      {
+        "id": 225,
+        "label": "Inspect the silk display · 花むすび",
+        "kind": "craft",
+        "pose": {
+          "pos": [
+            127.26792181887525,
+            6.155979844189808,
+            178.25465921021066
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.23368923307429335
+        }
+      },
+      {
+        "id": 226,
+        "label": "Taste the soba · 石畳そば",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            127.26792181887525,
+            6.155979844189808,
+            171.74534078978934
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.23368923307429335
+        }
+      },
+      {
+        "id": 227,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            122.48894438465592,
+            5.92190748006478,
+            171.82534078978935
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.07072552515473086
+        }
+      },
+      {
+        "id": 228,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            124.39093310176558,
+            6.0150661111068855,
+            172.29534078978935
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6166170304811485
+        }
+      },
+      {
+        "id": 229,
+        "label": "Open a folding fan · 風のいろ",
+        "kind": "fan",
+        "pose": {
+          "pos": [
+            201.97414412043597,
+            9.966135275490354,
+            194.4722977557134
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.23336888675009823
+        }
+      },
+      {
+        "id": 230,
+        "label": "Taste the soba · 石畳そば",
+        "kind": "food",
+        "pose": {
+          "pos": [
+            191.54423521408864,
+            9.367948997352162,
+            195.7568886117744
+          ],
+          "yaw": -1.9634954084936256,
+          "pitch": -0.029003942386090418
+        }
+      },
+      {
+        "id": 231,
+        "label": "Order a coffee · 路地珈琲",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            193.6946844397251,
+            5.083520929893621,
+            32.59533192267561
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.12691096644380925
+        }
+      },
+      {
+        "id": 232,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            197.63646582642903,
+            5.178276794001298,
+            32.990930025317425
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.19285252883489049
+        }
+      },
+      {
+        "id": 233,
+        "label": "Taste Uji tea · 京の茶",
+        "kind": "tea",
+        "pose": {
+          "pos": [
+            202.07593758998627,
+            5.285709381902438,
+            33.810114472366365
+          ],
+          "yaw": 1.178097245096177,
+          "pitch": -0.1725378822241566
+        }
+      },
+      {
+        "id": 234,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            199.863006885488,
+            5.232613305526064,
+            33.640554911311966
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6159240033500747
+        }
+      },
+      {
+        "id": 235,
+        "label": "Open a folding fan · 風のいろ",
+        "kind": "fan",
+        "pose": {
+          "pos": [
+            204.90405427673608,
+            5.352545805981884,
+            33.49208150963649
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.13032216434502508
+        }
+      },
+      {
+        "id": 237,
+        "label": "Read the shop sign",
+        "kind": "sign",
+        "pose": {
+          "pos": [
+            218.30402625929918,
+            6.4,
+            60.70599132317454
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.06514351880487977
+        }
+      },
+      {
+        "id": 239,
+        "label": "Ring the bicycle bell",
+        "kind": "bell",
+        "pose": {
+          "pos": [
+            107.18,
+            1.2620434782608696,
+            53.5
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.3994217759223675
+        }
+      },
+      {
+        "id": 240,
+        "label": "Ring the bicycle bell",
+        "kind": "bell",
+        "pose": {
+          "pos": [
+            188.53115293966158,
+            7.723293592634668,
+            106.68188224441549
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.4728804796711215
+        }
+      },
+      {
+        "id": 241,
+        "label": "Ring the bicycle bell",
+        "kind": "bell",
+        "pose": {
+          "pos": [
+            221.56225650368776,
+            14.221793897252853,
+            181.6965649542142
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.7768049208215999
+        }
+      },
+      {
+        "id": 244,
+        "label": "Choose a cold tea",
+        "kind": "vending",
+        "pose": {
+          "pos": [
+            113.9,
+            1.2634545454545454,
+            34.9
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.45204877706204394
+        }
+      },
+      {
+        "id": 245,
+        "label": "Choose a cold tea",
+        "kind": "vending",
+        "pose": {
+          "pos": [
+            270.29999999999995,
+            34.540243902439016,
+            269.9
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.545400429218196
+        }
+      },
+      {
+        "id": 246,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            189.4,
+            5.226403326403326,
+            39.4
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6345362144436653
+        }
+      },
+      {
+        "id": 247,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            211.38977893487777,
+            6.580319390616986,
+            64.97826968474065
+          ],
+          "yaw": 0.7853981633974412,
+          "pitch": -0.5998969074543521
+        }
+      },
+      {
+        "id": 248,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            199.79982944121662,
+            9.79511054969098,
+            132.98832019107948
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6119695162018427
+        }
+      },
+      {
+        "id": 249,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            341.7065686544842,
+            44,
+            310.86424319468887
+          ],
+          "yaw": -1.9634954084936147,
+          "pitch": -0.6107259643892144
+        }
+      },
+      {
+        "id": 250,
+        "label": "Greet the cat",
+        "kind": "cat",
+        "pose": {
+          "pos": [
+            78.49136182721435,
+            1.0749436640905283,
+            58.67325520749303
+          ],
+          "yaw": -1.96349540849362,
+          "pitch": -0.7168690423540532
+        }
+      },
+      {
+        "id": 251,
+        "label": "Greet the cat",
+        "kind": "cat",
+        "pose": {
+          "pos": [
+            223.69563491899655,
+            13.290147680367443,
+            170.05099014287006
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.7474930034863996
+        }
+      },
+      {
+        "id": 252,
+        "label": "Look back over Kyoto",
+        "kind": "overlook",
+        "pose": {
+          "pos": [
+            350.4,
+            44,
+            310.3
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.26504285989746046
+        }
+      },
+      {
+        "id": 253,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            71.80000000000001,
+            1.0324476370510398,
+            65.3
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6151334108764679
+        }
+      },
+      {
+        "id": 254,
+        "label": "Listen to the garden water",
+        "kind": "water",
+        "pose": {
+          "pos": [
+            206.8,
+            5.422260844588129,
+            48
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.48853446760929087
+        }
+      },
+      {
+        "id": 255,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            208.8,
+            6.209437253302694,
+            53
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.60550588550572
+        }
+      },
+      {
+        "id": 256,
+        "label": "Listen to the garden water",
+        "kind": "water",
+        "pose": {
+          "pos": [
+            184.70000000000002,
+            7.821630697801148,
+            108.4
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.77438662091802
+        }
+      },
+      {
+        "id": 257,
+        "label": "Sit for a moment",
+        "kind": "sit",
+        "pose": {
+          "pos": [
+            191.4,
+            8.06,
+            104.7
+          ],
+          "yaw": 1.5707963267948966,
+          "pitch": -0.6659692373791086
+        }
+      }
+    ],
+    "unreachable": [
+      {
+        "id": 108,
+        "label": "Taste Uji tea · 京の茶",
+        "position": [
+          177.32650514544505,
+          5.569956056356024,
+          33.3321246865311
+        ]
+      },
+      {
+        "id": 113,
+        "label": "Try Kyoto yuba · ゆばの里",
+        "position": [
+          192.1136733871593,
+          7.411388873121167,
+          49.256926611847994
+        ]
+      },
+      {
+        "id": 116,
+        "label": "Sample the incense · 香の庭",
+        "position": [
+          196.19848636769984,
+          8.062922112212826,
+          60.02597901509128
+        ]
+      },
+      {
+        "id": 122,
+        "label": "Sample the incense · 香の庭",
+        "position": [
+          214.9296853026107,
+          12.833685576945445,
+          151.54217145033147
+        ]
+      },
+      {
+        "id": 125,
+        "label": "Browse the postcards · 東山だより",
+        "position": [
+          220.61915889290668,
+          13.814838138014535,
+          161.246649635965
+        ]
+      },
+      {
+        "id": 128,
+        "label": "Taste Uji tea · 京の茶",
+        "position": [
+          223.12719335052535,
+          14.36088225398181,
+          166.82005954178425
+        ]
+      },
+      {
+        "id": 159,
+        "label": "Taste Uji tea · 京の茶",
+        "position": [
+          229.8847107717336,
+          28.474249044827083,
+          252.08477520113985
+        ]
+      },
+      {
+        "id": 161,
+        "label": "Browse the postcards · 東山だより",
+        "position": [
+          235.218320129904,
+          29.41872418203146,
+          254.67896948364486
+        ]
+      },
+      {
+        "id": 171,
+        "label": "Order a coffee · 路地珈琲",
+        "position": [
+          255.87014904919164,
+          33.11988505524526,
+          264.7217946302312
+        ]
+      },
+      {
+        "id": 174,
+        "label": "Sample the incense · 香の庭",
+        "position": [
+          261.12082611216454,
+          34.14000074303714,
+          267.16765455757513
+        ]
+      },
+      {
+        "id": 178,
+        "label": "Order a coffee · 路地珈琲",
+        "position": [
+          266.27387609009304,
+          35.136099889073876,
+          269.5679268079025
+        ]
+      },
+      {
+        "id": 180,
+        "label": "Sample the incense · 香の庭",
+        "position": [
+          271.23017285354183,
+          36.10244396381472,
+          271.8767344549522
+        ]
+      },
+      {
+        "id": 183,
+        "label": "Sit for a moment",
+        "position": [
+          281.60208551947574,
+          37.02,
+          276.7237167973012
+        ]
+      },
+      {
+        "id": 236,
+        "label": "Inspect the silk display · 花むすび",
+        "position": [
+          212.88450934656063,
+          7.988669845184265,
+          62.298750202904664
+        ]
+      },
+      {
+        "id": 238,
+        "label": "Ring the bicycle bell",
+        "position": [
+          62.31415250795456,
+          1.5958800263678312,
+          15.140385902945631
+        ]
+      },
+      {
+        "id": 242,
+        "label": "Ring the bicycle bell",
+        "position": [
+          232.21930541378777,
+          20.42,
+          220.7348488440844
+        ]
+      },
+      {
+        "id": 243,
+        "label": "Choose a cold tea",
+        "position": [
+          36.9,
+          1.1585714285714286,
+          -6.5
+        ]
+      }
+    ],
+    "note": "Candidate poses are collision-free within 12m of a mapped walking corridor, with real player facing/range and AABB occlusion tests. This does not substitute for a pathfinding proof of every shop recess."
+  },
+  "outputAlpha": [
+    {
+      "ink": false,
+      "grade": false,
+      "transparentPixels": 0,
+      "totalPixels": 57600
+    },
+    {
+      "ink": false,
+      "grade": true,
+      "transparentPixels": 0,
+      "totalPixels": 57600
+    }
+  ],
+  "rendering": {
+    "gpu": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+    "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "glError": 0,
+    "programs": [
+      {
+        "id": 0,
+        "runnable": null
+      },
+      {
+        "id": 1,
+        "runnable": null
+      },
+      {
+        "id": 2,
+        "runnable": null
+      },
+      {
+        "id": 3,
+        "runnable": null
+      },
+      {
+        "id": 4,
+        "runnable": null
+      },
+      {
+        "id": 5,
+        "runnable": null
+      },
+      {
+        "id": 6,
+        "runnable": null
+      },
+      {
+        "id": 7,
+        "runnable": null
+      },
+      {
+        "id": 8,
+        "runnable": null
+      },
+      {
+        "id": 9,
+        "runnable": null
+      },
+      {
+        "id": 10,
+        "runnable": null
+      },
+      {
+        "id": 11,
+        "runnable": null
+      },
+      {
+        "id": 12,
+        "runnable": null
+      },
+      {
+        "id": 13,
+        "runnable": null
+      },
+      {
+        "id": 14,
+        "runnable": null
+      },
+      {
+        "id": 15,
+        "runnable": null
+      },
+      {
+        "id": 16,
+        "runnable": null
+      },
+      {
+        "id": 17,
+        "runnable": null
+      },
+      {
+        "id": 18,
+        "runnable": null
+      },
+      {
+        "id": 19,
+        "runnable": null
+      },
+      {
+        "id": 20,
+        "runnable": null
+      },
+      {
+        "id": 21,
+        "runnable": null
+      },
+      {
+        "id": 22,
+        "runnable": null
+      },
+      {
+        "id": 23,
+        "runnable": null
+      },
+      {
+        "id": 24,
+        "runnable": null
+      },
+      {
+        "id": 25,
+        "runnable": null
+      },
+      {
+        "id": 26,
+        "runnable": null
+      },
+      {
+        "id": 27,
+        "runnable": null
+      },
+      {
+        "id": 28,
+        "runnable": null
+      },
+      {
+        "id": 29,
+        "runnable": null
+      },
+      {
+        "id": 30,
+        "runnable": null
+      },
+      {
+        "id": 31,
+        "runnable": null
+      },
+      {
+        "id": 32,
+        "runnable": null
+      },
+      {
+        "id": 33,
+        "runnable": null
+      },
+      {
+        "id": 34,
+        "runnable": null
+      },
+      {
+        "id": 35,
+        "runnable": null
+      },
+      {
+        "id": 36,
+        "runnable": null
+      }
+    ],
+    "stats": {
+      "districts": 19,
+      "buildings": 166,
+      "shopfronts": 148,
+      "landmarks": 5,
+      "props": 518,
+      "interactions": 258,
+      "pavingStones": 4829,
+      "contextBuildings": 385,
+      "propAssemblies": {
+        "paper-lantern": 105,
+        "shop-display": 241,
+        "handwritten-menu": 66,
+        "doorstep-plant": 59,
+        "timber-bench": 31,
+        "city-bicycle": 5,
+        "quiet-tea-vending-machine": 3,
+        "sleepy-lane-cat": 2,
+        "bamboo-garden-screen": 2,
+        "garden-tsukubai": 2
+      },
+      "standaloneDetailPlacements": 29,
+      "sourceMeshes": 44673,
+      "staticBatches": 2231,
+      "vegetation": {
+        "trees": 824,
+        "canopyClusters": 21536,
+        "branches": 11988,
+        "groundPetals": 3690,
+        "fallingPetals": 150,
+        "instancedMeshes": 94,
+        "drawCalls": 128,
+        "types": {
+          "shrub": 169,
+          "maple": 315,
+          "bamboo": 8,
+          "sakura": 82,
+          "pine": 131,
+          "cedar": 119
+        },
+        "spatialCells": 29
+      },
+      "heroViews": 34,
+      "routeLength": 688.0380059231638,
+      "averageFPS": 12.037326824534642,
+      "onePercentLow": 0.241945044602569,
+      "drawCalls": 794,
+      "submittedTriangles": 1875919,
+      "worldTriangles": 6243640,
+      "meshCount": 3069,
+      "instancedMeshes": 102,
+      "shadowCasters": 1153,
+      "textures": 139,
+      "geometries": 2758,
+      "pipeline": {
+        "sceneCpuMs": 3.9000000953674316,
+        "postCpuMs": 0.09999990463256836,
+        "calls": 791,
+        "triangles": 1875916
+      },
+      "renderSize": [
+        2065,
+        1161
+      ],
+      "renderer": "WebKit WebGL"
+    }
+  },
+  "performance": {
+    "samples": 480,
+    "elapsedSeconds": 7.995100000190771,
+    "averageFPS": 60.03677252173791,
+    "onePercentLow": 59.52380952380565,
+    "worstFrameMs": 16.80000000000109,
+    "renderSize": [
+      2065,
+      1161
+    ],
+    "drawCalls": 562,
+    "triangles": 1272391,
+    "sceneCpuMs": 3.0999999046325684,
+    "postCpuMs": 0.09999990463256836,
+    "timingNote": "CPU fields measure submission, not GPU duration. FPS uses all wall-clock frame intervals, including stalls. Headless run may contend with parallel QA browsers."
+  },
+  "pass": true
+}

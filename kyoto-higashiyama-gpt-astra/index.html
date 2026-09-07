@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#d8e2da">
+  <title>Kyoto — 3D viewer</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23606d60'/%3E%3C/svg%3E">
+</head>
+<body>
+  <canvas id="world" aria-label="Kyoto 3D viewer. Drag to orbit, scroll to zoom, right-drag to pan." tabindex="0"></canvas>
+  <div class="viewer-tools" role="toolbar" aria-label="3D view controls">
+    <select id="viewpoint" aria-label="Viewpoint"></select>
+    <button id="reset" aria-label="Reset view" title="Reset view · R"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6"/></svg></button>
+    <button id="fullscreen" aria-label="Enter fullscreen" aria-pressed="false" title="Fullscreen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m8 0h5v-5"/></svg></button>
+  </div>
+  <p class="viewer-hint"><span class="mouse-hint">Drag to orbit · Scroll to zoom · Right-drag to pan</span><span class="touch-hint">Drag to orbit · Pinch to zoom · Two fingers to pan</span></p>
+  <div id="loading" role="status">Loading Kyoto…</div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
