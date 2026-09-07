@@ -2,10 +2,12 @@
 import fs from 'node:fs';
 const argv = process.argv.slice(2); const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 ? argv[i + 1] : d; };
 const image = opt('image'), name = opt('name', 'asset'), out = opt('out', `${name}.glb`);
-const KEY = process.env.VARCO_API_KEY, BASE = process.env.VARCO_API_BASE || 'https://api.varco.ai';
+import { getKey } from '../server/secrets.mjs';
+// env var first, then the per-machine secrets file written by the Director's Settings panel
+const KEY = getKey('VARCO_API_KEY'), BASE = process.env.VARCO_API_BASE || 'https://api.varco.ai';
 if (!image) { console.error('usage: node tools/varco_fetch.mjs --image ref.png --name my_prop [--out my_prop.glb]'); process.exit(1); }
 if (!KEY) {
-  console.log(`VARCO_API_KEY not set. Manual path:\n 1) open https://3d.varco.ai and generate from ${image} (or a VARCO Art render)\n 2) Export -> GLB (auto remesh ~5k tris, keep PBR)\n 3) node tools/inject_asset.mjs ${out} --as varco/${name} --height <metres> [--replace <rel>]`);
+  console.log(`VARCO_API_KEY not set (environment or the Director's Settings panel). Manual path:\n 1) open https://3d.varco.ai and generate from ${image} (or a VARCO Art render)\n 2) Export -> GLB (auto remesh ~5k tris, keep PBR)\n 3) node tools/inject_asset.mjs ${out} --as varco/${name} --height <metres> [--replace <rel>]`);
   process.exit(0);
 }
 // Endpoint shape per VARCO API Platform (confirm against api.varco.ai docs; NC AI internal access): POST /v1/image-to-3d (multipart) -> {job_id}; GET /v1/jobs/{id} -> {status, result:{glb_url}}

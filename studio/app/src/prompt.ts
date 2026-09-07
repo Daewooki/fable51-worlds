@@ -3,6 +3,7 @@
 import { esc } from './dom';
 import { duration as keysDuration } from '../../schemas/keys.mjs';
 import type { Ctx } from './jobs';
+import { CONFIG_EVENT, fetchConfig, type StudioConfig } from './settings';
 
 export function mountPromptPanel(el: HTMLElement, ctx: Ctx): { refresh: () => void } {
   el.innerHTML = `
@@ -34,15 +35,22 @@ export function mountPromptPanel(el: HTMLElement, ctx: Ctx): { refresh: () => vo
     return keys.length ? keysDuration(keys) || 10 : 10;
   }
 
-  async function loadDefaultProvider() {
-    try {
-      const res = await fetch('/api/config');
-      if (!res.ok) return;
-      const cfg = await res.json();
-      if (cfg.provider && ['none', 'anthropic', 'openai'].includes(cfg.provider)) providerEl.value = cfg.provider;
-    } catch { /* keep the 'none' default */ }
+  // Provider list follows the keys the server can see (env or the Settings panel's file):
+  // providers without a key are shown but disabled, and the default is the server's pick
+  // (STUDIO_LLM if pinned, else the first provider with a key, else `none`).
+  function applyConfig(cfg: StudioConfig | null) {
+    if (!cfg) return;
+    const prev = providerEl.value;
+    for (const opt of Array.from(providerEl.options)) {
+      const ok = opt.value === 'none' || !!cfg.providers?.[opt.value];
+      opt.disabled = !ok;
+      opt.textContent = opt.value === 'none' ? 'none (anchors only)' : `${opt.value}${ok ? '' : ' (no key — see Settings)'}`;
+    }
+    const want = prev !== 'none' && cfg.providers?.[prev] ? prev : cfg.provider;
+    providerEl.value = ['none', 'anthropic', 'openai'].includes(want) && (want === 'none' || cfg.providers?.[want]) ? want : 'none';
   }
-  loadDefaultProvider();
+  window.addEventListener(CONFIG_EVENT, (e) => applyConfig((e as CustomEvent<StudioConfig>).detail));
+  fetchConfig().then(applyConfig);
 
   generateBtn.addEventListener('click', async () => {
     if (!ctx.project || !ctx.shot) { errorEl.textContent = 'select a project and shot first'; return; }

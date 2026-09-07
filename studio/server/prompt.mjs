@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateKey } from '../schemas/project.mjs';
+import { getKey, defaultProvider } from './secrets.mjs';
 
 // studio/server/prompt.mjs -> repo root is two levels up.
 const ROOT = fileURLToPath(new URL('../..', import.meta.url));
@@ -128,9 +129,13 @@ function schemaText() {
   return `Key = {"t": seconds>=0, "m": "air"|"walk", "eye": [x,y,z] (air only), "pos": [x,z] (walk only, eye height is automatic), "look": [x,y,z], "fov"?: 30-90, "cut"?: true for a hard cut, "cap"?: caption, "time"?: "day"|"sunset"|"night"}`;
 }
 
-export async function promptToKeys({ world, prompt, durationSec = 10, provider = process.env.STUDIO_LLM || 'none' }) {
+export async function promptToKeys({ world, prompt, durationSec = 10, provider }) {
+  provider = provider || defaultProvider();
   const anchors = anchorsFor(world);
   if (provider === 'none') return anchorsToKeys(anchors, durationSec);
+  // Keys come from the environment first, then the per-machine secrets file the Settings panel
+  // writes; a missing key is reported as such rather than as an opaque 401 from the vendor.
+  const needKey = (name) => { const k = getKey(name); if (!k) throw new Error(`${provider}: no API key — set ${name} in the Director's Settings panel or as an environment variable, or choose provider "none"`); return k; };
 
   const sys = `You plan camera moves for a 3D city world. Coordinates are metres, y up. Landmarks (use these positions as anchors):\n${anchors
     .map((a) => `- ${a.title}: pos ${JSON.stringify(a.pos)} look ${JSON.stringify(a.look)}`)
@@ -141,7 +146,7 @@ export async function promptToKeys({ world, prompt, durationSec = 10, provider =
   if (provider === 'anthropic') {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      headers: { 'x-api-key': needKey('ANTHROPIC_API_KEY'), 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
       body: JSON.stringify({ model: model || 'claude-sonnet-5', max_tokens: 2000, system: sys, messages: [{ role: 'user', content: prompt }] }),
     });
     if (!r.ok) throw new Error(`anthropic ${r.status}: ${(await r.text()).slice(0, 300)}`);
@@ -150,7 +155,7 @@ export async function promptToKeys({ world, prompt, durationSec = 10, provider =
   } else if (provider === 'openai') {
     const r = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, 'content-type': 'application/json' },
+      headers: { Authorization: `Bearer ${needKey('OPENAI_API_KEY')}`, 'content-type': 'application/json' },
       body: JSON.stringify({ model: model || 'gpt-4o-mini', messages: [{ role: 'system', content: sys }, { role: 'user', content: prompt }] }),
     });
     if (!r.ok) throw new Error(`openai ${r.status}: ${(await r.text()).slice(0, 300)}`);

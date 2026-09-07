@@ -253,6 +253,32 @@ replacement.
 
 ---
 
+## API keys (Settings panel)
+
+Nothing in the core loop needs a key: previz, export and the anchor-based prompt planner are
+local. Three optional features do, and each person enters their own key **in the Director's
+Settings panel** (bottom row) rather than editing files:
+
+| Key | Unlocks | Without it |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | prompt → path with Claude | provider `none` (landmark anchors) |
+| `OPENAI_API_KEY` | prompt → path with GPT | provider `none` |
+| `VARCO_API_KEY` | `tools/varco_fetch.mjs` image-to-3D | manual VARCO 3D web export |
+
+Resolution order for every key: **environment variable → `studio/.secrets.json` → none**.
+The file is written by the panel (`PUT /api/settings`), lives on the PC running the studio
+server, is git-ignored and mode 0600, and is never sent back to a browser — `GET /api/config`
+reports only `set`, `source` (`env` / `file` / `none`) and a masked tail. A key set through the
+environment is shown as read-only. Saving and clearing are accepted only from loopback, so with
+`STUDIO_BIND=0.0.0.0` a LAN peer cannot change anyone's keys. The prompt panel's provider list
+follows the keys the server can see; its default is `STUDIO_LLM` if pinned, else the first
+provider with a key, else `none`.
+
+Higgsfield (Seedance) is not a key but a CLI login; the panel shows whether
+`higgsfield` is installed and logged in, and the commands to fix it if not.
+
+---
+
 ## Environment variables
 
 | Variable | Default | What it does |

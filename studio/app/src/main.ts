@@ -4,6 +4,7 @@ import { addKeyAt, removeKey, moveKey, keyFromCamera, mixedModeSegments, type Ke
 import { mountJobsPanel, type Ctx } from './jobs';
 import { mountPromptPanel } from './prompt';
 import { mountPhonePanel } from './phone';
+import { mountSettingsPanel } from './settings';
 import { esc } from './dom';
 // Plain ESM (no type declarations) shared with the server — see mjs-shim.d.ts.
 import { WORLDS, createShot } from '../../schemas/project.mjs';
@@ -359,6 +360,7 @@ async function selectShot(id: string) {
 
 const jobsPanel = mountJobsPanel(panelJobs, ctx);
 const promptPanel = mountPromptPanel(panelPrompt, ctx);
+mountSettingsPanel(document.getElementById('panel-settings') as HTMLElement);
 
 function renderAll() {
   renderLeft();

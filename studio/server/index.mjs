@@ -5,6 +5,18 @@ import { listProjects, readProject, writeProject, projectDir, PROJECTS_DIR } fro
 import { createProject } from '../schemas/project.mjs';
 import { createJob, enqueue, getJob, listJobs } from './jobs.mjs';
 import { attachWs, isAllowedHost, PHONE_TOKEN } from './ws.mjs';
+import { KEY_NAMES, keyStatus, writeSecrets, getKey, defaultProvider } from './secrets.mjs';
+import { detectCli } from './finalize/seedance.mjs';
+
+// detectCli() spawns the Higgsfield binary; the Settings panel polls /api/config, so cache it.
+let cliCache = { at: 0, value: null };
+function cliStatus() {
+  if (Date.now() - cliCache.at > 30000) cliCache = { at: Date.now(), value: detectCli() };
+  return cliCache.value;
+}
+// Writing keys is allowed only from this machine: with STUDIO_BIND=0.0.0.0 (phone camera) a
+// LAN peer passes the Host allowlist, and must not be able to plant or wipe someone's keys.
+const isLoopback = (req) => ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket.remoteAddress);
 import { renderPreviz } from './render/previz.mjs';
 import { runSeedance } from './finalize/seedance.mjs';
 import { exportGlb } from './export/glb.mjs';
@@ -95,11 +107,28 @@ export function createServer() {
           return res.end(png);
         }
         if (seg[1] === 'config' && !seg[2] && req.method === 'GET') {
-          const provider = process.env.STUDIO_LLM || 'none';
-          const hasKey = provider === 'anthropic' ? !!process.env.ANTHROPIC_API_KEY : provider === 'openai' ? !!process.env.OPENAI_API_KEY : true;
+          const provider = defaultProvider();
+          const providers = { none: true, anthropic: !!getKey('ANTHROPIC_API_KEY'), openai: !!getKey('OPENAI_API_KEY') };
+          const hasKey = !!providers[provider];
           // The Director UI is same-origin, so it can simply read the phone token here and
           // put it in the QR URL; the phone, which is not, must present it to join.
-          return json(res, 200, { provider, hasKey, phoneToken: PHONE_TOKEN });
+          // `keys` carries set/source/masked only — never a key value.
+          return json(res, 200, { provider, hasKey, providers, keys: keyStatus(), higgsfield: cliStatus(), canEditKeys: isLoopback(req), phoneToken: PHONE_TOKEN });
+        }
+        if (seg[1] === 'settings' && !seg[2] && req.method === 'GET') return json(res, 200, { keys: keyStatus(), canEditKeys: isLoopback(req) });
+        if (seg[1] === 'settings' && !seg[2] && req.method === 'PUT') {
+          if (!isLoopback(req)) return json(res, 403, { error: 'keys can only be changed from this machine' });
+          const b = await readBody(req);
+          const unknown = Object.keys(b).filter((k) => !KEY_NAMES.includes(k));
+          if (unknown.length) return json(res, 400, { error: `unknown key ${unknown[0]}` });
+          try { writeSecrets(b); } catch (e) { return json(res, 400, { error: String(e?.message || e) }); }
+          return json(res, 200, { keys: keyStatus() });
+        }
+        if (seg[1] === 'settings' && seg[2] && !seg[3] && req.method === 'DELETE') {
+          if (!isLoopback(req)) return json(res, 403, { error: 'keys can only be changed from this machine' });
+          if (!KEY_NAMES.includes(seg[2])) return json(res, 400, { error: `unknown key ${seg[2]}` });
+          writeSecrets({ [seg[2]]: '' });
+          return json(res, 200, { keys: keyStatus() });
         }
         if (seg[1] === 'lan-ip' && !seg[2] && req.method === 'GET') return json(res, 200, { ip: lanIp() });
         return json(res, 404, { error: 'not found' });

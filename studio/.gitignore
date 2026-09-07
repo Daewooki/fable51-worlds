@@ -2,4 +2,6 @@ node_modules
 projects/*
 !projects/.gitkeep
 .certs/
+.secrets.json
+.secrets.json.tmp
 test/fixtures/*.glb
