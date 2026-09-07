@@ -40,7 +40,7 @@ const readBody = (req) => new Promise((resolve, reject) => {
 const RUNNERS = {
   previz: async (job, log) => { const p = await readProject(job.projectId); const shot = p.shots.find((s) => s.id === job.input.shotId); if (!shot) throw new Error('shot not found');
     const out = path.join(projectDir(p.id), 'shots', shot.id); fs.mkdirSync(out, { recursive: true });
-    return renderPreviz({ world: p.world, shot, outDir: out, onProgress: (f, n) => { job.progress = f / n; if (f % 30 === 0) log('frame', f, '/', n); } }); },
+    return renderPreviz({ world: p.world, shot, outDir: out, onProgress: (f, n) => { job.progress = f / n; if (f % 30 === 0) log('frame', f, '/', n); }, onWarn: (m) => { log('WARN', m); (job.warnings ||= []).push(m); } }); },
   finalize: async (job, log) => runSeedance({ project: await readProject(job.projectId), ...job.input, log }),
   export: async (job, log) => { const p = await readProject(job.projectId); return exportGlb({ project: p, shotId: job.input.shotId, log }); },
 };

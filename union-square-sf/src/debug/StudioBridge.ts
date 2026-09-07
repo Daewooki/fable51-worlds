@@ -5,8 +5,28 @@ import type { App } from '../app/App';
 
 export function installStudioBridge(app: App, twin: TwinApi) {
   const send = (msg: any) => window.parent !== window && window.parent.postMessage(msg, '*');
+  // Path collision probe for the Director's timeline: for each camera point, cast a ray straight
+  // down from above the world and compare the camera height with the first surface hit. A hit
+  // more than 1.5 m above the terrain is a structure (building massing, hero module, prop,
+  // canopy); a camera below that surface is inside or under it. Below the terrain is blocked too.
+  const ray = new THREE.Raycaster(); const rayOrigin = new THREE.Vector3(); const DOWN = new THREE.Vector3(0, -1, 0);
+  const probePath = (m: { points: [number, number, number][]; clearance?: number }) => {
+    const groups = ['world', 'props', 'vegetation'].map((n) => app.scene.getObjectByName(n)).filter(Boolean) as THREE.Object3D[];
+    const clearance = m.clearance ?? 1.0;
+    return (m.points || []).map(([x, y, z]) => {
+      const ground = (twin as any).world.terrain.heightAt(x, z) as number; // `world` is on the runtime __twin, not the typed QA surface
+      rayOrigin.set(x, 2000, z); ray.set(rayOrigin, DOWN); ray.far = 4000;
+      const hit = ray.intersectObjects(groups, true)[0];
+      const top = hit ? hit.point.y : ground;
+      const structure = top - ground > 1.5;
+      const blocked = y < ground + 0.3 || (structure && y < top + clearance);
+      return { blocked, top: +top.toFixed(2), ground: +ground.toFixed(2), structure };
+    });
+  };
+  (twin as any).probePath = probePath; // headless callers (previz) use it without the message hop
   const handlers: Record<string, (m: any) => any> = {
     ping: () => 'pong',
+    probePath,
     setCameraRaw: (m) => { app.camera.position.set(m.eye[0], m.eye[1], m.eye[2]); app.camera.lookAt(m.look[0], m.look[1], m.look[2]); if (m.fov) { app.camera.fov = m.fov; app.camera.updateProjectionMatrix(); } return true; },
     setTime: (m) => { twin.setTime(m.p); return true; },
     freeze: (m) => { twin.freeze(!!m.v); return true; },

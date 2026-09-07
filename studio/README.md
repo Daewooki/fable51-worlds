@@ -135,6 +135,39 @@ refs/…                       # artist / style / audio references you drop in y
 
 ---
 
+## Path collision check and auto-fix
+
+Keys interpolate in straight lines and know nothing about the buildings, so a generated or
+hand-placed move can cut through a façade. The Director checks every shot against the live
+world and shows the result under the scrubber:
+
+- **Red bands** on the scrubber mark the stretches where the camera is inside or under a
+  structure (or below the terrain); hover a band for the times and what it hits. The line
+  under the scrubber says `path clear — no collisions` or lists the collisions.
+- The check runs by itself (debounced) whenever the keys change and when the world loads;
+  **Check path** re-runs it on demand.
+- **Fix path** lifts blocked *air* segments: it inserts a key at the middle of each blocked
+  stretch, raised 12 m above the highest surface the stretch crosses, and re-checks (up to
+  four rounds, since a new straight segment can still clip near its ends). Endpoints are
+  never moved. **Generate** (prompt → path) runs the fix automatically, so the four anchor
+  keys come out already flying over whatever sat between them.
+- Two cases are reported but not fixed, because the right answer is the creator's: a **key
+  that is itself inside a structure** (move it — or, if you mean to go indoors, come in
+  through an opening), and a **walk segment** that crosses a building (walk keys follow the
+  ground and cannot be lifted; route around, or cut).
+- The previz renderer runs the same probe before it starts and writes a `WARN` line to the
+  job log (and `job.warnings`) if the path still crosses structures; it does not refuse to
+  render.
+
+How the world answers: the bridge's `probePath` command casts a ray straight down at each
+sampled camera position (10 Hz plus every key time) through the `world`, `props` and
+`vegetation` groups; a first hit more than 1.5 m above the terrain is a structure, and a
+camera below that surface (minus 1 m clearance) is blocked. It is a roof test, not a wall
+test: a camera 30 cm outside a façade is "clear", and a camera under a canopy or an arcade
+reads as blocked. Both worlds implement it (kyoto in its adapter).
+
+---
+
 ## Unlocking the camera
 
 Under `?studio=1` both worlds switch their own camera controllers **off**, so nothing fights

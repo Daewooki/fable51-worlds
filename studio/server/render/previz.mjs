@@ -25,13 +25,24 @@ const INSTALL = `(() => {
   window.__twin.setMode('orbit');
 })()`;
 
-export async function renderPreviz({ world, shot, outDir, onProgress }) {
+export async function renderPreviz({ world, shot, outDir, onProgress, onWarn }) {
   const FPS = shot.fps, total = Math.round(duration(shot.keys) * FPS);
   if (total < 1) throw new Error('shot has no duration');
   const frames = path.join(outDir, 'frames'); fs.rmSync(frames, { recursive: true, force: true }); fs.mkdirSync(frames, { recursive: true });
   const { browser, page, softwareRender } = await launchWorld({ world, width: shot.width, height: shot.height, time: shot.timeOfDay });
   try {
     await page.evaluate(INSTALL);
+    // Collision warning (does not block the render): probe the path at 10 Hz the same way the
+    // Director does, and report blocked stretches so a bad shot is visible in the job log.
+    try {
+      const pts = [];
+      for (let t = 0; t <= duration(shot.keys) + 1e-9; t += 0.1) { const s = sample(shot.keys, +t.toFixed(3), FPS); pts.push([+t.toFixed(3), s.air ? s.eye : [s.pos[0], 1.68, s.pos[1]], s.air]); }
+      const hits = await page.evaluate((p) => (window.__twin.probePath ? window.__twin.probePath({ points: p.map((q) => q[1]), clearance: 1.0 }) : null), pts);
+      if (hits) {
+        const bad = pts.filter((p, i) => hits[i]?.blocked);
+        if (bad.length) { const t0 = bad[0][0], t1 = bad[bad.length - 1][0]; onWarn?.(`camera passes through structures in ${bad.length} of ${pts.length} samples (${t0}s–${t1}s) — use "Fix path" in the Director`); }
+      }
+    } catch (e) { onWarn?.(`path probe skipped: ${String(e?.message || e)}`); }
     let lastTime = shot.timeOfDay;
     for (let f = 0; f < total; f++) {
       const t = f / FPS, s = sample(shot.keys, t, FPS);

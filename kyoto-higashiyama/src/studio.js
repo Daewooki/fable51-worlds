@@ -257,8 +257,29 @@ export function installStudio({
 function installBridge(twin) {
   const send = (msg) => { if (window.parent !== window) window.parent.postMessage(msg, '*'); };
 
+  // Path collision probe (same contract as union-square-sf's StudioBridge): a downward ray per
+  // camera point; a surface more than 1.5 m above the terrain is a structure, and a camera
+  // below it (or below the terrain) is blocked.
+  const ray = new THREE.Raycaster(); const rayOrigin = new THREE.Vector3(); const DOWN = new THREE.Vector3(0, -1, 0);
+  const probePath = (m) => {
+    const scene = twin.app.scene;
+    const groups = ['world', 'props', 'vegetation'].map((n) => scene.getObjectByName(n)).filter(Boolean);
+    const clearance = m.clearance ?? 1.0;
+    return (m.points || []).map(([x, y, z]) => {
+      const ground = twin.world.terrain.heightAt(x, z);
+      rayOrigin.set(x, 2000, z); ray.set(rayOrigin, DOWN); ray.far = 4000;
+      const hit = ray.intersectObjects(groups, true)[0];
+      const top = hit ? hit.point.y : ground;
+      const structure = top - ground > 1.5;
+      const blocked = y < ground + 0.3 || (structure && y < top + clearance);
+      return { blocked, top: +top.toFixed(2), ground: +ground.toFixed(2), structure };
+    });
+  };
+
+  twin.probePath = probePath; // headless callers (previz) use it without the message hop
   const handlers = {
     ping: () => 'pong',
+    probePath,
     setCameraRaw: (m) => twin.setCameraRaw(m),
     setTime: (m) => twin.setTime(m.p),
     freeze: (m) => twin.freeze(!!m.v),

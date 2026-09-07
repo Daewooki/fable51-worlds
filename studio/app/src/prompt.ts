@@ -71,6 +71,9 @@ export function mountPromptPanel(el: HTMLElement, ctx: Ctx): { refresh: () => vo
       ctx.shot.keys = body.keys;
       await ctx.save();
       ctx.refresh();
+      // Generated paths are straight lines between landmarks and routinely cut through
+      // buildings; lift them over whatever they hit before the creator ever sees them.
+      await ctx.fixPath?.();
     } catch (e: any) {
       errorEl.innerHTML = esc(String(e?.message || e));
     } finally {

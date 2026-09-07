@@ -116,7 +116,14 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   gap: 8px;
   margin-top: 8px;
 }
-#scrub { flex: 1; }
+#scrub-wrap { position: relative; flex: 1; display: flex; align-items: center; }
+#scrub { flex: 1; position: relative; z-index: 1; }
+#scrub-bands { position: absolute; left: 0; right: 0; top: 50%; height: 8px; transform: translateY(-50%); pointer-events: none; z-index: 0; }
+.scrub-band { position: absolute; top: 0; height: 100%; background: rgba(230, 70, 70, 0.85); border-radius: 2px; pointer-events: auto; }
+#path-status { font-size: 11px; color: var(--dim); min-height: 14px; margin: 2px 0; }
+#path-status.path-ok { color: #7fcf8f; }
+#path-status.path-bad { color: #f0a0a0; }
+.vc-spacer { flex: 1; }
 #scrub-time { font-family: "SFMono-Regular", Consolas, monospace; color: var(--dim); min-width: 56px; }
 #live-pos { font-family: "SFMono-Regular", Consolas, monospace; color: var(--dim); font-size: 11px; }
 #status-line { margin-top: 6px; color: var(--dim); font-size: 11px; }

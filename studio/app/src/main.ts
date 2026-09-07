@@ -5,6 +5,7 @@ import { mountJobsPanel, type Ctx } from './jobs';
 import { mountPromptPanel } from './prompt';
 import { mountPhonePanel } from './phone';
 import { mountSettingsPanel } from './settings';
+import { checkPath, fixPath, describeRun, type PathReport, type Probe } from './pathcheck';
 import { esc } from './dom';
 // Plain ESM (no type declarations) shared with the server — see mjs-shim.d.ts.
 import { WORLDS, createShot } from '../../schemas/project.mjs';
@@ -244,13 +245,98 @@ function renderViewportControls() {
         ? 'flying by hand — drag in the viewport; “Add key @ t” captures the live pose'
         : 'camera locked to the timeline')
       : 'n/a — this world has no camera modes'}</span>
+    <span class="vc-spacer"></span>
+    <button id="vc-check" type="button" ${ctx.bridge && (ctx.shot?.keys?.length || 0) > 0 && !pathBusy ? '' : 'disabled'}>Check path</button>
+    <button id="vc-fix" type="button" ${ctx.bridge && (ctx.shot?.keys?.length || 0) > 1 && !pathBusy && pathReport && !pathReport.clear ? '' : 'disabled'}>Fix path</button>
   `;
   $('#vc-unlock').addEventListener('click', () => setUnlocked(!unlocked));
+  $('#vc-check').addEventListener('click', () => runPathCheck());
+  $('#vc-fix').addEventListener('click', () => runPathFix());
   $<HTMLSelectElement>('#vc-mode').addEventListener('change', (e) => {
     unlockMode = (e.target as HTMLSelectElement).value as 'walk' | 'orbit';
     if (unlocked) setUnlocked(true); // re-apply straight away
   });
 }
+
+// ---------------------------------------------------------------- path collision check
+// The world answers `probePath` (downward ray per camera point); we sample the shot at 10 Hz,
+// paint blocked stretches as red bands under the scrubber, and "Fix path" lifts blocked air
+// segments over what they hit. Runs automatically (debounced) whenever the keys change.
+let pathReport: PathReport | null = null;
+let pathBusy = false;
+let pathTimer: number | null = null;
+let pathSeq = 0;
+const pathBandsEl = document.getElementById('scrub-bands') as HTMLElement;
+const pathStatusEl = document.getElementById('path-status') as HTMLElement;
+
+const probeViaBridge: Probe = async (points) => {
+  if (!ctx.bridge) throw new Error('no bridge');
+  return ctx.bridge.call('probePath', { points, clearance: 1.0 });
+};
+
+function renderPathStatus() {
+  const keys: Key[] = ctx.shot?.keys || [];
+  const d = duration(keys) || 0;
+  pathBandsEl.innerHTML = '';
+  if (!pathReport || d <= 0) { pathStatusEl.textContent = pathBusy ? 'checking path…' : ''; pathStatusEl.className = ''; return; }
+  for (const r of pathReport.runs) {
+    const band = document.createElement('div');
+    band.className = 'scrub-band';
+    band.style.left = `${(r.t0 / d) * 100}%`;
+    band.style.width = `${Math.max(0.6, ((r.t1 - r.t0) / d) * 100)}%`;
+    band.title = describeRun(r, keys);
+    pathBandsEl.appendChild(band);
+  }
+  if (pathReport.clear) { pathStatusEl.textContent = pathBusy ? 'checking path…' : 'path clear — no collisions'; pathStatusEl.className = 'path-ok'; return; }
+  const lines = pathReport.runs.map((r) => describeRun(r, keys));
+  pathStatusEl.innerHTML = `<b>${esc(pathReport.runs.length)} collision${pathReport.runs.length > 1 ? 's' : ''}</b> (${esc(pathReport.blockedSeconds)} s): ${esc(lines.join(' · '))}`
+    + (pathReport.unfixable?.length ? ` — ${esc(pathReport.unfixable.length)} need a manual move (walk segment or a key inside a structure)` : '');
+  pathStatusEl.className = 'path-bad';
+}
+
+async function runPathCheck() {
+  const keys: Key[] = ctx.shot?.keys || [];
+  if (!ctx.bridge || keys.length < 1) { pathReport = null; renderPathStatus(); return; }
+  const seq = ++pathSeq;
+  pathBusy = true; renderPathStatus();
+  try {
+    const report = await checkPath(keys, probeViaBridge);
+    if (seq !== pathSeq) return; // superseded by a newer edit
+    pathReport = report;
+  } catch (e: any) {
+    if (seq !== pathSeq) return;
+    pathReport = null;
+    pathStatusEl.textContent = `path check failed: ${String(e?.message || e)}`;
+  } finally {
+    if (seq === pathSeq) { pathBusy = false; renderPathStatus(); renderViewportControls(); }
+  }
+}
+
+function schedulePathCheck(delayMs = 600) {
+  if (pathTimer !== null) window.clearTimeout(pathTimer);
+  pathTimer = window.setTimeout(() => { pathTimer = null; runPathCheck(); }, delayMs);
+}
+
+async function runPathFix() {
+  const keys: Key[] = ctx.shot?.keys || [];
+  if (!ctx.bridge || !ctx.shot || keys.length < 2) return;
+  pathBusy = true; renderPathStatus(); renderViewportControls();
+  try {
+    const { keys: fixed, report } = await fixPath(keys, probeViaBridge, { margin: 12, rounds: 4 });
+    ctx.shot.keys = fixed;
+    pathReport = report;
+    await ctx.save();
+    renderRight(); updateScrubber();
+    const n = report.fixedKeys || 0;
+    statusEl.textContent = n ? `path fixed — ${n} key${n > 1 ? 's' : ''} inserted to fly over structures` : report.clear ? 'path already clear' : 'could not fix automatically — see the collision list';
+  } catch (e: any) {
+    statusEl.textContent = `path fix failed: ${String(e?.message || e)}`;
+  } finally {
+    pathBusy = false; renderPathStatus(); renderViewportControls();
+  }
+}
+ctx.checkPath = runPathCheck;
+ctx.fixPath = runPathFix;
 
 async function setUnlocked(on: boolean) {
   if (!ctx.bridge) return;
@@ -268,6 +354,8 @@ function updateScrubber() {
   scrubEl.disabled = !ctx.shot || keys.length === 0;
   if (Number(scrubEl.value) > d) scrubEl.value = String(d);
   scrubTimeEl.textContent = `${Number(scrubEl.value).toFixed(2)}s`;
+  // Keys changed (this runs from every refresh): re-check the path against the world.
+  schedulePathCheck();
 }
 
 scrubEl.addEventListener('input', () => {
@@ -318,6 +406,7 @@ function mountWorldForShot(shot: any) {
     statusEl.textContent = 'world ready';
     renderRight();
     renderViewportControls();
+    schedulePathCheck(100);
     (window as any).__studio = { bridge, ctx };
   });
 }

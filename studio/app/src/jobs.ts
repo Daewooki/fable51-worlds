@@ -12,6 +12,9 @@ export type Ctx = {
   bridge: WorldBridge | null;
   save: () => Promise<void>;
   refresh: () => void;
+  // Path collision check / auto-fix against the live world (set by main.ts once a bridge exists).
+  checkPath?: () => Promise<void>;
+  fixPath?: () => Promise<void>;
 };
 
 const fileUrl = (projectId: string, rel: string) => `/files/${projectId}/${rel}`;
