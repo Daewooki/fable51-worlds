@@ -10,7 +10,7 @@ export type Probe = (points: [number, number, number][]) => Promise<ProbeHit[]>;
 export type ProbeHit = { blocked: boolean; top: number; ground: number; structure: boolean };
 export type Sample = { t: number; eye: [number, number, number]; look: [number, number, number]; air: boolean };
 export type Run = { t0: number; t1: number; maxTop: number; segment: number; air: boolean; atKey: number | null };
-export type PathReport = { duration: number; samples: number; runs: Run[]; blockedSeconds: number; clear: boolean; fixedKeys?: number; unfixable?: Run[] };
+export type PathReport = { duration: number; samples: number; runs: Run[]; blockedSeconds: number; clear: boolean; fixedKeys?: number; groundedKeys?: number; unfixable?: Run[] };
 
 export const WALK_EYE = 1.68;
 
@@ -61,13 +61,41 @@ export async function checkPath(keys: Key[], probe: Probe, hz = 10): Promise<Pat
   return { duration: ks[ks.length - 1].t, samples: samples.length, runs, blockedSeconds: +blockedSeconds.toFixed(2), clear: runs.length === 0 };
 }
 
+// Ground pass: air keys authored (or generated) with a street-level height that is below the
+// terrain — anchors carry a placeholder height, and worlds like Kyoto sit 40 m up a hill —
+// are moved up so the eye is at the same height above the ground they were written for
+// (`y` is read as "metres above street level" when it is below ground + `streetBand`), and
+// the look point rises by the same amount. Keys well above ground are left alone.
+export async function groundKeys(keys: Key[], probe: Probe, opts: { eyeMin?: number; streetBand?: number } = {}): Promise<{ keys: Key[]; moved: number }> {
+  const eyeMin = opts.eyeMin ?? 1.6, streetBand = opts.streetBand ?? 6;
+  const airIdx = keys.map((k, i) => (k.m === 'air' && k.eye ? i : -1)).filter((i) => i >= 0);
+  if (airIdx.length === 0) return { keys, moved: 0 };
+  const hits = await probe(airIdx.map((i) => keys[i].eye as [number, number, number]));
+  let moved = 0;
+  const out = keys.map((k) => ({ ...k }));
+  airIdx.forEach((i, n) => {
+    const k = out[i], h = hits[n];
+    if (!h || !k.eye) return;
+    const y = k.eye[1];
+    if (y >= h.ground + 0.3) return; // above ground already
+    const above = Math.max(eyeMin, Math.min(streetBand, y)); // placeholder "height above street"
+    const ny = +(h.ground + above).toFixed(2);
+    const dy = ny - y;
+    k.eye = [k.eye[0], ny, k.eye[2]];
+    k.look = [k.look[0], +(k.look[1] + dy).toFixed(2), k.look[2]];
+    moved++;
+  });
+  return { keys: out, moved };
+}
+
 // Lift blocked air segments: insert a key at the middle of each blocked run with the eye
 // raised above the highest surface the run crosses (plus `margin`), keeping the interpolated
 // look. Re-check and repeat (new straight segments can still clip near their ends) up to
 // `rounds` times. Runs that sit on a key, or on a walk segment, are left for the creator.
 export async function fixPath(keys: Key[], probe: Probe, opts: { margin?: number; rounds?: number; hz?: number } = {}): Promise<{ keys: Key[]; report: PathReport }> {
   const margin = opts.margin ?? 12, rounds = opts.rounds ?? 4, hz = opts.hz ?? 10;
-  let ks = sortKeys(keys);
+  const grounded = await groundKeys(sortKeys(keys), probe);
+  let ks = grounded.keys;
   let added = 0;
   let report = await checkPath(ks, probe, hz);
   for (let round = 0; round < rounds && !report.clear; round++) {
@@ -84,7 +112,7 @@ export async function fixPath(keys: Key[], probe: Probe, opts: { margin?: number
     }
     report = await checkPath(ks, probe, hz);
   }
-  return { keys: ks, report: { ...report, fixedKeys: added, unfixable: report.runs.filter((r) => !r.air || r.atKey !== null) } };
+  return { keys: ks, report: { ...report, fixedKeys: added, groundedKeys: grounded.moved, unfixable: report.runs.filter((r) => !r.air || r.atKey !== null) } };
 }
 
 export function describeRun(r: Run, _keys: Key[]): string {

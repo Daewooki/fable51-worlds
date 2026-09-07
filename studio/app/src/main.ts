@@ -14,8 +14,8 @@ import { sample, duration } from '../../schemas/keys.mjs';
 const WORLD_PORTS: Record<string, number> = { 'union-square-sf': 5173, 'kyoto-higashiyama': 5174 };
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
-const panelLeft = $('#panel-left');
-const panelRight = $('#panel-right');
+const panelLeft = $('#panel-left-main');
+const panelRight = $('#panel-keys');
 const panelJobs = $('#panel-jobs');
 const panelPrompt = $('#panel-prompt');
 const panelPhone = $('#panel-phone');
@@ -62,7 +62,7 @@ function fillOptions<T>(sel: HTMLSelectElement, rows: T[], opts: { value: (r: T)
 
 function renderLeft() {
   panelLeft.innerHTML = `
-    <h2>Projects</h2>
+    <h2><span class="step">1</span>Project</h2>
     <select id="project-select" size="6"></select>
     <details class="new-form" open>
       <summary>New project</summary>
@@ -70,7 +70,7 @@ function renderLeft() {
       <select id="np-world">${fmtWorldOptions()}</select>
       <button id="np-create" type="button">Create</button>
     </details>
-    <h2>Shots</h2>
+    <h2><span class="step">2</span>Shot</h2>
     <select id="shot-select" size="6"></select>
     <details class="new-form" open>
       <summary>New shot</summary>
@@ -138,7 +138,7 @@ function mixedModeWarning(keys: Key[]): string {
 function renderRight() {
   const keys: Key[] = ctx.shot?.keys || [];
   panelRight.innerHTML = `
-    <h2>Keyframes</h2>
+    <h2><span class="step">3</span>Camera keys</h2>
     <div class="new-key-row">
       <select id="nk-mode">
         <option value="air">air</option>
@@ -327,8 +327,11 @@ async function runPathFix() {
     pathReport = report;
     await ctx.save();
     renderRight(); updateScrubber();
-    const n = report.fixedKeys || 0;
-    statusEl.textContent = n ? `path fixed — ${n} key${n > 1 ? 's' : ''} inserted to fly over structures` : report.clear ? 'path already clear' : 'could not fix automatically — see the collision list';
+    const n = report.fixedKeys || 0, g = report.groundedKeys || 0;
+    const parts = [];
+    if (g) parts.push(`${g} key${g > 1 ? 's' : ''} raised to street level`);
+    if (n) parts.push(`${n} key${n > 1 ? 's' : ''} inserted to fly over structures`);
+    statusEl.textContent = parts.length ? `path fixed — ${parts.join(', ')}` : report.clear ? 'path already clear' : 'could not fix automatically — see the collision list';
   } catch (e: any) {
     statusEl.textContent = `path fix failed: ${String(e?.message || e)}`;
   } finally {
@@ -399,8 +402,15 @@ function mountWorldForShot(shot: any) {
   const bridge = new WorldBridge(iframeEl);
   ctx.bridge = bridge;
   bridge.onPos((p) => { livePosEl.textContent = `eye (${p.x.toFixed(2)}, ${p.y.toFixed(2)}, ${p.z.toFixed(2)})`; });
-  statusEl.textContent = 'loading world…';
+  statusEl.textContent = `loading ${world}…`;
   iframeEl.src = `http://localhost:${port}/?qa=1&ui=0&studio=1&life=0&time=${shot.timeOfDay}`;
+  // Liveness probe: an opaque no-cors fetch resolves if anything answers on the port and
+  // rejects on connection refused, so a world whose dev server is not running gets a clear
+  // message instead of a silent "loading…" forever.
+  fetch(`http://localhost:${port}/`, { mode: 'no-cors', cache: 'no-store' }).catch(() => {
+    if (ctx.bridge !== bridge) return;
+    statusEl.textContent = `${world} dev server is not running on :${port} — start it with "npm run up:all" (or npx vite --port ${port} --strictPort in ${world}/)`;
+  });
   bridge.ready.then(() => {
     if (ctx.bridge !== bridge) return; // superseded by a later shot switch
     statusEl.textContent = 'world ready';
@@ -439,6 +449,13 @@ async function selectProject(id: string) {
   renderAll();
   mountPhoneForProject(p.id);
   if (p.shots.length) await selectShot(p.shots[0].id);
+  else {
+    // No shot yet: blank the viewport so the previous project's world does not linger and
+    // look like this project's.
+    iframeEl.src = 'about:blank';
+    pathReport = null; renderPathStatus();
+    statusEl.textContent = `${p.world} — create a shot to load the world`;
+  }
 }
 
 async function selectShot(id: string) {

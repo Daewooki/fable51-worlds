@@ -29,7 +29,9 @@ const PORTS = { ui: 5180, server: 5190 };
 
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 ? (argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : true) : d; };
-const worldArg = String(opt('world', 'union-square-sf'));
+// Default to every world: the Director can open a project of either, and a world whose dev
+// server is down just shows "not running" — cheaper to start both than to explain.
+const worldArg = String(opt('world', 'all'));
 const lan = !!opt('lan', false);
 const open = !!opt('open', false);
 const stopOnly = !!opt('stop', false);

@@ -9,6 +9,8 @@
   "scripts": {
     "up": "node tools/up.mjs",
     "up:all": "node tools/up.mjs --world all",
+    "up:union": "node tools/up.mjs --world union-square-sf",
+    "up:kyoto": "node tools/up.mjs --world kyoto-higashiyama",
     "up:lan": "node tools/up.mjs --lan",
     "down": "node tools/up.mjs --stop",
     "dev": "node server/index.mjs",

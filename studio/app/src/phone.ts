@@ -70,7 +70,7 @@ export function mountPhonePanel(
   opts: { projectId: string; bridge: { call(cmd: string, p?: any): Promise<any> }; onRecorded(keys: any[]): void },
 ): { dispose(): void } {
   el.innerHTML = `
-    <h3>Phone camera</h3>
+    
     <img id="ph-qr" width="160" alt="phone camera QR" />
     <div><code id="ph-url">resolving LAN address…</code></div>
     <div class="ph-hint">Open the Director itself on this address for the QR to work.</div>

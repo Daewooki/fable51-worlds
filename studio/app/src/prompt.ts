@@ -7,7 +7,7 @@ import { CONFIG_EVENT, fetchConfig, type StudioConfig } from './settings';
 
 export function mountPromptPanel(el: HTMLElement, ctx: Ctx): { refresh: () => void } {
   el.innerHTML = `
-    <h2>Prompt → path</h2>
+    <h2>Prompt → path <span class="ph-opt">(auto camera move)</span></h2>
     <textarea id="pp-prompt" rows="3" placeholder="describe the camera move…"></textarea>
     <div class="new-key-row">
       <label>duration <input id="pp-duration" type="number" min="1" step="0.5" value="10" /></label>

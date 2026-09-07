@@ -61,11 +61,12 @@ function artifactsHtml(job: any, projectId: string): string {
 
 export function mountJobsPanel(el: HTMLElement, ctx: Ctx): { refresh: () => void } {
   el.innerHTML = `
+    <h2><span class="step">4</span>Render · Finalize · Export</h2>
     <div class="jobs-actions">
       <button id="job-previz" type="button">Render previz</button>
       <button id="job-export" type="button">Export</button>
     </div>
-    <details class="finalize-form" open>
+    <details class="finalize-form">
       <summary>Finalize (Seedance)</summary>
       <div class="finalize-grid">
         <label>Mode

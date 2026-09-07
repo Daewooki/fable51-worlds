@@ -70,3 +70,23 @@ it('fixPath leaves walk segments to the creator', async () => {
   expect(report.clear).toBe(false);
   expect(report.unfixable?.length).toBe(1);
 });
+
+it('groundKeys raises underground air keys to the same height above street level, look included', async () => {
+  const { groundKeys } = await import('../app/src/pathcheck');
+  // ground at 39 m everywhere (a hill town), no structures
+  const hill: Probe = async (points) => points.map(([, y]) => ({ blocked: y < 39.3, top: 39, ground: 39, structure: false }));
+  const keys: Key[] = [
+    { t: 0, m: 'air', eye: [0, 3, 0], look: [20, 1.7, 0] },      // placeholder street height -> 39 + 3
+    { t: 5, m: 'air', eye: [10, 140, 0], look: [0, 40, 0] },     // already high -> untouched
+    { t: 8, m: 'air', eye: [20, 1.0, 0], look: [40, 1.0, 0] },   // below eyeMin -> 39 + 1.6
+  ];
+  const { keys: out, moved } = await groundKeys(keys, hill);
+  expect(moved).toBe(2);
+  expect(out[0].eye).toEqual([0, 42, 0]); expect(out[0].look[1]).toBeCloseTo(40.7, 2);
+  expect(out[1]).toEqual(keys[1]);
+  expect(out[2].eye![1]).toBeCloseTo(40.6, 2);
+  expect(keys[0].eye![1]).toBe(3); // input not mutated
+  const fixed = await fixPath(keys, hill);
+  expect(fixed.report.clear).toBe(true);
+  expect(fixed.report.groundedKeys).toBe(2);
+});

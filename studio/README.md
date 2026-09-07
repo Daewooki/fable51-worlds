@@ -56,8 +56,8 @@ Also needed:
 
 ```bash
 cd studio
-npm run up            # union-square-sf (:5173) + studio server (:5190) + Director UI (:5180)
-npm run up:all        # both worlds
+npm run up            # both worlds (:5173, :5174) + studio server (:5190) + Director UI (:5180)
+npm run up:union      # only union-square-sf   (npm run up:kyoto for only kyoto)
 npm run up:lan        # server bound to 0.0.0.0 for the phone camera; prints the LAN URL
 npm run down          # stop whatever is listening on 5173/5174/5180/5190
 ```

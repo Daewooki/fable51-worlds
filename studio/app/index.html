@@ -8,7 +8,13 @@
   </head>
   <body>
     <div id="app">
-      <div id="panel-left" class="panel"></div>
+      <div id="panel-left" class="panel">
+        <div id="panel-left-main"></div>
+        <details id="phone-details" class="side-details">
+          <summary>Phone camera <span class="ph-opt">(optional)</span></summary>
+          <div id="panel-phone"></div>
+        </details>
+      </div>
       <div id="panel-center" class="panel">
         <div id="world-wrap">
           <iframe id="world" title="world preview"></iframe>
@@ -25,12 +31,11 @@
         <div id="path-status"></div>
         <div id="status-line"></div>
       </div>
-      <div id="panel-right" class="panel"></div>
-      <div id="panel-jobs" class="panel"></div>
-      <div id="panel-bottom2">
-        <div id="panel-prompt" class="panel"></div>
-        <div id="panel-phone" class="panel"></div>
+      <div id="panel-right" class="panel">
+        <div id="panel-keys"></div>
+        <div id="panel-prompt"></div>
       </div>
+      <div id="panel-jobs" class="panel"></div>
       <div id="panel-settings" class="panel"></div>
     </div>
     <script type="module" src="/src/main.ts"></script>
