@@ -89,7 +89,8 @@ export class World {
     if (this.plazaSpec) { this.plaza = new Plaza(this.plazaSpec, this.terrain, this.collision); this.group.add(this.plaza.group); }
     progress('buildings', 0.62);
     // authored façade specs
-    try { const idx = await (await fetch(`${BASE}data/facades/index.json`)).json(); for (const f of idx.files || []) { try { const arr = await (await fetch(`${BASE}data/facades/${f}`)).json(); this.facadeSpecs.push(...arr); } catch (e) { console.warn('facade file failed', f, e); } } } catch { /* no authored specs yet */ }
+    const facadeIdx = await optionalData<{ files?: string[] }>('facades/index.json', 'authored facade specs');
+    for (const f of facadeIdx?.files || []) { try { const arr = await (await fetch(`${BASE}data/facades/${f}`)).json(); this.facadeSpecs.push(...arr); } catch (e) { console.warn('facade file failed', f, e); } }
     const detailIds = new Set<string>();
     const byId = new Map<string, FacadeSpec>();
     const gb = this.gis.buildings;
@@ -117,8 +118,7 @@ export class World {
     this.facades = new FacadeBuilder(this);
     let n = 0;
     // storefront census → tenants for auto-detailed buildings (address match: street + house number/range)
-    let census: any[] = [];
-    try { census = await (await fetch(`${BASE}data/storefronts.json`)).json(); } catch { /* optional */ }
+    const census: any[] = (await optionalData<any[]>('storefronts.json', 'storefront census')) || [];
     const parseAddr = (a: string) => { const m = /^(\d+)(?:\s*[-–]\s*(\d+))?\s+([A-Za-z'.]+)/.exec(a || ''); return m ? { lo: +m[1], hi: +(m[2] || m[1]), street: m[3].replace(/[.']/g, '').toLowerCase() } : null; };
     const tenantsFor = (info: BuildingInfo): { street: string; tenant: any }[] => {
       const b = info.b; const hn = (b.tags['addr:housenumber'] || '').split(/[;,]/).map((x) => x.trim()).filter(Boolean); const street = (b.tags['addr:street'] || info.address || '').replace(/ (Street|Avenue|Lane|St|Ave|Ln)$/i, '').replace(/[.']/g, '').toLowerCase();

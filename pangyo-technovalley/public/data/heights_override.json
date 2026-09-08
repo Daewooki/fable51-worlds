@@ -1,9 +1,19 @@
 {
   "_README": {
-    "purpose": "Hand-curated per-building overrides, keyed by OSM id ('way/<id>' or 'relation/<id>').",
-    "shape": { "heightM": "number, metres, optional", "floors": "number, optional (used as floors * 3.6 m)", "style": "facade style id, optional ('glass' | 'concrete' | 'stone' | ...)", "name": "display name override, optional" },
-    "heightResolutionOrder": ["OSM height", "OSM building:levels * 3.6 + 1", "override.heightM", "override.floors * 3.6", "area-based default"],
-    "note": "heightM/floors only take effect when OSM tags neither a height nor building:levels; style and name always apply."
+    "purpose": "Hand-curated per-building overrides, keyed by OSM id ('way/<id>' or 'relation/<id>') or by street address.",
+    "shape": { "heightM": "number, metres, optional", "floors": "number, optional", "style": "facade style id, optional ('glass' | 'concrete' | 'stone_warm' | 'terracotta' | 'travertine' | ...)", "name": "display name override, optional", "hide": "boolean, optional — skip the building entirely", "floorH": "number, optional — storey height for the facade engine", "bayW": "number, optional — facade bay width" },
+    "twoLayers": "This file is read TWICE, by two different consumers, with two different precedences. Both are intended.",
+    "buildTimeDefault": {
+      "who": "tools/geo/build_gis.mjs resolveHeight() — bakes gis.json's heightM/heightSource",
+      "order": ["OSM height", "OSM building:levels * 3.6 + 1", "override.heightM", "override.floors * 3.6", "area-based default"],
+      "why": "gis.json is a record of the survey: real OSM tags win, and the override only fills gaps so the baked data stays honest about what came from OSM (see each building's heightSource)."
+    },
+    "runtimeOverride": {
+      "who": "src/world/Buildings.ts — the height actually extruded in the world",
+      "order": ["override.heightM", "gis.json heightM", "gis.json levels * floorH + 1", "override.floors * floorH", "area-based default"],
+      "why": "the override is curated by hand, so at render time it wins over the OSM tag it was written to correct."
+    },
+    "note": "style / floorH / bayW / hide / name always apply at runtime. When OSM already carries a correct height, an override.heightM changes what is rendered but not what gis.json records."
   },
   "way/694434545": { "heightM": 58, "style": "glass", "name": "NCSOFT R&D Center" },
   "way/694434544": { "heightM": 9, "style": "glass" }

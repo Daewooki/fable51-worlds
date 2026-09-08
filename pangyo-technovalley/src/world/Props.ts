@@ -9,6 +9,7 @@ import type { World } from './World';
 import type { App } from '../app/App';
 import { Rng } from '../util/Rng';
 import { pointInPolygon } from '../util/Geometry2D';
+import { buildFootprintIndex, isInsideFootprint, FootprintIndex } from './FootprintIndex';
 import { mergeGeometries as mergeBufferGeos } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { StreetSpec } from './StreetGrid';
 
@@ -21,6 +22,9 @@ const BENCH_RADIUS = 140, BENCH_SPACING = 45;      // benches only on the origin
 const MAJOR_WIDTH = 12;                            // a street this wide counts as "major" for signals
 const EXTENT = 620;                                // props are placed within this box around the origin
 const DENSE_RADIUS = 250;                          // beyond this, street trees are thinned to keep the triangle budget sane
+// The fitted street model is axis-aligned, so a kerb line can run through a building whose real frontage is not.
+// Every procedural placement is rejected inside a footprint expanded by this much (lamp masts lean, so they get more).
+const FOOTPRINT_CLEAR = 0.5, FOOTPRINT_CLEAR_LAMP = 1.0;
 
 export class Props {
   group = new THREE.Group();
@@ -28,6 +32,10 @@ export class Props {
   signals: SignalHead[] = [];
   lampPositions: [number, number, number][] = [];
   plazaLampPositions: [number, number, number][] = [];
+  /** Footprint index used to veto placements; also handy for QA. */
+  footprints!: FootprintIndex;
+  /** Placement bookkeeping (exposed for the boot test / HUD). */
+  placement = { lamps: 0, lampsRejected: 0, trees: 0, treesRejected: 0, benches: 0, benchesRejected: 0, signalMasts: 0, signalMastsRejected: 0 };
   constructor(public world: World, public app: App) { this.group.name = 'props'; }
 
   async build() {
@@ -64,6 +72,9 @@ export class Props {
     const inBounds = (x: number, z: number) => Math.abs(x) < EXTENT && Math.abs(z) < EXTENT;
     const onPlaza = (x: number, z: number) => !!w.plaza && w.plaza.contains(x, z);
     const at = (s: StreetSpec, along: number, across: number): [number, number] => (s.axis === 'ns' ? [across, along] : [along, across]);
+    // --- building veto: no procedural prop may stand inside (or hard against) a building ---
+    this.footprints = buildFootprintIndex([...(w.gis.buildings || []), ...(w.gis.buildingParts || [])]);
+    const inBuilding = (x: number, z: number, clear = FOOTPRINT_CLEAR) => isInsideFootprint(x, z, this.footprints, clear);
 
     for (const s of w.streetSpecs) {
       if (s.pedestrian) continue;
@@ -74,9 +85,11 @@ export class Props {
         for (const side of [-1, 1]) {
           const [x, z] = at(s, d, s.c + side * (hw + LAMP_CURB_OFFSET));
           if (!inBounds(x, z) || nearCrossing(x, z, 9)) continue;
+          if (inBuilding(x, z, FOOTPRINT_CLEAR_LAMP)) { this.placement.lampsRejected++; continue; }
           const rot = s.axis === 'ns' ? (side > 0 ? Math.PI / 2 : -Math.PI / 2) : side > 0 ? Math.PI : 0;
           (ped ? lampPed : lampTall)?.add([x, gy(x, z), z], rot);
           this.lampPositions.push([x, gy(x, z) + (ped ? 4.6 : 7.6), z]);
+          this.placement.lamps++;
         }
       }
       // --- street trees on sidewalks at least TREE_MIN_SIDEWALK wide ---
@@ -86,8 +99,10 @@ export class Props {
           if (!inBounds(x, z) || nearCrossing(x, z, TREE_CROSSING_CLEAR) || onPlaza(x, z)) continue;
           if (this.rng.next() < 0.15) continue;
           if (Math.hypot(x, z) > DENSE_RADIUS && this.rng.next() < 0.6) continue;
+          if (inBuilding(x, z)) { this.placement.treesRejected++; continue; }
           treeGrate?.add([x, gy(x, z) + 0.005, z], 0);
           this.world.treeSpots.push([x, gy(x, z), z]);
+          this.placement.trees++;
         }
       }
       // --- parking meters where the spec has a parking lane ---
@@ -95,14 +110,14 @@ export class Props {
         if (!(side < 0 ? s.parking.left : s.parking.right)) continue;
         for (let d = lo + 14; d < hi - 10; d += 6.2) {
           const [x, z] = at(s, d, s.c + side * (hw + 0.5));
-          if (!inBounds(x, z) || nearCrossing(x, z, 12)) continue;
+          if (!inBounds(x, z) || nearCrossing(x, z, 12) || inBuilding(x, z)) continue;
           meter?.add([x, gy(x, z), z], this.rng.range(-0.1, 0.1) + (s.axis === 'ns' ? 0 : Math.PI / 2));
         }
       }
       // --- bins / bike racks / utility cabinets, sparsely ---
       for (let d = lo + 20; d < hi - 10; d += 48) for (const side of [-1, 1]) {
         const [x, z] = at(s, d, s.c + side * (hw + 1.0));
-        if (!inBounds(x, z) || nearCrossing(x, z, 6)) continue;
+        if (!inBounds(x, z) || nearCrossing(x, z, 6) || inBuilding(x, z)) continue;
         const r = this.rng.next();
         if (r < 0.4) trash?.add([x, gy(x, z), z], this.rng.range(0, 6.28));
         else if (r < 0.7) bikeRack?.add([x, gy(x, z), z], s.axis === 'ns' ? 0 : Math.PI / 2);
@@ -112,19 +127,21 @@ export class Props {
       for (let d = lo + 18; d < hi - 12; d += BENCH_SPACING) for (const side of [-1, 1]) {
         const [x, z] = at(s, d, s.c + side * (hw + Math.max(1.2, s.sidewalk - 1.4)));
         if (Math.hypot(x, z) > BENCH_RADIUS || nearCrossing(x, z, 10) || onPlaza(x, z)) continue;
+        if (inBuilding(x, z)) { this.placement.benchesRejected++; continue; }
         const rot = s.axis === 'ns' ? (side > 0 ? -Math.PI / 2 : Math.PI / 2) : side > 0 ? 0 : Math.PI;
         bench?.add([x, gy(x, z), z], rot);
         this.world.collision.addBox(x, z, 1.8, 0.7, gy(x, z), gy(x, z) + 0.9, rot);
+        this.placement.benches++;
       }
     }
 
     // --- OSM-mapped props (this extract has none of these except a few benches; the code stays generic) ---
-    for (const p of w.gis.trees || []) { if (!inBounds(p.x, p.z)) continue; this.world.treeSpots.push([p.x, gy(p.x, p.z), p.z]); treeGrate?.add([p.x, gy(p.x, p.z) + 0.005, p.z], 0); }
-    for (const p of w.gis.lamps || []) { if (!inBounds(p.x, p.z)) continue; lampPed?.add([p.x, gy(p.x, p.z), p.z], 0); this.lampPositions.push([p.x, gy(p.x, p.z) + 4.6, p.z]); }
+    for (const p of w.gis.trees || []) { if (!inBounds(p.x, p.z)) continue; if (inBuilding(p.x, p.z)) { this.placement.treesRejected++; continue; } this.world.treeSpots.push([p.x, gy(p.x, p.z), p.z]); treeGrate?.add([p.x, gy(p.x, p.z) + 0.005, p.z], 0); this.placement.trees++; }
+    for (const p of w.gis.lamps || []) { if (!inBounds(p.x, p.z)) continue; if (inBuilding(p.x, p.z, FOOTPRINT_CLEAR_LAMP)) { this.placement.lampsRejected++; continue; } lampPed?.add([p.x, gy(p.x, p.z), p.z], 0); this.lampPositions.push([p.x, gy(p.x, p.z) + 4.6, p.z]); this.placement.lamps++; }
     for (const p of w.gis.hydrants || []) { if (inBounds(p.x, p.z)) hydrant?.add([p.x, gy(p.x, p.z), p.z], 0); }
     for (const p of w.gis.benches || []) { if (inBounds(p.x, p.z)) bench?.add([p.x, gy(p.x, p.z), p.z], 0); }
     for (const p of w.gis.bollards || []) { if (inBounds(p.x, p.z)) bollard?.add([p.x, gy(p.x, p.z), p.z], 0); }
-    for (const c of crossingPts) { if (inBounds(c.x, c.z)) curbRamp?.add([c.x, gy(c.x, c.z), c.z], 0); }
+    for (const c of crossingPts) { if (inBounds(c.x, c.z) && !inBuilding(c.x, c.z)) curbRamp?.add([c.x, gy(c.x, c.z), c.z], 0); }
 
     // --- traffic signals: OSM signal nodes snapped to the nearest junction, else every major × major junction ---
     const signalProto = has('street/traffic_signal_post') ? await Assets.load('street/traffic_signal_post') : null;
@@ -144,10 +161,12 @@ export class Props {
       const hwA = c.a.width / 2, hwB = c.b.width / 2;
       for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
         const x = c.x + sx * (hwA + 0.7), z = c.z + sz * (hwB + 0.7);
+        if (inBuilding(x, z)) { this.placement.signalMastsRejected++; continue; }
         const y = gy(x, z);
         signalSpots.push({ x, z, y, rot: sx < 0 ? (sz < 0 ? Math.PI : Math.PI / 2) : sz < 0 ? -Math.PI / 2 : 0, cx: c.x, cz: c.z });
-        if (sx * sz > 0 && hydrant && !(w.gis.hydrants || []).length) hydrant.add([x + sx * 1.2, y, z - sz * 1.0], 0);
-        if (sx * sz < 0 && signPole) signPole.add([x + sx * 1.5, y, z + sz * 0.5], 0);
+        this.placement.signalMasts++;
+        if (sx * sz > 0 && hydrant && !(w.gis.hydrants || []).length && !inBuilding(x + sx * 1.2, z - sz * 1.0)) hydrant.add([x + sx * 1.2, y, z - sz * 1.0], 0);
+        if (sx * sz < 0 && signPole && !inBuilding(x + sx * 1.5, z + sz * 0.5)) signPole.add([x + sx * 1.5, y, z + sz * 0.5], 0);
       }
     }
     if (signalProto && signalSpots.length) this.buildSignals(signalProto, signalSpots);
@@ -176,6 +195,7 @@ export class Props {
     }
 
     for (const im of [lampTall, lampPed, lampGlobe, meter, hydrant, trash, bench, benchPlaza, bikeRack, signPole, utility, bollard, treeGrate, curbRamp, utilBig]) if (im) { im.finalize(); this.group.add(im.group); }
+    console.info('[props] placed', JSON.stringify(this.placement));
     this.app.scene.add(this.group);
     return this;
   }

@@ -38,7 +38,7 @@ Runtime data files under `src/data/recon/` (synced to `public/data/`):
 | `gis.json` | yes | buildings, building parts, streets, POIs, prop bins |
 | `elevation.json` | yes | terrain heightfield |
 | `streets_spec.json` | yes | `World.makeStreetSpecs()` — the analytic street model (lanes clamped to 1–6) |
-| `heights_override.json` | no | per-OSM-id height / floors / style / name overrides |
+| `heights_override.json` | no | per-OSM-id height / floors / style / name overrides (see below) |
 | `tour.json` | no | tour mode camera stops (`[{ title, subtitle?, pos, look, duration, hold, time? }]`) |
 | `routes.json` | no | scheduled route vehicles for `Traffic` (see the header of `src/life/Traffic.ts`) |
 | `plaza.json` | no | the optional public-square module (see the header of `src/world/Plaza.ts`) |
@@ -47,6 +47,19 @@ Runtime data files under `src/data/recon/` (synced to `public/data/`):
 | `storefronts.json` | no | storefront census used to name façade bays |
 
 Nothing in `src/` names a place: a missing optional file logs one `console.info` and turns that feature off.
+
+### Building heights — two layers, two precedences
+
+`heights_override.json` is read twice, on purpose:
+
+| layer | who | order |
+| --- | --- | --- |
+| **build time** (bakes `gis.json`) | `tools/geo/build_gis.mjs` → `resolveHeight()` | OSM `height` → OSM `building:levels × 3.6 + 1` → `override.heightM` → `override.floors × 3.6` → area default |
+| **runtime** (what is extruded) | `src/world/Buildings.ts` | `override.heightM` → `gis.json heightM` → `levels × floorH + 1` → `override.floors × floorH` → area default |
+
+`gis.json` is a record of the survey, so real OSM tags win there and each building keeps an honest `heightSource`;
+the override only fills gaps. At render time the curated value wins, because that is the point of curating it.
+`style` / `floorH` / `bayW` / `hide` / `name` always apply at runtime.
 
 ## Licensing / attribution
 

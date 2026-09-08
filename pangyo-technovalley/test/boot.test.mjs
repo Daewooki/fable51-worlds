@@ -5,18 +5,22 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launchWorld, WORLD_PORTS } from '../../studio/server/render/browser.mjs';
+import { buildFootprintIndex, isInsideFootprint, footprintAt } from '../src/world/FootprintIndex.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const pkgRoot = path.resolve(here, '..');
 const TOUR = JSON.parse(fs.readFileSync(path.join(pkgRoot, 'public/data/tour.json'), 'utf8'));
+const GIS = JSON.parse(fs.readFileSync(path.join(pkgRoot, 'public/data/gis.json'), 'utf8'));
 const TIMEOUT = 400_000;
 
 describe('pangyo-technovalley boots', () => {
-  let browser, page, pageErrors;
+  let browser, page, pageErrors, wallClockMs;
 
   beforeAll(async () => {
+    const t0 = Date.now();
     const r = await launchWorld({ world: 'pangyo-technovalley', port: 5175, width: 1280, height: 720, time: 'sunset', quality: 'med' });
     browser = r.browser; page = r.page; pageErrors = r.errors;
+    wallClockMs = Date.now() - t0;
     // installStudioBridge is imported after __twin.ready is published
     await page.waitForFunction(() => typeof window.__twin?.probePath === 'function', null, { timeout: 120_000 });
   }, TIMEOUT);
@@ -60,6 +64,37 @@ describe('pangyo-technovalley boots', () => {
     probes.forEach((p, i) => {
       expect(p, `${TOUR[i].title} ${JSON.stringify(TOUR[i].pos)} -> ${JSON.stringify(p)}`).toMatchObject({ blocked: false });
     });
+  }, TIMEOUT);
+
+  it('places no street lamp inside a building footprint', async () => {
+    const { lamps, placement } = await page.evaluate(() => ({
+      lamps: window.__twin.props.lampPositions.map(([x, , z]) => [x, z]),
+      placement: window.__twin.props.placement,
+    }));
+    expect(lamps.length).toBeGreaterThan(100);
+    // same helper the runtime used, re-run here on the shipped gis.json
+    const idx = buildFootprintIndex([...GIS.buildings, ...GIS.buildingParts]);
+    const bad = lamps.filter(([x, z]) => isInsideFootprint(x, z, idx, 1.0))
+      .map(([x, z]) => `(${x.toFixed(1)}, ${z.toFixed(1)}) in ${footprintAt(x, z, idx) || 'clearance band'}`);
+    expect(bad, `lamps inside buildings: ${bad.slice(0, 10).join('; ')}`).toEqual([]);
+    expect(placement.lamps).toBe(lamps.length);
+  }, TIMEOUT);
+
+  it('places no street tree inside a building footprint', async () => {
+    const trees = await page.evaluate(() => window.__twin.world.treeSpots.map(([x, , z]) => [x, z]));
+    const idx = buildFootprintIndex([...GIS.buildings, ...GIS.buildingParts]);
+    const bad = trees.filter(([x, z]) => isInsideFootprint(x, z, idx, 0.5))
+      .map(([x, z]) => `(${x.toFixed(1)}, ${z.toFixed(1)}) in ${footprintAt(x, z, idx) || 'clearance band'}`);
+    expect(bad, `trees inside buildings: ${bad.slice(0, 10).join('; ')}`).toEqual([]);
+  }, TIMEOUT);
+
+  it('reports load time and render cost', async () => {
+    const s = await page.evaluate(() => ({ loadMs: window.__twin.loadMs, stats: window.__twin.app.stats(), placement: window.__twin.props.placement }));
+    console.log(`[boot] in-page load ${s.loadMs} ms, launchWorld wall clock ${wallClockMs} ms, ` +
+      `${(s.stats.triangles / 1e6).toFixed(2)} M tris, ${s.stats.calls} draw calls, ${s.stats.textures} textures; ` +
+      `props ${JSON.stringify(s.placement)}`);
+    expect(s.loadMs).toBeGreaterThan(0);
+    expect(s.stats.triangles).toBeGreaterThan(1e6);
   }, TIMEOUT);
 
   it('renders tour stop 1 to docs/boot.png', async () => {

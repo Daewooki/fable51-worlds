@@ -83,7 +83,11 @@ describe('build_streets.foldToAxis', () => {
   });
 });
 
-describe('build_gis.resolveHeight', () => {
+// BUILD-TIME order only. resolveHeight() bakes gis.json, where real OSM tags must win so `heightSource` stays
+// honest about the survey; the hand-curated override only fills gaps. At RUNTIME the precedence is deliberately
+// the other way round — Buildings.ts uses `ov.heightM ?? b.heightM ?? …` so a curated correction wins over the
+// OSM tag it was written to correct. Both layers are documented in src/data/recon/heights_override.json._README.
+describe('build_gis.resolveHeight (build-time default order)', () => {
   const AREA = 900; // area default = min(28, 12 + sqrt(900) * 0.25) = 19.5
 
   it('prefers OSM height over everything else', () => {

@@ -22,6 +22,7 @@ const loadingEl = document.getElementById('loading')!, bar = document.getElement
 const progress = (m: string, f: number) => { msg.textContent = m; bar.style.width = `${Math.round(f * 100)}%`; };
 
 async function main() {
+  const t0 = performance.now();
   const studioMode = new URLSearchParams(location.search).get('studio') === '1';
   const app = new App(document.getElementById('app')!);
   const world = new World();
@@ -143,6 +144,8 @@ async function main() {
   // warm-up: force shader compilation for visible materials
   app.renderer.compile(app.scene, app.camera);
 
+  const loadMs = Math.round(performance.now() - t0);
+  console.info('[pangyo] load', loadMs, 'ms');
   installQa({
     ready: true,
     setView: applyView,
@@ -163,7 +166,7 @@ async function main() {
     storefronts: () => hero.storefrontList(),
     enter: (id) => interaction.enter(id),
     log: [],
-    ...({ buildingAt: (x: number, z: number) => { let best: any = null, bd = 1e9; for (const i of world.buildings.infos.values()) { const d = Math.hypot(i.footprint[0][0] - x, i.footprint[0][1] - z); if (d < bd) { bd = d; best = i; } } return best && { id: best.id, name: best.name, address: best.address, height: best.height, floors: best.floors, style: best.style, floorH: best.floorH, bayW: best.bayW, baseY: best.baseY, fp: best.footprint }; }, world, app, hero, life, props } as any),
+    ...({ buildingAt: (x: number, z: number) => { let best: any = null, bd = 1e9; for (const i of world.buildings.infos.values()) { const d = Math.hypot(i.footprint[0][0] - x, i.footprint[0][1] - z); if (d < bd) { bd = d; best = i; } } return best && { id: best.id, name: best.name, address: best.address, height: best.height, floors: best.floors, style: best.style, floorH: best.floorH, bayW: best.bayW, baseY: best.baseY, fp: best.footprint }; }, world, app, hero, life, props, loadMs } as any),
   });
   if (studioMode) { const { installStudioBridge } = await import('./debug/StudioBridge'); installStudioBridge(app, (window as any).__twin); }
 }
