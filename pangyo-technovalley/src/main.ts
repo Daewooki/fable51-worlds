@@ -14,6 +14,7 @@ import { Interaction } from './systems/Interaction';
 import { Life } from './life/Life';
 import { Props } from './world/Props';
 import { Hero } from './world/Hero';
+import { buildHeroProps } from './world/PangyoHero';   // importing registers this world's hero modules
 import { Vegetation } from './world/Vegetation';
 import { NightLights } from './systems/NightLights';
 import { optionalData } from './world/World';
@@ -27,13 +28,14 @@ async function main() {
   const app = new App(document.getElementById('app')!);
   const world = new World();
   app.scene.add(world.group);
-  await Assets.loadManifests(['arch', 'street', 'retail', 'vehicles', 'veg', 'people', 'varco']);
+  await Assets.loadManifests(['arch', 'street', 'retail', 'vehicles', 'veg', 'people', 'pangyo', 'varco']);
   await Assets.loadOverrides();
   // hero building ids come from data/hero.json, read inside world.build()
   await world.build(progress);
   progress('hero buildings', 0.72);
   const hero = new Hero(world, app);
   await hero.build();
+  await buildHeroProps(world, app);
   progress('props', 0.8);
   const props = new Props(world, app);
   await props.build();

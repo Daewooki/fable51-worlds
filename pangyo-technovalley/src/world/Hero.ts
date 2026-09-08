@@ -21,7 +21,9 @@ export class Hero {
   interactables: Interactable[] = [];
   constructor(public world: World, public app: App) { this.group.name = 'hero'; }
   async build() {
-    this.app.scene.add(this.group);
+    // under `world`, not straight on the scene: the studio's probePath only ray-casts the `world`,
+    // `props` and `vegetation` groups, and a hero module IS the building there.
+    this.world.group.add(this.group);
     for (const s of this.world.storefronts) this.storefronts.push({ ...s, source: 'facade' });
     const entries = this.world.heroEntries;
     if (!entries.length) return;

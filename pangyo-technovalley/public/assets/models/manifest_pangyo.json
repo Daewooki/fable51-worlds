@@ -1,0 +1,79 @@
+{
+ "pangyo/nc_rnd_center": {
+  "file": "assets/models/pangyo/nc_rnd_center.glb",
+  "tris": 6640,
+  "bbox_threejs": {
+   "min": [
+    -55.76000213623047,
+    0.0,
+    -23.850000381469727
+   ],
+   "max": [
+    55.76000213623047,
+    62.20000076293945,
+    20.119998931884766
+   ]
+  },
+  "sizeBytes": 464812,
+  "kind": "hero",
+  "height": 58.0,
+  "footprint": [
+   111.2,
+   40.0
+  ],
+  "front": "-Z",
+  "origin": "bottom_center",
+  "note": "fit height 58 m excludes the rooftop sign, which stands 3 m proud on purpose"
+ },
+ "pangyo/pangyo_station_canopy": {
+  "file": "assets/models/pangyo/pangyo_station_canopy.glb",
+  "tris": 536,
+  "bbox_threejs": {
+   "min": [
+    -9.0,
+    -1.0199999809265137,
+    -4.192651748657227
+   ],
+   "max": [
+    9.0,
+    6.424715995788574,
+    4.192651748657227
+   ]
+  },
+  "sizeBytes": 32008,
+  "kind": "hero_prop",
+  "height": 6.0,
+  "footprint": [
+   18.0,
+   8.0
+  ],
+  "front": "-Z",
+  "origin": "bottom_center"
+ },
+ "pangyo/alphadome_tower": {
+  "file": "assets/models/pangyo/alphadome_tower.glb",
+  "tris": 5180,
+  "bbox_threejs": {
+   "min": [
+    -30.799999237060547,
+    0.0,
+    -31.239999771118164
+   ],
+   "max": [
+    31.708454132080078,
+    112.19999694824219,
+    31.239999771118164
+   ]
+  },
+  "sizeBytes": 207644,
+  "kind": "hero",
+  "height": 100.0,
+  "footprint": [
+   60.0,
+   60.0
+  ],
+  "front": "-Z",
+  "origin": "bottom_center",
+  "note": "fit height 100 m excludes the crown mast"
+ }
+}

@@ -16,8 +16,17 @@ import { localBbox } from '../geo/geo';
 
 export interface GisData { origin: any; buildings: GisBuilding[]; buildingParts: GisBuilding[]; streets: any[]; pois: any[]; trees: any[]; lamps: any[]; signals: any[]; crossings: any[]; hydrants: any[]; benches: any[]; bollards?: any[]; plaza?: any; intersections: any[] }
 
-/** One entry of `data/hero.json`: an OSM building whose massing is replaced by a hero module. */
-export interface HeroEntry { osmId: string; module: string; yaw?: number; footprintFit?: boolean }
+/**
+ * One entry of `data/hero.json`: an OSM building whose massing geometry is replaced by a hero module.
+ *
+ * `yaw` (degrees) pins the module's rotation outright; `facing` (a world [x, z] direction) only picks
+ * which of the two long faces of the footprint's oriented bbox the module's −Z front looks along;
+ * with neither, the face nearer a fitted street wins. `footprintFit` asks the module to scale itself
+ * to the footprint's oriented bbox and the building height. `selfCollision` says the module registers
+ * its own collision volumes, so the massing collision polygon is dropped for that building — by
+ * default it is KEPT, because a hero replaces geometry, not walls.
+ */
+export interface HeroEntry { osmId: string; module: string; yaw?: number; footprintFit?: boolean; facing?: [number, number]; selfCollision?: boolean }
 
 /** Fetch an optional data file. Missing/invalid ⇒ null plus one console.info line (feature off, no crash). */
 export async function optionalData<T>(file: string, what: string): Promise<T | null> {
@@ -112,7 +121,11 @@ export class World {
     this.detailedIds = detailIds;
     const noGeometry = new Set([...this.heroIds, ...detailIds]);
     const plazaPoly = this.gis.plaza?.footprint || (this.plazaSpec ? [[this.plazaSpec.bounds.xMin, this.plazaSpec.bounds.zMin], [this.plazaSpec.bounds.xMax, this.plazaSpec.bounds.zMin], [this.plazaSpec.bounds.xMax, this.plazaSpec.bounds.zMax], [this.plazaSpec.bounds.xMin, this.plazaSpec.bounds.zMax]] as [number, number][] : null);
-    this.buildings = new Buildings(this.gis.buildings, this.gis.buildingParts, this.terrain, this.collision, { ...this.heightOverrides, ...this.overrides }, noGeometry, plazaPoly, this.heroIds);
+    // Hero buildings lose their massing *geometry* (they are in `noGeometry`) but keep the massing
+    // collision polygon, so the walk controller and the studio's probe still meet solid walls where
+    // the hero module stands. Only a module that registers its own volumes opts out (`selfCollision`).
+    const heroSelfCollision = new Set(this.heroEntries.filter((e) => e.selfCollision).map((e) => e.osmId));
+    this.buildings = new Buildings(this.gis.buildings, this.gis.buildingParts, this.terrain, this.collision, { ...this.heightOverrides, ...this.overrides }, noGeometry, plazaPoly, heroSelfCollision);
     this.group.add(this.buildings.group);
     progress('façades', 0.68);
     this.facades = new FacadeBuilder(this);

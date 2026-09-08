@@ -20,7 +20,7 @@ for (const s of gis.streets) { delete s.tags; s.points = s.points.map(([x, z]) =
 for (const p of gis.pois) { const t = {}; for (const k of ['shop', 'amenity', 'tourism', 'office', 'brand', 'addr:street', 'addr:housenumber', 'level']) if (p.tags?.[k]) t[k] = p.tags[k]; p.tags = t; }
 fs.writeFileSync(path.join(dst, 'gis.json'), JSON.stringify(gis));
 
-for (const f of ['elevation.json', 'streets_spec.json', 'heights_override.json', 'tour.json', 'routes.json', 'viewpoints.json', 'storefronts.json', 'plaza.json', 'hero.json']) {
+for (const f of ['elevation.json', 'streets_spec.json', 'heights_override.json', 'tour.json', 'routes.json', 'viewpoints.json', 'storefronts.json', 'plaza.json', 'hero.json', 'hero_props.json']) {
   const p = path.join(src, f); if (fs.existsSync(p)) fs.copyFileSync(p, path.join(dst, f));
 }
 // façade specs (optional)

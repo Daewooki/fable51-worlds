@@ -1,0 +1,20 @@
+[
+  {
+    "module": "pangyo/pangyo_station_canopy",
+    "pos": [168.44, 533.53],
+    "yaw": 0,
+    "note": "판교역 (OSM node/5927786493, railway=station, 37.39473 / 127.111189). The station itself has no building footprint in OSM — only this node, two platform nodes and three railway=subway_entrance nodes — so the canopy is a prop, not a hero building."
+  },
+  {
+    "module": "pangyo/pangyo_station_canopy",
+    "pos": [201.84, 467.42],
+    "yaw": 0,
+    "note": "subway entrance ref 1 (OSM node/3408315040)"
+  },
+  {
+    "module": "pangyo/pangyo_station_canopy",
+    "pos": [221.45, 556.72],
+    "yaw": 0,
+    "note": "subway entrance ref 2 (OSM node/3408315041)"
+  }
+]

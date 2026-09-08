@@ -16,5 +16,9 @@
     "note": "style / floorH / bayW / hide / name always apply at runtime. When OSM already carries a correct height, an override.heightM changes what is rendered but not what gis.json records."
   },
   "way/694434545": { "heightM": 58, "style": "glass", "name": "NCSOFT R&D Center" },
-  "way/694434544": { "heightM": 9, "style": "glass" }
+  "way/694434544": { "heightM": 9, "style": "glass" },
+  "_hidden_by_stage2": "The three ways below are older OSM outlines of the NC complex that lie wholly inside way/694434545 / way/694434544. Stage 1 hid them behind the massing walls; the stage-2 hero modules made them poke through the curtain wall, so they are hidden. Their volume is covered by the hero buildings' own collision polygons, which World keeps.",
+  "way/478539437": { "hide": true },
+  "way/478539439": { "hide": true },
+  "way/694434546": { "hide": true }
 }

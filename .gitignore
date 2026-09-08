@@ -247,3 +247,6 @@ refs/**/*.png
 **/media/storyboard/
 **/media/_*
 **/qa/shots/
+
+# portable Blender used by pangyo-technovalley asset generators (user-space, not committed)
+pangyo-technovalley/tools/blender/

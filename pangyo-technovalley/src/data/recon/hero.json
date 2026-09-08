@@ -1,0 +1,29 @@
+[
+  {
+    "osmId": "way/694434545",
+    "module": "pangyo/nc_rnd_center",
+    "footprintFit": true,
+    "facing": [0, 1],
+    "note": "엔씨소프트 R&D 센터, 12 levels / 58 m. facing +z (grid south) puts the 2-storey lobby on the forecourt the tour and the target cut approach from; the only fitted street on this block, 대왕판교로644번길, runs 3 m off the NORTH edge (z = -28.34), so the automatic nearest-street rule would turn the entrance away from every authored camera."
+  },
+  {
+    "osmId": "way/694434544",
+    "module": "pangyo/nc_podium",
+    "footprintFit": false,
+    "note": "the NC podium, 2 levels / 8 m. Built on its own polygon, not from a bbox-fitted GLB: its min-area bbox is 143.3 x 57.5 m for a 5,669 m2 L-shaped footprint and would swallow way/478539437, way/478539439 and way/694434546."
+  },
+  {
+    "osmId": "way/1087134311",
+    "module": "pangyo/alphadome_tower",
+    "footprintFit": true,
+    "facing": [0.86, -0.51],
+    "note": "알파돔타워, 15 levels / 68 m, 98 m from the 판교역 station node; facing the station plaza."
+  },
+  {
+    "osmId": "way/454615763",
+    "module": "pangyo/alphadome_tower",
+    "footprintFit": true,
+    "facing": [0.95, 0.33],
+    "note": "알파리움타워1, 13 levels / 60 m, 200 m from the 판교역 station node; facing the station plaza."
+  }
+]

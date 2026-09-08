@@ -133,6 +133,93 @@ path** clears them — an earlier take of this cut reported *3 collisions (0.5 s
 6.4–7.3 s (surfaces at 57/58/60 m) and came back `path clear` after 7 inserted keys — but the
 result yo-yos between 20 m and 70 m, which is why the shipped cut is authored to be clear.
 
+## Stage 2 — hero modules
+
+Three generic massings around 판교역로 are replaced by authored modules, generated offline with
+Blender and fitted to their OSM footprints at load time.
+
+| module | GLB | tris | replaces |
+| --- | --- | --- | --- |
+| `pangyo/nc_rnd_center` | `public/assets/models/pangyo/nc_rnd_center.glb` | 6,640 | `way/694434545` 엔씨소프트 R&D 센터 (12 levels / 58 m) |
+| `pangyo/alphadome_tower` | `.../alphadome_tower.glb` | 5,180 | `way/1087134311` 알파돔타워 (68 m) and `way/454615763` 알파리움타워1 (60 m) |
+| `pangyo/pangyo_station_canopy` | `.../pangyo_station_canopy.glb` | 536 | nothing — 판교역 has no building footprint in OSM, so the canopy is a *prop* |
+| `pangyo/nc_podium` | — (built in TypeScript on the real polygon) | 188 | `way/694434544`, the NC podium (2 levels / 9 m) |
+
+### Generating the GLBs
+
+```
+tools/blender/blender-4.2.9-windows-x64/blender.exe --background --python tools/bpl/gen_pangyo.py
+```
+
+Blender 4.2.9 LTS is unpacked under `tools/blender/` and **not committed** (it is in the root
+`.gitignore`); download the portable Windows build from blender.org and unpack it there to
+re-run the generator. The PyPI `bpy` wheel is not an option on this machine — it needs Python
+3.11. `tools/bpl/bpl_lib.py` is `union-square-sf`'s asset-kit library, copied verbatim except
+for its header, a `text_mesh` helper and two extra material names; the conventions it enforces
+(metres, Z-up in Blender, origin at the asset's bottom-centre, front = +Y in Blender = **−Z**
+in Three.js, materials named from `MATERIAL_LIBRARY` and remapped by `src/materials/Library.ts`)
+are the same ones the union kit uses.
+
+The generator writes `public/assets/models/manifest_pangyo.json` itself (real tri counts, real
+bboxes). The studio's `tools/inject_asset.mjs` was not used: it only accepts `--as varco/<name>`.
+
+### Data
+
+`src/data/recon/hero.json` — `[{ osmId, module, footprintFit?, yaw?, facing?, selfCollision? }]`;
+`src/data/recon/hero_props.json` — `[{ module, pos:[x, z], yaw? }]` for modules with no footprint.
+Both are synced to `public/data/` by `npm run sync` and are optional (missing ⇒ no heroes).
+
+### Fitting
+
+`src/world/PangyoHero.ts` registers the named builders and does the placement:
+
+- **scale** — the module's manifest `footprint` `[w, d]` is scaled onto the minimum-area oriented
+  bounding box of the OSM footprint, and its manifest `height` onto the building height. Modules
+  are authored at their real plan size (NC 111.2 × 40.0 m, the towers 60 × 60 m) so the fit stays
+  near 1 and the 1.5 m mullion spacing survives. `height` is the *fit* height, not the bbox
+  height: the NCSOFT sign stands 3 m above the 58 m parapet and the tower's mast above 100 m,
+  on purpose.
+- **yaw** — the long axis of the oriented bbox gives two candidate front normals; the one nearer
+  a fitted street wins, unless the entry names `facing` (a preferred direction) or `yaw`
+  (absolute degrees). The NC entry sets `facing: [0, 1]`: the only fitted street on that block,
+  대왕판교로644번길, runs 3 m off the **north** edge (`c = −28.34`), so the automatic rule would
+  turn the 정문 away from the forecourt every authored camera approaches from.
+- **collision** — a hero replaces *geometry*, not walls. `World` now keeps the massing collision
+  polygon for hero buildings (only an entry with `selfCollision: true` opts out), so the walk
+  controller and the studio's `probePath` still meet the building.
+- **fallback** — if a GLB is missing or fails to parse, the module builds itself from Three.js
+  geometry instead (curtain-walled footprint extrusion, canvas-textured "NCSOFT" sign) and logs
+  it. The world boots either way. All three GLBs exported cleanly here, so the fallback is a
+  safety net, not the shipped path.
+
+The NC podium is the exception: it is built straight on its own polygon rather than from a
+bbox-fitted GLB, because its footprint is an L — a 5,669 m² plan whose minimum-area bbox is
+143.3 × 57.5 m (69 % fill) and swallows `way/478539437`, `way/478539439` and `way/694434546`.
+Those three ways are older OSM outlines of the NC complex lying wholly inside the tower and
+podium footprints; stage 1 hid them behind the massing walls, the hero curtain wall let them
+poke through, so they are now `hide: true` in `heights_override.json`.
+
+### Stage-2 target cut
+
+`docs/stage2-target-cut.mp4` — the stage-1 cut re-rendered on the hero geometry, same keys,
+same driver (`studio/tools/stage1_targetcut.mjs --port 5195`, so :5190 is untouched).
+Stills `docs/stage2-f000.png` / `-f120.png` / `-f239.png`; `docs/stage2-nc.png` is the NC
+entrance view with the rooftop sign.
+
+| | |
+| --- | --- |
+| collision check | **path clear — no collisions**, first pass |
+| previz render (240 frames @ 1920×1080) | **118.1 s** (0.49 s/frame) |
+| world load in the Director iframe | 13.1 s |
+| `softwareRender` | **false** (GPU / ANGLE d3d11) |
+| encoded deliverable | 3.6 MB (`-crf 28`; the studio's own `previz.mp4` is 16.2 MB) |
+| world cost after stage 2 (boot test, 1280×720 `med`) | 2.96 M tris, 356 draw calls; the four hero buildings are 17,188 tris and the three canopies 1,608 |
+
+`test/hero.test.mjs` covers it: the fit maths as unit tests, then a headless boot asserting the
+modules are in the scene, that detaching the `hero` group leaves *terrain* under the NC centroid
+(so no massing survived), that `probePath` is clear at the roof + 2 m and blocked at y = 20 m
+inside, and that every hero building still has its collision walls.
+
 ## Licensing / attribution
 
 - Map data © OpenStreetMap contributors, available under the Open Database Licence (ODbL):
