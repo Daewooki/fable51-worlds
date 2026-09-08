@@ -1,0 +1,10 @@
+{
+  "_README": {
+    "purpose": "Hand-curated per-building overrides, keyed by OSM id ('way/<id>' or 'relation/<id>').",
+    "shape": { "heightM": "number, metres, optional", "floors": "number, optional (used as floors * 3.6 m)", "style": "facade style id, optional ('glass' | 'concrete' | 'stone' | ...)", "name": "display name override, optional" },
+    "heightResolutionOrder": ["OSM height", "OSM building:levels * 3.6 + 1", "override.heightM", "override.floors * 3.6", "area-based default"],
+    "note": "heightM/floors only take effect when OSM tags neither a height nor building:levels; style and name always apply."
+  },
+  "way/694434545": { "heightM": 58, "style": "glass", "name": "NCSOFT R&D Center" },
+  "way/694434544": { "heightM": 9, "style": "glass" }
+}

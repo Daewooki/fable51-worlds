@@ -1,0 +1,27 @@
+{
+  "name": "pangyo-technovalley",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "geo": "node tools/geo/fetch_osm.mjs && node tools/geo/fetch_elevation.mjs && node tools/geo/build_gis.mjs && node tools/geo/build_streets.mjs && node tools/geo/sync_data.mjs",
+    "dev": "vite --port 5175 --strictPort",
+    "build": "node tools/geo/sync_data.mjs && tsc --noEmit && vite build",
+    "preview": "vite preview --port 4175 --strictPort",
+    "sync": "node tools/geo/sync_data.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@types/three": "^0.185.4",
+    "pixelmatch": "^7.2.0",
+    "playwright": "^1.62.1",
+    "pngjs": "^7.0.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2",
+    "vitest": "^3.2.4"
+  }
+}

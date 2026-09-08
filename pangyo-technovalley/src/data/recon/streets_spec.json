@@ -1,0 +1,515 @@
+{
+ "meta": {
+  "generated": "2026-09-08T04:15:32.408Z",
+  "generator": "tools/geo/build_streets.mjs",
+  "method": "named OSM ways of kinds [motorway|trunk|primary|secondary|tertiary|residential|unclassified|living_street|pedestrian] with ≥ 120 m inside the bbox, fitted to the grid axes (±25°); c = length-weighted mean perpendicular offset; from/to = extent, snapped to the bbox edge within 40 m; width = OSM width or lanes × 3.25 m",
+  "gridBearingDeg": 84.541,
+  "counts": {
+   "streets": 23,
+   "ns": 8,
+   "ew": 15,
+   "dropped": 2
+  },
+  "dropped": [
+   {
+    "name": "판교로227번길",
+    "bearingDeg": 24.39,
+    "deviationDeg": 29.85,
+    "lengthM": 392.4,
+    "reason": "> 25° from both grid axes"
+   },
+   {
+    "name": "판교로255번길",
+    "bearingDeg": 115.259,
+    "deviationDeg": 30.72,
+    "lengthM": 869.7,
+    "reason": "> 25° from both grid axes"
+   }
+  ]
+ },
+ "streets": [
+  {
+   "name": "동판교로266번길",
+   "axis": "ew",
+   "c": -676.1,
+   "from": 664.7,
+   "to": 804.91,
+   "width": 6.5,
+   "sidewalk": 3,
+   "lanes": 2,
+   "oneway": "W",
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "none",
+   "kind": "residential",
+   "lengthM": 245.1,
+   "bearingDeg": 89.148,
+   "deviationDeg": 4.61,
+   "segments": 23
+  },
+  {
+   "name": "판교로319번길",
+   "axis": "ew",
+   "c": -510.31,
+   "from": -150.61,
+   "to": 311.46,
+   "width": 6.5,
+   "sidewalk": 3,
+   "lanes": 2,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "single_yellow",
+   "kind": "residential",
+   "lengthM": 466.5,
+   "bearingDeg": 84.92,
+   "deviationDeg": 0.38,
+   "segments": 14
+  },
+  {
+   "name": "판교로",
+   "axis": "ew",
+   "c": -442.33,
+   "from": -602.17,
+   "to": 804.91,
+   "width": 29.25,
+   "sidewalk": 3,
+   "lanes": 9,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "secondary",
+   "lengthM": 1623.3,
+   "bearingDeg": 81.654,
+   "deviationDeg": 2.89,
+   "segments": 54
+  },
+  {
+   "name": "낙생고가차도",
+   "axis": "ew",
+   "c": -442.11,
+   "from": -767.67,
+   "to": -599.51,
+   "width": 13,
+   "sidewalk": 3,
+   "lanes": 4,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "secondary",
+   "lengthM": 347.4,
+   "bearingDeg": 66.639,
+   "deviationDeg": 17.9,
+   "segments": 10
+  },
+  {
+   "name": "판교역로241번길",
+   "axis": "ew",
+   "c": -353.64,
+   "from": -167.13,
+   "to": 118.72,
+   "width": 6.5,
+   "sidewalk": 3,
+   "lanes": 2,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "single_yellow",
+   "kind": "residential",
+   "lengthM": 374.2,
+   "bearingDeg": 90.19,
+   "deviationDeg": 5.65,
+   "segments": 2
+  },
+  {
+   "name": "판교역로242번길",
+   "axis": "ew",
+   "c": -319.22,
+   "from": 118.72,
+   "to": 299.36,
+   "width": 6.5,
+   "sidewalk": 3,
+   "lanes": 2,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "single_yellow",
+   "kind": "residential",
+   "lengthM": 181.2,
+   "bearingDeg": 88.891,
+   "deviationDeg": 4.35,
+   "segments": 2
+  },
+  {
+   "name": "판교역로226번길",
+   "axis": "ew",
+   "c": -148.37,
+   "from": -21,
+   "to": 284.4,
+   "width": 13,
+   "sidewalk": 3,
+   "lanes": 4,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "residential",
+   "lengthM": 417.8,
+   "bearingDeg": 89.399,
+   "deviationDeg": 4.86,
+   "segments": 4
+  },
+  {
+   "name": "대왕판교로645번길",
+   "axis": "ew",
+   "c": -98.31,
+   "from": -656.37,
+   "to": -273.68,
+   "width": 13,
+   "sidewalk": 3,
+   "lanes": 4,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "tertiary",
+   "lengthM": 384.3,
+   "bearingDeg": 89.745,
+   "deviationDeg": 5.2,
+   "segments": 6
+  },
+  {
+   "name": "대왕판교로644번길",
+   "axis": "ew",
+   "c": -28.34,
+   "from": -225.95,
+   "to": 721.58,
+   "width": 13,
+   "sidewalk": 3,
+   "lanes": 4,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "tertiary",
+   "lengthM": 952.1,
+   "bearingDeg": 90.088,
+   "deviationDeg": 5.55,
+   "segments": 22
+  },
+  {
+   "name": "동판교로177번길",
+   "axis": "ew",
+   "c": 168.41,
+   "from": 362.95,
+   "to": 702.18,
+   "width": 13,
+   "sidewalk": 3,
+   "lanes": 4,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "unclassified",
+   "lengthM": 340.7,
+   "bearingDeg": 89.883,
+   "deviationDeg": 5.34,
+   "segments": 10
+  },
+  {
+   "name": "판교역로192번길",
+   "axis": "ew",
+   "c": 171.1,
+   "from": 68.23,
+   "to": 362.95,
+   "width": 13,
+   "sidewalk": 3,
+   "lanes": 4,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "unclassified",
+   "lengthM": 301.1,
+   "bearingDeg": 77.551,
+   "deviationDeg": 6.99,
+   "segments": 13
+  },
+  {
+   "name": "서판교로108번길",
+   "axis": "ew",
+   "c": 232.73,
+   "from": -903.06,
+   "to": -825.92,
+   "width": 6.5,
+   "sidewalk": 3,
+   "lanes": 2,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "single_yellow",
+   "kind": "residential",
+   "lengthM": 290.6,
+   "bearingDeg": 73.154,
+   "deviationDeg": 11.39,
+   "segments": 6
+  },
+  {
+   "name": "서판교로100번길",
+   "axis": "ew",
+   "c": 321.3,
+   "from": -903.06,
+   "to": -800.75,
+   "width": 6.5,
+   "sidewalk": 3,
+   "lanes": 2,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "single_yellow",
+   "kind": "residential",
+   "lengthM": 285.7,
+   "bearingDeg": 87.085,
+   "deviationDeg": 2.54,
+   "segments": 5
+  },
+  {
+   "name": "대왕판교로606번길",
+   "axis": "ew",
+   "c": 327.01,
+   "from": -198.99,
+   "to": 681.18,
+   "width": 19.5,
+   "sidewalk": 3,
+   "lanes": 6,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "tertiary",
+   "lengthM": 1702.1,
+   "bearingDeg": 90.244,
+   "deviationDeg": 5.7,
+   "segments": 41
+  },
+  {
+   "name": "서판교로88번길",
+   "axis": "ew",
+   "c": 433.56,
+   "from": -903.06,
+   "to": -794.74,
+   "width": 6.5,
+   "sidewalk": 3,
+   "lanes": 2,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "single_yellow",
+   "kind": "tertiary",
+   "lengthM": 151.6,
+   "bearingDeg": 87.902,
+   "deviationDeg": 3.36,
+   "segments": 33
+  },
+  {
+   "name": "판교로210번길",
+   "axis": "ns",
+   "c": -860.27,
+   "from": -239.58,
+   "to": 438.76,
+   "width": 6.5,
+   "sidewalk": 3,
+   "lanes": 2,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "single_yellow",
+   "kind": "residential",
+   "lengthM": 930.3,
+   "bearingDeg": 160.226,
+   "deviationDeg": 14.31,
+   "segments": 44
+  },
+  {
+   "name": "경부고속도로",
+   "axis": "ns",
+   "c": -749.38,
+   "from": -373.18,
+   "to": 454.6,
+   "width": 26,
+   "sidewalk": 3,
+   "lanes": 8,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "motorway",
+   "lengthM": 1671.7,
+   "bearingDeg": 165.031,
+   "deviationDeg": 9.51,
+   "segments": 18
+  },
+  {
+   "name": "판교로228번길",
+   "axis": "ns",
+   "c": -677.1,
+   "from": -405.8,
+   "to": 418.26,
+   "width": 13,
+   "sidewalk": 3,
+   "lanes": 4,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "tertiary",
+   "lengthM": 871.8,
+   "bearingDeg": 164.597,
+   "deviationDeg": 9.94,
+   "segments": 61
+  },
+  {
+   "name": "판교로256번길",
+   "axis": "ns",
+   "c": -522.57,
+   "from": -466.61,
+   "to": -105.42,
+   "width": 13,
+   "sidewalk": 3,
+   "lanes": 4,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "tertiary",
+   "lengthM": 362.9,
+   "bearingDeg": 0.081,
+   "deviationDeg": 5.54,
+   "segments": 4
+  },
+  {
+   "name": "대왕판교로",
+   "axis": "ns",
+   "c": -275.1,
+   "from": -869.52,
+   "to": 552.64,
+   "width": 19.5,
+   "sidewalk": 3,
+   "lanes": 6,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "primary",
+   "lengthM": 2250.5,
+   "bearingDeg": 164.926,
+   "deviationDeg": 9.62,
+   "segments": 67
+  },
+  {
+   "name": "판교역로",
+   "axis": "ns",
+   "c": 85.09,
+   "from": -499.22,
+   "to": 552.64,
+   "width": 29.25,
+   "sidewalk": 4.5,
+   "lanes": 9,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "tertiary",
+   "lengthM": 948.9,
+   "bearingDeg": 0.172,
+   "deviationDeg": 5.63,
+   "segments": 14
+  },
+  {
+   "name": "분당내곡로",
+   "axis": "ns",
+   "c": 358.77,
+   "from": -869.52,
+   "to": 402.68,
+   "width": 22.75,
+   "sidewalk": 3,
+   "lanes": 7,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "trunk",
+   "lengthM": 1498.5,
+   "bearingDeg": 165.169,
+   "deviationDeg": 9.37,
+   "segments": 57
+  },
+  {
+   "name": "동판교로",
+   "axis": "ns",
+   "c": 704.56,
+   "from": -787.69,
+   "to": 552.64,
+   "width": 13,
+   "sidewalk": 3,
+   "lanes": 4,
+   "oneway": null,
+   "parking": {
+    "left": false,
+    "right": false
+   },
+   "centerLine": "double_yellow",
+   "kind": "secondary",
+   "lengthM": 1344.8,
+   "bearingDeg": 175.112,
+   "deviationDeg": 0.57,
+   "segments": 67
+  }
+ ]
+}

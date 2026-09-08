@@ -231,6 +231,9 @@ qa/walkthrough/
 qa/demo/frames*/
 qa/demo/*.mp4
 src/data/recon/osm_raw.json
+# ...except pangyo-technovalley's, which is a committed cached input so the
+# world builds offline (plan 2026-09-08-pangyo-world, Global Constraints).
+!pangyo-technovalley/src/data/recon/osm_raw.json
 refs/**/*.jpg
 refs/**/*.png
 .DS_Store
