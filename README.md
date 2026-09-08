@@ -1,11 +1,13 @@
 # fable51-worlds → MV Studio
 
 > **This fork turns [PhiloLabs/fable51-worlds](https://github.com/PhiloLabs/fable51-worlds) — AI-built, walkable Three.js cities — into a music-video production tool, and adds a third city built from public map data alone.**
-> Upstream is the engine. Everything below this box is what was added on top: **+50 commits, ~25k lines, 250+ tests, three worlds filmable through one contract.**
+> Upstream is the engine. Everything below this box is what was added on top: **+51 commits, ~31k lines, 189 tests, three worlds filmable through one contract.**
 
-<img src="docs/media/pangyo-target-cut.gif" width="100%" alt="Pangyo Techno Valley: aerial over the NCSOFT R&D Center, then south along 판교역로 at sunset — rendered from the browser world by MV Studio">
+<img src="docs/media/showreel.gif" width="100%" alt="MV Studio showreel: the aerial dive over the NCSOFT R&D Center, the cut to 판교역로 at night, and the climb to the 판교역 skyline">
 
-<sub>▲ 판교테크노밸리 (Pangyo, Korea) — a city that did not exist in this repo a day ago. Built from OpenStreetMap + SRTM with no manual survey, hero buildings generated in headless Blender, filmed with the timeline below. [Full 1080p cut](pangyo-technovalley/docs/stage3-target-cut.mp4) · [how it was made](pangyo-technovalley/README.md#how-this-world-was-made) · [QA report with every known defect](pangyo-technovalley/FINAL_QA_REPORT.md)</sub>
+<sub>▶ **[Watch the full showreel](docs/media/mv-studio-showreel.mp4)** · 69 s · 1920×1080 · 30 fps · Pangyo sunset→night, Union Square, Kyoto Higashiyama, and the Director itself — every frame rendered out of the live browser worlds by MV Studio. [Poster frame](docs/media/showreel-poster.jpg) · rebuild it with `cd studio && node tools/showreel.mjs`.</sub>
+
+**Numbers.** `git rev-list --count upstream/main..HEAD` → **51 commits** · `git diff --shortstat upstream/main..HEAD` → **378 files, +31,034 lines** · **189 tests** (studio 115, pangyo 74) plus a postMessage-bridge check per world · **3 filmable worlds** · end-to-end pipeline (`tools/e2e.mjs`, create → prompt → previz → finalize → GLB) **196.4 s / 159.3 s / 149.2 s** for union / kyoto / pangyo.
 
 ## What this fork adds
 
@@ -19,10 +21,57 @@
 | 🔐 | **Runs on your PC, keys optional** | Previz, export and the offline planner need **no API key**. Per-machine keys (Anthropic / OpenAI / VARCO) are entered in a Settings panel and stored locally; the server binds to localhost, checks Host/Origin, and spawns the Seedance CLI without a shell. |
 | 🚀 | **One command** | `cd studio && npm run up` starts all three worlds, the server and the UI; `npm run down` stops them. `tools/e2e.mjs` runs create → prompt → previz → finalize → export on any world. |
 
-<p>
-<img src="docs/media/director.png" width="49%" alt="MV Studio Director: numbered steps (project, shot, camera keys, render), the world in an iframe, the timeline scrubber">
-<img src="docs/media/pangyo-nc-entrance.png" width="49%" alt="The NCSOFT R&D Center hero module: curtain wall, rooftop NCSOFT sign, glass entrance — generated in headless Blender from the OSM footprint">
-</p>
+---
+
+## The feature tour
+
+### 🎬 Director and timeline
+
+<img src="docs/media/director.png" width="100%" alt="MV Studio Director: numbered steps (project, shot, camera keys, render), the world in an iframe, the timeline scrubber">
+
+Four numbered steps down the left and right of one screen — project, shot, camera keys, render — with the live world in an iframe in the middle and a scrubber under it. A key is `{ t, m: 'air' | 'walk', eye | pos, look, fov?, cap?, cut?, time? }` (`studio/schemas/project.mjs`), sampled by 26 lines of pure interpolation shared by the browser and the renderer (`studio/schemas/keys.mjs`), so what you scrub is exactly what the GPU renders. **Render previz** writes PNG frames and an H.264 MP4 at full resolution — 300 frames of 1080p in 85.8–147.9 s depending on the world ([measured](studio/README.md#measured-on)).
+
+### 🧱 Collision check and Fix path
+
+<img src="docs/media/path-fix.png" width="100%" alt="The scrubber with red collision bands, the collision list under it, and the Fix path button">
+
+Keys interpolate in straight lines and know nothing about buildings, so the Director probes the sampled path against the *live* world at 10 Hz plus every key time (`probePath` over the postMessage bridge, a downward ray through the `world`, `props` and `vegetation` groups). Blocked stretches become red bands on the scrubber; **Fix path** inserts a key in the middle of each one, 12 m above the highest surface it crosses, and re-checks up to four times. It deliberately refuses two cases — a walk segment through a building, and a key that is *itself* inside one — because the right answer there is the creator's. [How the probe works →](studio/README.md#path-collision-check-and-auto-fix)
+
+### 🗺️ Prompt → path, and the phone as a camera
+
+<img src="docs/media/director-prompt.png" width="100%" alt="The Director with a sentence in the Prompt → path panel, the generated keys in the table, the phone-camera QR open in the left column and the viewport being driven from the phone">
+
+A sentence becomes four keys with **no API key and no network**: provider `none` reads that world's own landmark anchors — `public/data/tour.json` when the world ships one (Pangyo does), else the `TOURS` table in `studio/server/prompt.mjs` — and **Generate** runs Fix path before you ever see the result. With `anthropic` or `openai` selected the model gets the same anchors as grounding and its plan is validated key by key against the schema. The phone panel shows a QR for `/phone/?projectId=…&token=…`; the phone's gyro drives the world camera live over the `/ws` relay, a swipe dollies, and the record button captures the move straight into the shot's keys. [Prompt → path](studio/README.md#prompt--path) · [Phone as a virtual camera](studio/README.md#phone-as-a-virtual-camera)
+
+### 🏙️ Pangyo Techno Valley, from public GIS only
+
+<img src="docs/media/pangyo-nc-aerial.png" width="100%" alt="Aerial over the NCSOFT R&D Center in 판교테크노밸리, built from OpenStreetMap and SRTM">
+
+The first world in this repo built end to end from public map data alone: OpenStreetMap via Overpass (**564 building footprints**, 118 building parts, 794 highway ways, 378 POIs, 58 traffic-signal nodes) and SRTM elevation at 30 m via OpenTopoData, fitted into **23 street specs** and fed to a generalized copy of the upstream runtime — a city as data, not code. 277 of the 564 heights are real OSM values; the rest are estimated, and every approximation is listed in the world's own [QA report](pangyo-technovalley/FINAL_QA_REPORT.md). The same 8 s move was re-filmed at each stage: [1 — massing](pangyo-technovalley/docs/stage1-target-cut.mp4) · [2 — hero modules](pangyo-technovalley/docs/stage2-target-cut.mp4) · [3 — ground cover, routes, life](pangyo-technovalley/docs/stage3-target-cut.mp4).
+
+### 🧱 Hero modules generated in headless Blender
+
+<img src="docs/media/pangyo-nc-entrance.png" width="100%" alt="The NCSOFT R&D Center hero module: curtain wall, rooftop NCSOFT sign, glass entrance">
+
+Three landmarks that OSM only knows as flat polygons are generated as GLB by `blender --background --python pangyo-technovalley/tools/bpl/gen_pangyo.py` (portable Blender 4.2.9, no install), each against a hard triangle budget the script exits non-zero on: the **NCSOFT R&D Center** at 6,640 tris (mullion grid, floor bands, rooftop sign, glass entrance), the **알파돔 tower** at 5,180 and the **판교역 canopy** at 548 — budget 20,000 each. The manifest records the fit height, footprint, front axis and origin convention, including the canopy's −1.02 m stair offset, so placement never has to guess.
+
+### 🎞️ Seedance finalize, and GLB + Blender export
+
+The previz is the deliverable *and* the motion reference. **Finalize** hands it to **Seedance 2.5** (`video_edit`, or `omni_reference` with artist/style images) through the Higgsfield CLI, spawned as a native binary with `shell: false`; with no CLI logged in it writes `seedance-job.md` — the exact command and media list — instead of failing. **Export** writes `export/scene.glb` (the `world`, `props` and `vegetation` groups), `<shotId>.keys.json` and a `blender_import.py` that rebuilds the animated camera: 20.3 s / 39.7 MB for Union Square, 10.2 s / 30.8 MB for Pangyo, 40.1 s / 397.1 MB for Kyoto (which bakes merged vertex-coloured districts instead of instancing). [Walkthrough steps 7–8 →](studio/README.md#the-one-shot-walkthrough)
+
+### 🎨 VARCO / any-GLB asset injector
+
+`node studio/tools/inject_asset.mjs <file>.glb --as <category>/<name> --height <m> [--replace <rel-path>]` welds, dedups and simplifies a generated mesh to a triangle budget, bakes its transforms (normals included), re-scales it to a real-world height, writes the entry into that category's manifest (`varco/…` → `manifest_varco.json`, `pangyo/…` → `manifest_pangyo.json`) and can take the place of an existing asset — replace the bench and all 26 benches in the world become the new one. `tools/varco_fetch.mjs` gets the GLB from VARCO 3D with `VARCO_API_KEY`, and prints the manual web-export steps without one. Kyoto is the exception: it is fully procedural with no GLB kit at all, so VARCO styling there means Seedance style references, not geometry. [Details →](studio/README.md#varco-3d-assets)
+
+### 🔐 Security and local-first
+
+- **Nothing in the core loop needs a key.** Previz, path check, export and the anchor-based prompt planner are entirely local.
+- **The server is loopback by default** (`STUDIO_BIND=127.0.0.1`) and checks `Host` and `Origin` against an allowlist of localhost plus this machine's own LAN IPv4 addresses — a WebSocket handshake is exempt from CORS, so the `/ws` upgrade is refused before it reaches the WebSocket layer.
+- **The phone room needs a per-process token** carried in the QR URL; a `join` without it is closed with code `4401`. Saving or clearing keys is accepted from loopback only, so with `STUDIO_BIND=0.0.0.0` a LAN peer still cannot touch them.
+- **Keys live on your machine.** Resolution order is environment → `studio/.secrets.json` (git-ignored, mode 0600, never sent back to a browser) → none; `GET /api/config` reports only `set`, `source` and a masked tail.
+- **The Seedance CLI is spawned without a shell** — the native `hf` binary directly, never the `.cmd` shim — so a prompt containing `"` or `%VAR%` cannot be re-parsed by cmd.exe.
+
+---
 
 **Quick start** (Node 22, ffmpeg on PATH, a GPU):
 
