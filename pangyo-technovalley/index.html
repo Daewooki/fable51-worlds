@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pangyo Techno Valley — Digital Twin</title>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0f14; font-family: -apple-system, "Inter", "Helvetica Neue", Arial, sans-serif; color: #e8ecf1; }
+    #app { position: fixed; inset: 0; }
+    canvas { display: block; }
+    #hud { position: fixed; left: 12px; top: 12px; font-size: 12px; line-height: 1.45; background: rgba(8,12,18,.62); padding: 8px 10px; border-radius: 8px; pointer-events: none; white-space: pre; backdrop-filter: blur(6px); max-width: 420px; }
+    #toolbar { position: fixed; right: 12px; top: 12px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; max-width: 60vw; }
+    #toolbar button, #toolbar select { font: 12px/1 inherit; color: #e8ecf1; background: rgba(8,12,18,.7); border: 1px solid rgba(255,255,255,.18); border-radius: 6px; padding: 6px 10px; cursor: pointer; backdrop-filter: blur(6px); }
+    #toolbar button.active { background: #2f7cf6; border-color: #2f7cf6; }
+    #prompt { position: fixed; left: 50%; bottom: 14%; transform: translateX(-50%); font-size: 15px; background: rgba(8,12,18,.78); padding: 10px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,.15); display: none; text-align: center; }
+    #prompt b { color: #ffd166; }
+    #prompt small { display: block; opacity: .75; font-size: 12px; margin-top: 3px; }
+    #crosshair { position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px; border-radius: 50%; background: rgba(255,255,255,.75); box-shadow: 0 0 2px #000; display: none; }
+    #ref-layer { position: fixed; inset: 0; pointer-events: none; display: none; background-size: contain; background-position: center; background-repeat: no-repeat; }
+    #ref-ctl { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); display: none; background: rgba(8,12,18,.8); padding: 8px 12px; border-radius: 8px; font-size: 12px; align-items: center; gap: 10px; }
+    #ref-ctl input[type=range] { width: 220px; }
+    #toast { position: fixed; left: 50%; top: 64px; transform: translateX(-50%); background: rgba(8,12,18,.85); padding: 8px 14px; border-radius: 8px; font-size: 13px; display: none; border: 1px solid rgba(255,255,255,.15); }
+    #help { position: fixed; left: 12px; bottom: 12px; font-size: 11px; opacity: .8; background: rgba(8,12,18,.55); padding: 6px 9px; border-radius: 6px; white-space: pre; }
+    #loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; background: #0b0f14; z-index: 10; gap: 10px; }
+    #loading .bar { width: 260px; height: 6px; background: #223; border-radius: 3px; overflow: hidden; }
+    #loading .bar i { display: block; height: 100%; width: 0; background: #2f7cf6; transition: width .2s; }
+    #tour-title { position: fixed; left: 50%; bottom: 10%; transform: translateX(-50%); font-size: 22px; letter-spacing: .04em; text-shadow: 0 2px 8px #000; display: none; }
+    #tour-title small { display: block; font-size: 13px; opacity: .8; letter-spacing: .1em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="loading"><div>Loading Pangyo Techno Valley…</div><div class="bar"><i id="loading-bar"></i></div><div id="loading-msg" style="font-size:12px;opacity:.7"></div></div>
+  <div id="hud"></div>
+  <div id="toolbar">
+    <button data-mode="walk">Walk</button>
+    <button data-mode="orbit">Orbit</button>
+    <button data-mode="tour">Tour</button>
+    <select id="time-select"><option value="day">Day</option><option value="sunset">Sunset</option><option value="night">Night</option></select>
+    <select id="view-select"><option value="">Viewpoint…</option></select>
+    <button id="btn-ref">Ref</button>
+    <button id="btn-debug">Debug</button>
+  </div>
+  <div id="crosshair"></div>
+  <div id="prompt"></div>
+  <div id="toast"></div>
+  <div id="tour-title"></div>
+  <div id="ref-layer"></div>
+  <div id="ref-ctl"><span>Reference</span><input id="ref-opacity" type="range" min="0" max="100" value="50"><span id="ref-label">50%</span><button id="ref-next">next ▸</button></div>
+  <div id="help"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

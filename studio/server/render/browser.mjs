@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
 
-export const WORLD_PORTS = { 'union-square-sf': 5173, 'kyoto-higashiyama': 5174 };
+export const WORLD_PORTS = { 'union-square-sf': 5173, 'kyoto-higashiyama': 5174, 'pangyo-technovalley': 5175 };
 
 const GPU = ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--use-gl=angle', '--hide-scrollbars'];
 const SOFT = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--hide-scrollbars'];

@@ -1,0 +1,8 @@
+[
+  { "title": "NCSOFT R&D Center", "subtitle": "판교테크노밸리 · aerial", "pos": [40, 140, 220], "look": [0, 20, 0], "duration": 7, "hold": 3, "time": "day" },
+  { "title": "NC 정문", "subtitle": "대왕판교로644번길 12 · south forecourt", "pos": [0, 0.5, 44], "look": [0, 24, 0], "duration": 7, "hold": 3 },
+  { "title": "판교역로 코너", "subtitle": "판교역로 · street level", "pos": [90, 2.2, 0], "look": [95, 2, 220], "duration": 7, "hold": 3 },
+  { "title": "판교역로 남행", "subtitle": "dolly south toward 판교역", "pos": [85, 7.7, 200], "look": [110, 8, 460], "duration": 8, "hold": 3 },
+  { "title": "판교역", "subtitle": "신분당선 판교역 · 알파돔시티", "pos": [168, 22, 500], "look": [200, 14, 545], "duration": 7, "hold": 4 },
+  { "title": "판교 야경", "subtitle": "night skyline over the valley", "pos": [-260, 90, 260], "look": [0, 30, 0], "duration": 9, "hold": 5, "time": "night" }
+]
