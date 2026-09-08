@@ -4,33 +4,22 @@ import {spawn} from 'node:child_process';
 import {once} from 'node:events';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {chromium} from 'playwright';
 const args=Object.fromEntries(process.argv.slice(2).map(a=>a.replace(/^--/,'').split('=')));
 const media=args.media||'media';
 const fable=args.fable||'../kyoto-higashiyama/media/kyoto-higashiyama-walkthrough.mp4';
+const union=args.union||'../union-square-sf-gpt-astra/media/fable51-vs-gpt6-astra-union-square.mp4';
 const own=path.join(media,'kyoto-higashiyama-codex-walkover.mp4');
 const comparison=path.join(media,'fable51-vs-gpt6-astra-kyoto.mp4');
-await fs.access(fable);await fs.access(own);
-// Canvas2D keeps the label strip portable across FFmpeg builds without drawtext.
-const browser=await chromium.launch({headless:true,executablePath:args.chrome||process.env.KYOTO_CHROME||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
-let labelData;
-try {
- const page=await browser.newPage();
- labelData=await page.evaluate(()=>{
-  const c=document.createElement('canvas');c.width=3840;c.height=80;
-  const ctx=c.getContext('2d');ctx.fillStyle='#181a20';ctx.fillRect(0,0,c.width,c.height);
-  ctx.fillStyle='#fff';ctx.font='44px Arial, sans-serif';ctx.textBaseline='middle';
-  ctx.fillText('Codex / GPT-6 Astra — one-shot result',40,40);
-  ctx.fillText('Claude Fable 5.1',1960,40);
-  return c.toDataURL('image/png');
- });
-}finally{await browser.close();}
+await fs.access(fable);await fs.access(own);await fs.access(union);
 const labels=path.join(media,'comparison-labels.png');
-await fs.writeFile(labels,Buffer.from(labelData.split(',')[1],'base64'));
 async function run(argv,label){
  console.log(label);const p=spawn('ffmpeg',['-y','-loglevel','error',...argv],{stdio:'inherit'});
  const [code]=await once(p,'close');if(code!==0)throw new Error(`ffmpeg ${label}: ${code}`);
 }
+// Reuse the existing evaluation header verbatim: labels, typography, colors and
+// spacing. Its 1920x64 strip scales 2x above our full-resolution 3840px panels.
+await run(['-i',union,'-frames:v','1','-vf','crop=1920:64:0:0,scale=3840:128:flags=lanczos','-update','1',labels],
+ 'Reuse Union Square title strip');
 // Preserve every pixel of both 1920x1080 sources. Labels occupy added headroom.
 const graph=[
  '[0:v]trim=duration=53.9,setpts=PTS-STARTPTS,setsar=1[a]',
@@ -46,5 +35,5 @@ async function gif(input,output,{start=0,duration,width,fps}){
  await run(['-ss',String(start),'-t',String(duration),'-i',input,'-filter_complex',split,'-an','-loop','0',output],`Encode ${output}`);
 }
 await gif(comparison,path.join(media,'preview.gif'),{start:30.4,duration:4,width:960,fps:10});
-await gif(own,path.join(media,'kyoto-higashiyama-codex-walkover.gif'),{duration:65.9,width:640,fps:8});
-console.log('Comparison MP4, comparison preview, and complete Codex walkover GIF ready.');
+if(!('comparison-only' in args))await gif(own,path.join(media,'kyoto-higashiyama-codex-walkover.gif'),{duration:65.9,width:640,fps:8});
+console.log('Comparison MP4 and preview ready.');

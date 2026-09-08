@@ -6,9 +6,9 @@ const args=Object.fromEntries(process.argv.slice(2).map(a=>a.replace(/^--/,'').s
 const base=args.url||'http://localhost:5180/';
 const files=[
  ['kyoto-higashiyama-codex-walkover.mp4',1920,1080,65.9],
- ['fable51-vs-gpt6-astra-kyoto.mp4',3840,1160,53.9],
+ ['fable51-vs-gpt6-astra-kyoto.mp4',3840,1208,53.9],
  ['kyoto-higashiyama-codex-walkover.gif',640,360,65.9],
- ['preview.gif',960,290,4]
+ ['preview.gif',960,302,4]
 ];
 const checks=[];
 for(const [file,width,height,duration] of files){

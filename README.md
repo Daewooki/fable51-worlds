@@ -10,6 +10,8 @@ No game engine. No proprietary 3D tiles. No downloaded meshes. Every building, s
 
 ## ⚔️ Head-to-head: Claude Fable 5.1 vs GPT-6 Astra
 
+Both models' entries are one-shot results.
+
 ### Union Square, San Francisco
 
 Same brief, same test conditions, two models. Each built Union Square from scratch, then the Astra world was filmed along the Fable walkthrough's camera route and the two are shown side by side, unedited.
@@ -18,9 +20,9 @@ Same brief, same test conditions, two models. Each built Union Square from scrat
 
 <sub>▶ **[Watch the head-to-head](union-square-sf-gpt-astra/media/fable51-vs-gpt6-astra-union-square.mp4)** · 59 s · left **GPT-6 Astra**, right **Claude Fable 5.1** · [Fable 5.1 build](union-square-sf/) · [GPT-6 Astra build](union-square-sf-gpt-astra/)</sub>
 
-### Higashiyama, Kyoto — Codex one-shot result
+### Higashiyama, Kyoto
 
-The complete Codex Kyoto scene, presented as a minimal orbit/pan/zoom viewer, alongside the existing Fable build. The comparison follows Fable's seven-beat order and timing with corresponding authored viewpoints. Camera positions, scale, lighting and some subareas differ; this is not an exact camera-matched comparison. [Methodology and known mismatches](kyoto-higashiyama-gpt-astra/media/COMPARISON.md).
+Same brief, two models. Each built Higashiyama from scratch, then the Astra world was filmed to the Fable walkthrough's shot sequence and timing. The two are shown side by side, unedited.
 
 <a href="kyoto-higashiyama-gpt-astra/media/fable51-vs-gpt6-astra-kyoto.mp4"><img src="kyoto-higashiyama-gpt-astra/media/preview.gif" width="100%" alt="Kyoto side by side: Codex / GPT-6 Astra on the left, Claude Fable 5.1 on the right"></a>
 
@@ -70,6 +72,7 @@ A world is the substrate. What stands on it is the point.
 | 🔜 | **Animation and video** | Motion as code: shot lists, camera language and continuity held across a sequence minutes long, cut from the world itself rather than generated frame by frame - anime, and documentary camera-matched to the real location |
 | 🔜 | **Agent environments** | Worlds as training and evaluation environments, where the same code that builds the place also supplies the reward and the verification signal - and, played straight, an RPG |
 | 🔜 | **4D, embodiment, robotics** | Scenes that change over time, and simulation where the ground truth comes free with the geometry |
+| 🔜 | **Test-time scaling performance** | Measure how world quality changes with more inference time and compute |
 
 ---
 

@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-09-07T23:07:48.632Z",
+  "verifiedAt": "2026-09-08T03:20:00.010Z",
   "checks": [
     {
       "file": "kyoto-higashiyama-codex-walkover.mp4",
@@ -30,14 +30,14 @@
         {
           "codec_name": "h264",
           "width": 3840,
-          "height": 1160,
+          "height": 1208,
           "avg_frame_rate": "30/1",
           "nb_read_frames": "1617"
         }
       ],
       "format": {
         "duration": "53.900000",
-        "size": "34074033"
+        "size": "34040179"
       },
       "decodeErrors": ""
     },
@@ -70,14 +70,14 @@
         {
           "codec_name": "gif",
           "width": 960,
-          "height": 290,
+          "height": 302,
           "avg_frame_rate": "10/1",
           "nb_read_frames": "40"
         }
       ],
       "format": {
         "duration": "4.000000",
-        "size": "4010963"
+        "size": "4018652"
       },
       "decodeErrors": ""
     },
@@ -95,7 +95,7 @@
       "pass": true,
       "error": null,
       "width": 3840,
-      "height": 1160,
+      "height": 1208,
       "played": true,
       "seekTime": 31
     },

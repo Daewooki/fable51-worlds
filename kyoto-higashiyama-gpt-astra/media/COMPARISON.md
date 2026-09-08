@@ -32,7 +32,7 @@ node tools/record-comparison.mjs
 node tools/encode-comparison.mjs
 ```
 
-The recorder uses Playwright, locally installed Chrome, and FFmpeg. Set `KYOTO_CHROME` or pass `--chrome=/path/to/chrome`. Other options include `--url=http://localhost:5180`, `--out=media`, and `--samples=1`. The encoder expects the Fable MP4 in the sibling `kyoto-higashiyama/media/` folder; override with `--fable=/path/to/film.mp4`. Its label strip is generated with Canvas2D using the local Arial/sans-serif font.
+The recorder uses Playwright, locally installed Chrome, and FFmpeg. Set `KYOTO_CHROME` or pass `--chrome=/path/to/chrome`. Other options include `--url=http://localhost:5180`, `--out=media`, and `--samples=1`. The encoder expects the Fable MP4 in the sibling `kyoto-higashiyama/media/` folder; override with `--fable=/path/to/film.mp4`. The label strip reuses the Union Square comparison's exact “gpt-6 astra” and “fable5.1” header, scaled to 3840×128 to preserve the same proportions above the full-resolution panels. The source comparison is in `../union-square-sf-gpt-astra/media/`; override with `--union=/path/to/comparison.mp4`. Use `--comparison-only` to update the comparison and its GIF without re-encoding the standalone walkover.
 
 The native animation loop is parked through a browser-injected requestAnimationFrame gate. Each recorded frame advances the world by 1/30 second, uses the normal viewer pipeline, and reads the actual canvas. The recorder does not change source geometry, lights, materials or post-processing. Aerials use the viewer's existing distance-dependent fog. Terrain-following shots query the same `heightAt()` as the scene.
 

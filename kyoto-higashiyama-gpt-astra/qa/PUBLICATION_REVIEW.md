@@ -19,9 +19,9 @@
 
 ## Media and comparison
 
-- The 53.9-second comparison preserves both complete 1920×1080 source frames, side by side, plus an 80 px model-label strip. Codex is left; Fable is right.
+- The 53.9-second comparison preserves both complete 1920×1080 source frames, side by side, plus a 128 px model-label strip matching Union Square. Codex is left; Fable is right.
 - Exact timing, nonmatching subareas, opposite pagoda viewpoints, differing scale/FOV and fixed-versus-changing lighting are disclosed in [COMPARISON.md](../media/COMPARISON.md). No exact geographic camera match is claimed.
 - Both MP4s and both GIFs decode completely without errors; dimensions, duration and frame counts are recorded in [media-verification.json](media-verification.json). Native Chrome playback and GIF animation are tested.
-- The comparison preview is four seconds at 960×290. The full walkover GIF is 640×360 and 65.88 seconds after GIF time quantization. The 1080p MP4 is the full-quality standalone recording.
+- The comparison preview is four seconds at 960×302. The full walkover GIF is 640×360 and 65.88 seconds after GIF time quantization. The 1080p MP4 is the full-quality standalone recording.
 
 The publication and capture checks do not supersede the original artistic assessment. The scene retains its **7.64/10** combined final visual review and documented geographic uncertainties.
