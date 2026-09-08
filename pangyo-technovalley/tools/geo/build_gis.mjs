@@ -116,6 +116,28 @@ export function axialMean(segs) {
   return { axisDeg: +ax.toFixed(3), lengthM: Math.round(L), segments: segs.length };
 }
 
+/**
+ * Ground-cover class of an OSM area: which runtime material paints it and in what order.
+ * `surface` is one of paving | paving_dark | grass | water | soil; `priority` breaks the ties
+ * where areas nest (a pitch inside a park inside a commercial block) — higher draws on top.
+ * Returns null for anything that is not ground cover.
+ */
+export function landuseClass(t) {
+  const at = (kind, surface, priority) => ({ kind, surface, priority });
+  const lu = t.landuse, le = t.leisure, na = t.natural;
+  if (na === 'water' || lu === 'reservoir' || lu === 'basin' || t.waterway === 'riverbank' || na === 'wetland') return at(na ? `natural=${na}` : `landuse=${lu || 'basin'}`, 'water', 5);
+  if (t.amenity === 'parking') return at('amenity=parking', 'paving_dark', 4);
+  if (le === 'pitch' || le === 'playground' || le === 'track') return at(`leisure=${le}`, 'soil', 3);
+  if (le === 'park' || le === 'garden' || le === 'common' || le === 'village_green' || le === 'nature_reserve') return at(`leisure=${le}`, 'grass', 2);
+  if (lu === 'grass' || lu === 'meadow' || lu === 'forest' || lu === 'village_green' || lu === 'recreation_ground' || lu === 'greenfield' || lu === 'cemetery' || lu === 'allotments' || lu === 'orchard') return at(`landuse=${lu}`, 'grass', 2);
+  if (na === 'wood' || na === 'scrub' || na === 'grassland') return at(`natural=${na}`, 'grass', 2);
+  if (na === 'sand' || na === 'bare_rock' || lu === 'brownfield' || lu === 'landfill' || lu === 'quarry') return at(na ? `natural=${na}` : `landuse=${lu}`, 'soil', 2);
+  if (lu === 'commercial' || lu === 'retail' || lu === 'industrial' || lu === 'construction' || lu === 'education' || lu === 'institutional' || lu === 'religious') return at(`landuse=${lu}`, 'paving', 1);
+  if (lu === 'residential' || lu === 'garages') return at(`landuse=${lu}`, 'paving_dark', 1);
+  if (le === 'bleachers' || le === 'fitness_centre' || le === 'sports_centre') return at(`leisure=${le}`, 'paving', 1);
+  return null;
+}
+
 export function outerRing(e) {
   if (e.type === 'way') return e.geometry || null;
   if (e.type === 'relation') {
@@ -482,6 +504,30 @@ function main() {
     });
   }
 
+  // 7b. Ground-cover polygons (the `landuse` bin): what the runtime's BlockFill paints between the streets.
+  //     Only closed areas; buildings are excluded (they have their own massing). `surface` is the runtime's
+  //     material class and `priority` its stacking order (a pitch draws over the park it sits in).
+  const landuse = [];
+  for (const e of els) {
+    if (e.type !== 'way' && e.type !== 'relation') continue;
+    const t = e.tags || {};
+    if (t.building || t['building:part'] || t.highway) continue;
+    const cls = landuseClass(t);
+    if (!cls) continue;
+    const ring = outerRing(e);
+    if (!ring || ring.length < 4) continue;
+    const p = repPoint(e); if (!p || !inBbox(p.lat, p.lon, CLIP_MARGIN_M)) continue;
+    const footprint = ringToLocal(ring);
+    const areaM2 = r2(Math.abs(signedAreaLocal(footprint)));
+    if (areaM2 < 20) continue;
+    const holes = e.type === 'relation' ? (e.members || []).filter((m) => m.role === 'inner' && m.geometry && m.geometry.length >= 4).map((m) => ringToLocal(m.geometry)) : [];
+    landuse.push({
+      osmId: `${e.type}/${e.id}`, name: t.name || null, kind: cls.kind, surface: cls.surface, priority: cls.priority,
+      footprint, holes: holes.length ? holes : undefined, areaM2, centroid: toXZ(p),
+    });
+  }
+  landuse.sort((a, b) => a.priority - b.priority || b.areaM2 - a.areaM2);
+
   // 8. Intersections in local coords (from elevation.json when present)
   const intersections = (elev?.intersections || []).map((it) => { const [x, z] = toXZ(it); return { name: it.name, x, z, lat: it.lat, lon: it.lon, elevAbsM: it.elev_m, y: relY(it.elev_m) }; });
 
@@ -498,13 +544,13 @@ function main() {
       constants: { LAT0_DEG, M_PER_DEG_LAT: +M_PER_DEG_LAT.toFixed(3), M_PER_DEG_LON: +M_PER_DEG_LON.toFixed(3), LEVEL_HEIGHT_M, CLIP_MARGIN_M },
       heightOrder: ['osm:height', `osm:building:levels*${LEVEL_HEIGHT_M}+1`, 'override:heightM', `override:floors*${LEVEL_HEIGHT_M}`, 'area-default'],
       bearingFit: bearingReport, originSource, skipped,
-      counts: { buildings: buildings.length, buildingsInsideBbox: buildings.filter((b) => b.insideBbox).length, buildingParts: buildingParts.length, streets: streets.length, pois: pois.length, trees: trees.length, lamps: lamps.length, signals: signals.length, crossings: crossings.length, hydrants: hydrants.length, benches: benches.length, bollards: bollards.length },
+      counts: { buildings: buildings.length, buildingsInsideBbox: buildings.filter((b) => b.insideBbox).length, buildingParts: buildingParts.length, streets: streets.length, pois: pois.length, trees: trees.length, lamps: lamps.length, signals: signals.length, crossings: crossings.length, hydrants: hydrants.length, benches: benches.length, bollards: bollards.length, landuse: landuse.length },
     },
     origin: { lat: ORIGIN.lat, lon: ORIGIN.lon, elev_m: ORIGIN_ELEVATION_M },
     gridBearingDeg: GRID_BEARING_DEG,
     bbox_local,
     intersections,
-    buildings, buildingParts, streets, pois, trees, lamps, signals, crossings, hydrants, benches, bollards,
+    buildings, buildingParts, streets, pois, trees, lamps, signals, crossings, hydrants, benches, bollards, landuse,
   };
   fs.writeFileSync(OUT_PATH, JSON.stringify(gis));
 

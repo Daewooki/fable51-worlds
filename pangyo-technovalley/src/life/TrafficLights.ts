@@ -8,7 +8,7 @@ import type { World } from '../world/World';
 
 export type LampColour = 'green' | 'amber' | 'red';
 export interface SignalState { ns: LampColour; ew: LampColour; walkNS: boolean; walkEW: boolean; t: number }
-interface Crossing { x: number; z: number; offset: number; state: SignalState; heads: Head[]; key: string }
+interface Crossing { x: number; z: number; offset: number; state: SignalState; heads: Head[]; key: string; bindR: number }
 interface Head { axis: 'ns' | 'ew'; lamps: Record<string, THREE.MeshStandardMaterial>; last: string }
 
 export const CYCLE = 60, GREEN = 25, AMBER = 3, ALL_RED = 2, WALK_CLEAR = 6;
@@ -29,7 +29,10 @@ export class TrafficLights implements Updatable {
       if (!c.signal) continue;
       const key = `${Math.round(c.x)},${Math.round(c.z)}`;
       if (seen.has(key)) continue; seen.add(key);
-      const cr: Crossing = { x: c.x, z: c.z, key, offset: hash(c.x, c.z) * maxOffset, state: { ns: 'red', ew: 'red', walkNS: false, walkEW: false, t: 0 }, heads: [] };
+      // Masts stand one corner-radius out from the junction centre, so the bind radius has to scale with the
+      // junction: on a 29 m arterial the corner is 16 m from the centre and a fixed 14 m never matched.
+      const bindR = Math.hypot(c.a.width / 2 + c.a.sidewalk, c.b.width / 2 + c.b.sidewalk) + 3;
+      const cr: Crossing = { x: c.x, z: c.z, key, offset: hash(c.x, c.z) * maxOffset, bindR, state: { ns: 'red', ew: 'red', walkNS: false, walkEW: false, t: 0 }, heads: [] };
       this.crossings.push(cr); this.byKey.set(key, cr);
     }
     this.attachHeads();
@@ -43,7 +46,7 @@ export class TrafficLights implements Updatable {
       const red = mast.getObjectByName('lamp_red') as THREE.Mesh | undefined;
       if (!red || (mast as any).__tlBound) continue;
       const cr = this.nearest(mast.position.x, mast.position.z);
-      if (!cr || Math.hypot(cr.x - mast.position.x, cr.z - mast.position.z) > 14) continue;
+      if (!cr || Math.hypot(cr.x - mast.position.x, cr.z - mast.position.z) > cr.bindR) continue;
       (mast as any).__tlBound = true;
       const sx = Math.sign(mast.position.x - cr.x), sz = Math.sign(mast.position.z - cr.z);
       const head: Head = { axis: sx * sz < 0 ? 'ns' : 'ew', lamps: {}, last: '' };

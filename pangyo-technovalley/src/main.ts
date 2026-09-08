@@ -155,7 +155,7 @@ async function main() {
     setTime: (p) => app.time.set(p),
     setMode,
     freeze: (v) => { life.frozen = v; },
-    stats: () => ({ ...app.stats(), ...life.stats() }),
+    stats: () => ({ ...app.stats(), ...life.stats(), ground: world.blockFill?.stats() ?? null, signals: world.signalReport }),
     viewpoints: () => viewpoints.list.map((v) => v.id),
     renderOnce: () => app.renderOnce(),
     interact: () => interaction.activate(),
@@ -165,6 +165,9 @@ async function main() {
     nearby: () => interaction.nearby(),
     pos: () => ({ x: app.camera.position.x, y: app.camera.position.y, z: app.camera.position.z, heading: yawToCompass(walk.yaw) }),
     lifeStats: () => life.stats(),
+    // Deterministic clock for the QA smoke and test/life.test.mjs: advance ONLY the life systems (pedestrians,
+    // vehicles, signals) by `seconds` of simulated time in fixed dt steps, without waiting for real frames.
+    stepLife: (seconds: number, dt = 1 / 30) => { const n = Math.max(0, Math.round(seconds / dt)); for (let i = 0; i < n; i++) life.update(dt, 0); return { steps: n, seconds: n * dt }; },
     storefronts: () => hero.storefrontList(),
     enter: (id) => interaction.enter(id),
     log: [],

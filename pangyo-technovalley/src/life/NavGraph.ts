@@ -22,7 +22,9 @@ export interface NavNode {
 export interface NavEdge { id: number; a: number; b: number; len: number; kind: EdgeKind; crossing: boolean; intersection: number; walkDir: 'ns' | 'ew' | null }
 export interface NavIntersection { id: number; x: number; z: number; offset: number; signal: boolean }
 
-const BOUNDS = 420;            // graph extent (m); nodes on this boundary are spawn/despawn points
+const BOUNDS = 620;            // graph extent (m); nodes on this boundary are spawn/despawn points.
+                               // Matches Props' EXTENT so the 판교역 forecourt (z ≈ 530) is walkable:
+                               // at 420 the whole station end of 판교역로 fell outside the graph and had no pedestrians.
 const SPACING = 8;             // sidewalk node spacing (m)
 const CYCLE = 60, NS_WALK: [number, number] = [0, 25], EW_WALK: [number, number] = [30, 55], CLEAR = 5;
 const WCELL = 8;

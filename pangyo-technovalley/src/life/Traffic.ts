@@ -4,12 +4,14 @@
 // screens. With no routes.json there are no route vehicles — the background fleet on the lane graph still runs.
 //
 // data/routes.json shape:
-// [ { "name": "…",                      // label (also the object name in the scene)
+// [ { "name": "…",                      // label (also the object name in the scene); a name starting with
+//                                       // "_" marks a comment record and is skipped (JSON has no comments)
 //     "vehicle": "vehicles/<kit id>",   // required: which GLB from the vehicle kit drives this route
 //     "kind": "bus" | "rail" | "car",   // vehicle class (default "bus")
 //     "street": "<StreetSpec.name>",    // must match a street in data/streets_spec.json
 //     "dir": "N" | "S" | "E" | "W",
-//     "lane": "transit" | "rail" | "curbRight" | "curbLeft" | "any",   // which lane of that street (default "any")
+//     "lane": "transit" | "rail" | "curb" | "curbRight" | "curbLeft" | "any",   // which lane of that street (default "any";
+//                                       // "curb" = the kerbside lane for the direction of travel)
 //     "startT": -300,                   // along-axis coordinate where the vehicle is placed at boot
 //     "sign": "…", "number": "…", "board": "…",                        // optional canvas screens
 //     "vmax": 11, "stops": [ { "t": 120, "dwell": 12 } ] } ]           // stop positions along the axis
@@ -22,7 +24,7 @@ import { Assets } from '../assets/Assets';
 import { Materials } from '../materials/Library';
 import { Rng } from '../util/Rng';
 import { Config } from '../app/Config';
-import { LaneGraph, Link, Node, NextRef, CLS, Dir, Lane } from './LaneGraph';
+import { LaneGraph, Link, Node, NextRef, CLS, Dir, Lane, rightSign } from './LaneGraph';
 import type { TrafficLights } from './TrafficLights';
 
 interface Meta { length: number; width: number; wheelbase: number; wheelRadius: number }
@@ -33,7 +35,7 @@ interface Route { name: string; street: string; dir: Dir; pick: (l: Lane) => boo
 /** One record of `data/routes.json` (see the file header for the full shape). */
 export interface RouteSpec {
   name: string; vehicle: string; kind?: 'bus' | 'rail' | 'car';
-  street: string; dir: Dir; lane?: 'transit' | 'rail' | 'curbRight' | 'curbLeft' | 'any';
+  street: string; dir: Dir; lane?: 'transit' | 'rail' | 'curb' | 'curbRight' | 'curbLeft' | 'any';
   startT: number; sign?: string; number?: string; board?: string; vmax?: number;
   stops?: { t: number; dwell?: number }[];
 }
@@ -87,6 +89,8 @@ export class Traffic implements Updatable {
   rng: Rng;
   count: number;
   built = false;
+  /** Route specs that could not be resolved (unknown vehicle / street / no lane at startT) — asserted empty by the QA smoke. */
+  routeWarnings: string[] = [];
   private paintMat!: THREE.MeshStandardMaterial;
   private spawnCache = new Map<number, Link[]>();
   private tmp = new Float64Array(6); private tmpA = new Float64Array(6); private tmpB = new Float64Array(6);
@@ -136,11 +140,15 @@ export class Traffic implements Updatable {
       rail: (l) => l.kind === 'rail' || l.kind === 'shared',
       curbRight: (l) => l.kind === 'car' && l.index === l.spec.lanes - 1,
       curbLeft: (l) => l.kind === 'car' && l.index === 0,
+      // the kerbside lane for the direction of travel (lane indices run with the across-coordinate, so which
+      // end of the range is "kerb" flips with the direction): what a bus actually runs in on a two-way street
+      curb: (l) => l.kind === 'car' && l.index === (rightSign(l.dir) > 0 ? l.spec.lanes - 1 : 0),
       any: (l) => l.kind === 'car' || l.kind === 'transit',
     };
     for (const rs of specs) {
-      if (!rs.vehicle || !Assets.has(rs.vehicle)) { console.warn('[traffic] route', rs.name, 'wants an unknown vehicle', rs.vehicle); continue; }
-      if (!this.world.streetSpecs.some((s) => s.name === rs.street)) { console.warn('[traffic] route', rs.name, 'names a street that is not in streets_spec.json:', rs.street); continue; }
+      if (typeof rs.name === 'string' && rs.name.startsWith('_')) continue;   // comment record (JSON has no comments)
+      if (!rs.vehicle || !Assets.has(rs.vehicle)) { const m = `${rs.name}: unknown vehicle ${rs.vehicle}`; this.routeWarnings.push(m); console.warn('[traffic] route', m); continue; }
+      if (!this.world.streetSpecs.some((s) => s.name === rs.street)) { const m = `${rs.name}: unknown street ${rs.street}`; this.routeWarnings.push(m); console.warn('[traffic] route', m); continue; }
       const kind = rs.kind || 'bus';
       const cls = kind === 'rail' ? CLS.RAIL : kind === 'car' ? CLS.CAR : CLS.BUS;
       const dwellDefault = kind === 'rail' ? DWELL_RAIL : DWELL_BUS;
@@ -159,7 +167,7 @@ export class Traffic implements Updatable {
       if (route.number) this.screen(v.obj, 'number', route.number, { w: 160, h: 96, bg: '#e8dcb8', fg: '#2a1010', font: 'bold 76px Georgia, serif' });
       if (route.board) this.screen(v.obj, 'destboard_l', route.board, { w: 1024, h: 128, bg: '#6a1420', fg: '#f0e0a0', font: 'bold 64px Georgia, serif' });
       this.group.add(v.obj);
-      if (!this.placeRoute(v)) { console.warn('[traffic] route', rs.name, 'could not be placed on', rs.street, rs.dir, 'at t =', rs.startT); v.alive = false; }
+      if (!this.placeRoute(v)) { const m = `${rs.name}: no ${rs.dir} lane on ${rs.street} at t = ${rs.startT}`; this.routeWarnings.push(m); console.warn('[traffic] route', m); v.alive = false; }
     }
   }
   private newVehicle(kind: string, cls: number, meta: Meta): Vehicle {
@@ -392,9 +400,18 @@ export class Traffic implements Updatable {
   }
 
   stats() {
-    let moving = 0, stopped = 0, alive = 0, buses = 0, rail = 0, bikes = 0;
-    for (const v of this.vehicles) { if (!v.alive) continue; alive++; if (v.v > 0.3) moving++; else stopped++; if (v.cls === CLS.BUS) buses++; if (v.cls === CLS.RAIL) rail++; if (v.cls === CLS.BIKE) bikes++; }
-    return { vehicles: alive, total: this.vehicles.length, moving, stopped, buses, railVehicles: rail, bikes, links: this.graph?.links.length ?? 0, nodes: this.graph?.nodes.length ?? 0, msUpdate: +this.ms.toFixed(3) };
+    let moving = 0, stopped = 0, alive = 0, buses = 0, rail = 0, bikes = 0, routes = 0, routesAlive = 0, nan = 0;
+    const P = this.tmp;
+    for (const v of this.vehicles) {
+      if (v.route) routes++;
+      if (!v.alive) continue;
+      alive++; if (v.v > 0.3) moving++; else stopped++;
+      if (v.cls === CLS.BUS) buses++; if (v.cls === CLS.RAIL) rail++; if (v.cls === CLS.BIKE) bikes++;
+      if (v.route) routesAlive++;
+      LaneGraph.sample(v.link, v.s, P, { i: v.cursor.i });
+      if (!Number.isFinite(P[0]) || !Number.isFinite(P[1]) || !Number.isFinite(P[2]) || !Number.isFinite(v.v)) nan++;
+    }
+    return { vehicles: alive, total: this.vehicles.length, moving, stopped, buses, railVehicles: rail, bikes, routeVehicles: routes, routeVehiclesAlive: routesAlive, vehicleNaN: nan, routeWarnings: this.routeWarnings, links: this.graph?.links.length ?? 0, nodes: this.graph?.nodes.length ?? 0, msUpdate: +this.ms.toFixed(3) };
   }
   /** Debug snapshot of every live vehicle (position, heading, speed, link). */
   snapshot() {

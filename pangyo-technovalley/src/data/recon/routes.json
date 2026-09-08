@@ -1,0 +1,114 @@
+[
+  {
+    "_README": "Scheduled route vehicles (src/life/Traffic.ts reads the synced copy at public/data/routes.json). `street` must match a name in streets_spec.json, `t`/`startT` are along-axis local coordinates (z for ns streets, x for ew), `lane: curb` = the kerbside lane for the direction of travel. Stop positions are the OSM bus-stop platforms in gis.json.pois where this world has them (엔씨.안랩 07630/07631, H스퀘어 07479, 동안교 07450, 판교역서편 07407, 삼평교 07498); the rest sit mid-block at the named junction. Route numbers are the real G-Bus refs tagged on those platforms (101 / 3100 / 9007); no timetable is modelled — vehicles run continuously and dwell at each stop.",
+    "name": "_readme",
+    "vehicle": "",
+    "street": "",
+    "dir": "N",
+    "startT": 0
+  },
+  {
+    "name": "9007 판교역 방면",
+    "vehicle": "vehicles/bus_muni",
+    "kind": "bus",
+    "street": "판교역로",
+    "dir": "S",
+    "lane": "curb",
+    "startT": -470,
+    "vmax": 11.5,
+    "sign": "9007 판교역",
+    "number": "9007",
+    "stops": [
+      { "t": -270, "dwell": 14 },
+      { "t": -11, "dwell": 18 },
+      { "t": 246, "dwell": 12 },
+      { "t": 522, "dwell": 20 }
+    ]
+  },
+  {
+    "name": "9007 판교테크노밸리 방면",
+    "vehicle": "vehicles/bus_muni",
+    "kind": "bus",
+    "street": "판교역로",
+    "dir": "N",
+    "lane": "curb",
+    "startT": 540,
+    "vmax": 11.5,
+    "sign": "9007 판교테크노밸리",
+    "number": "9007",
+    "stops": [
+      { "t": 522, "dwell": 20 },
+      { "t": 246, "dwell": 12 },
+      { "t": -11, "dwell": 18 },
+      { "t": -270, "dwell": 14 }
+    ]
+  },
+  {
+    "name": "101 대왕판교로 남행",
+    "vehicle": "vehicles/bus_tour",
+    "kind": "bus",
+    "street": "대왕판교로",
+    "dir": "S",
+    "lane": "curb",
+    "startT": -800,
+    "vmax": 11.5,
+    "sign": "101 판교역 · 서현",
+    "number": "101",
+    "stops": [
+      { "t": -533, "dwell": 14 },
+      { "t": -60, "dwell": 16 },
+      { "t": 340, "dwell": 12 }
+    ]
+  },
+  {
+    "name": "101 대왕판교로 북행",
+    "vehicle": "vehicles/bus_tour",
+    "kind": "bus",
+    "street": "대왕판교로",
+    "dir": "N",
+    "lane": "curb",
+    "startT": 500,
+    "vmax": 11.5,
+    "sign": "101 판교테크노밸리",
+    "number": "101",
+    "stops": [
+      { "t": 340, "dwell": 12 },
+      { "t": -60, "dwell": 16 },
+      { "t": -533, "dwell": 14 }
+    ]
+  },
+  {
+    "name": "3100 판교로 동행",
+    "vehicle": "vehicles/bus_muni",
+    "kind": "bus",
+    "street": "판교로",
+    "dir": "E",
+    "lane": "curb",
+    "startT": -580,
+    "vmax": 11.5,
+    "sign": "3100 판교역 · 강남",
+    "number": "3100",
+    "stops": [
+      { "t": -240, "dwell": 14 },
+      { "t": 120, "dwell": 16 },
+      { "t": 500, "dwell": 12 }
+    ]
+  },
+  {
+    "name": "3100 판교로 서행",
+    "vehicle": "vehicles/bus_muni",
+    "kind": "bus",
+    "street": "판교로",
+    "dir": "W",
+    "lane": "curb",
+    "startT": 780,
+    "vmax": 11.5,
+    "sign": "3100 판교테크노밸리",
+    "number": "3100",
+    "stops": [
+      { "t": 500, "dwell": 12 },
+      { "t": 120, "dwell": 16 },
+      { "t": -240, "dwell": 14 }
+    ]
+  }
+]

@@ -1,5 +1,8 @@
 // Runtime configuration from URL parameters.
 const p = new URLSearchParams(location.search);
+/** Last occurrence of a repeated query key. The studio launcher always writes `life=0` into the world URL and then
+ *  appends its own extra query, so `…&life=0&…&life=1` must mean "life on": last one wins. */
+const last = (k: string): string | null => { const a = p.getAll(k); return a.length ? a[a.length - 1] : null; };
 export type TimePreset = 'day' | 'sunset' | 'night';
 export type Mode = 'walk' | 'orbit' | 'tour';
 
@@ -13,7 +16,7 @@ export const Config = {
   seed: Number(p.get('seed') || 1337),
   shadows: p.get('shadows') !== '0',
   quality: (p.get('q') || 'high') as 'low' | 'med' | 'high' | 'ultra',
-  noLife: p.get('life') === '0',
+  noLife: last('life') === '0',
   fov: Number(p.get('fov') || 0),
   pos: p.get('pos'),                          // "x,y,z"
   look: p.get('look'),                        // "heading,pitch" degrees

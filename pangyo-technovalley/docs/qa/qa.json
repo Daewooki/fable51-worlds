@@ -1,0 +1,364 @@
+{
+ "generatedAt": "2026-09-08T07:15:24.071Z",
+ "world": {
+  "loadMs": 4523,
+  "buildings": 564,
+  "buildingParts": 118,
+  "detailed": 18,
+  "heroes": 4,
+  "streets": 23,
+  "crossings": 19,
+  "signalled": 14,
+  "signalReport": {
+   "signalled": 14,
+   "fromOsm": 6,
+   "fromMajor": 8,
+   "osmUsed": 6
+  },
+  "ground": {
+   "meshes": 5,
+   "surfaces": 5,
+   "landuseAreas": 189,
+   "blockPatches": 721,
+   "tris": 82851,
+   "bySurface": {
+    "paving": {
+     "patches": 57,
+     "tris": 27192
+    },
+    "paving_dark": {
+     "patches": 736,
+     "tris": 31492
+    },
+    "grass": {
+     "patches": 83,
+     "tris": 16677
+    },
+    "soil": {
+     "patches": 16,
+     "tris": 636
+    },
+    "water": {
+     "patches": 10,
+     "tris": 6854
+    }
+   }
+  },
+  "props": {
+   "lamps": 427,
+   "lampsRejected": 77,
+   "trees": 441,
+   "treesRejected": 84,
+   "benches": 15,
+   "benchesRejected": 4,
+   "signalMasts": 42,
+   "signalMastsRejected": 6,
+   "hydrants": 20,
+   "hydrantsRejected": 0,
+   "bollards": 0,
+   "bollardsRejected": 0
+  },
+  "landuse": 232
+ },
+ "bootMs": 7603,
+ "softwareRender": false,
+ "errors": [],
+ "shots": [
+  {
+   "id": "nc-entrance",
+   "title": "NCSOFT R&D Center — 정문 (남측 forecourt)",
+   "ok": true,
+   "pos": {
+    "x": 11.209834289938144,
+    "y": 3.6438053105291766,
+    "z": 117.24472786090826,
+    "heading": 354.53999999999996
+   },
+   "file": "docs/qa/nc-entrance.png",
+   "bytes": 444395
+  },
+  {
+   "id": "nc-aerial",
+   "title": "NCSOFT R&D Center — aerial (tour stop 1)",
+   "ok": true,
+   "pos": {
+    "x": 51.15839478494128,
+    "y": 140,
+    "z": 222.29615560329088,
+    "heading": 344.24
+   },
+   "file": "docs/qa/nc-aerial.png",
+   "bytes": 1120972
+  },
+  {
+   "id": "pangyoro-hsquare",
+   "title": "판교역로 남행 — H스퀘어 코너",
+   "ok": true,
+   "pos": {
+    "x": 113.07316221034523,
+    "y": 21.08838845102783,
+    "z": -275.7253695013755,
+    "heading": 177.39999999999998
+   },
+   "file": "docs/qa/pangyoro-hsquare.png",
+   "bytes": 619932
+  },
+  {
+   "id": "pangyoyeok-plaza",
+   "title": "판교역 광장 — 신분당선 출입구 캐노피",
+   "ok": true,
+   "pos": {
+    "x": 197.177022569973,
+    "y": 14.400885076682458,
+    "z": 509.29172890268507,
+    "heading": 205
+   },
+   "file": "docs/qa/pangyoyeok-plaza.png",
+   "bytes": 601983
+  }
+ ],
+ "vpProbe": {
+  "pts": [
+   [
+    0,
+    3.706393054127693,
+    115
+   ],
+   [
+    40,
+    140,
+    220
+   ],
+   [
+    101.9,
+    20.75313289761544,
+    -278
+   ],
+   [
+    186,
+    14.262502110004425,
+    507
+   ]
+  ],
+  "probes": [
+   {
+    "blocked": false,
+    "top": 1.87,
+    "ground": 1.86,
+    "structure": false
+   },
+   {
+    "blocked": false,
+    "top": 1.08,
+    "ground": 1.05,
+    "structure": false
+   },
+   {
+    "blocked": false,
+    "top": 19.06,
+    "ground": 18.9,
+    "structure": false
+   },
+   {
+    "blocked": false,
+    "top": 12.39,
+    "ground": 12.41,
+    "structure": false
+   }
+  ]
+ },
+ "life": {
+  "before": {
+   "pedestrians": 220,
+   "vehicles": 100,
+   "pedNaN": 0,
+   "pedOnSidewalk": 218,
+   "pedUpdateMs": 0.96,
+   "pedUpdateMaxMs": 1.45,
+   "pedStates": {
+    "wait": 15,
+    "walk": 199,
+    "look": 5,
+    "idle": 1
+   },
+   "navNodes": 2254,
+   "navEdges": 2278,
+   "pedDrawCalls": 30,
+   "total": 110,
+   "moving": 98,
+   "stopped": 2,
+   "buses": 6,
+   "railVehicles": 0,
+   "bikes": 0,
+   "routeVehicles": 6,
+   "routeVehiclesAlive": 6,
+   "vehicleNaN": 0,
+   "routeWarnings": [],
+   "links": 458,
+   "nodes": 19,
+   "msUpdate": 0.242,
+   "lights": {
+    "signals": 14,
+    "heads": 42,
+    "t": 3
+   }
+  },
+  "after": {
+   "pedestrians": 220,
+   "vehicles": 102,
+   "pedNaN": 0,
+   "pedOnSidewalk": 218,
+   "pedUpdateMs": 0.65,
+   "pedUpdateMaxMs": 0.8,
+   "pedStates": {
+    "walk": 200,
+    "wait": 19,
+    "idle": 1
+   },
+   "navNodes": 2254,
+   "navEdges": 2278,
+   "pedDrawCalls": 30,
+   "total": 110,
+   "moving": 90,
+   "stopped": 12,
+   "buses": 6,
+   "railVehicles": 0,
+   "bikes": 0,
+   "routeVehicles": 6,
+   "routeVehiclesAlive": 6,
+   "vehicleNaN": 0,
+   "routeWarnings": [],
+   "links": 458,
+   "nodes": 19,
+   "msUpdate": 0.138,
+   "lights": {
+    "signals": 14,
+    "heads": 42,
+    "t": 33
+   }
+  }
+ },
+ "lights": {
+  "routes": [
+   {
+    "name": "9007 판교역 방면",
+    "minSpeed": 0,
+    "maxSpeed": 11.01,
+    "redStops": 5,
+    "dwellStops": 143,
+    "served": 1,
+    "firstRedStop": {
+     "t": 25.8,
+     "x": 85.1,
+     "z": -148.4,
+     "colour": "red",
+     "street": "판교역로"
+    }
+   },
+   {
+    "name": "9007 판교테크노밸리 방면",
+    "minSpeed": 0,
+    "maxSpeed": 10.04,
+    "redStops": 35,
+    "dwellStops": 120,
+    "served": 2,
+    "firstRedStop": {
+     "t": 20,
+     "x": 85.1,
+     "z": 327,
+     "colour": "red",
+     "street": "판교역로"
+    }
+   },
+   {
+    "name": "101 대왕판교로 남행",
+    "minSpeed": 0,
+    "maxSpeed": 11.2,
+    "redStops": 0,
+    "dwellStops": 111,
+    "served": 1,
+    "firstRedStop": null
+   },
+   {
+    "name": "101 대왕판교로 북행",
+    "minSpeed": 0,
+    "maxSpeed": 11.01,
+    "redStops": 0,
+    "dwellStops": 130,
+    "served": 1,
+    "firstRedStop": null
+   },
+   {
+    "name": "3100 판교로 동행",
+    "minSpeed": 0,
+    "maxSpeed": 11.18,
+    "redStops": 247,
+    "dwellStops": 0,
+    "served": 0,
+    "firstRedStop": {
+     "t": 27.6,
+     "x": -275.1,
+     "z": -442.3,
+     "colour": "red",
+     "street": "판교로"
+    }
+   },
+   {
+    "name": "3100 판교로 서행",
+    "minSpeed": 0,
+    "maxSpeed": 10.46,
+    "redStops": 0,
+    "dwellStops": 120,
+    "served": 1,
+    "firstRedStop": null
+   }
+  ],
+  "bgRedStopFrames": 56,
+  "after": {
+   "pedestrians": 220,
+   "vehicles": 100,
+   "pedNaN": 0,
+   "pedOnSidewalk": 220,
+   "pedUpdateMs": 0.66,
+   "pedUpdateMaxMs": 0.92,
+   "pedStates": {
+    "walk": 205,
+    "wait": 11,
+    "idle": 1,
+    "look": 3
+   },
+   "navNodes": 2254,
+   "navEdges": 2278,
+   "pedDrawCalls": 30,
+   "total": 110,
+   "moving": 96,
+   "stopped": 4,
+   "buses": 6,
+   "railVehicles": 0,
+   "bikes": 0,
+   "routeVehicles": 6,
+   "routeVehiclesAlive": 6,
+   "vehicleNaN": 0,
+   "routeWarnings": [],
+   "links": 458,
+   "nodes": 19,
+   "msUpdate": 0.165,
+   "lights": {
+    "signals": 14,
+    "heads": 42,
+    "t": 94
+   }
+  },
+  "lightStats": {
+   "signals": 14,
+   "heads": 42,
+   "t": 94
+  }
+ },
+ "render": {
+  "calls": 764,
+  "triangles": 4172775,
+  "geometries": 648,
+  "textures": 53
+ }
+}

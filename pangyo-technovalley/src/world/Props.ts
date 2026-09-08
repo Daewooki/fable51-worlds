@@ -19,7 +19,6 @@ export interface SignalHead { mesh: THREE.Object3D; lamps: Record<string, THREE.
 const LAMP_SPACING = 30, LAMP_CURB_OFFSET = 0.8;
 const TREE_SPACING = 12, TREE_MIN_SIDEWALK = 3.0, TREE_CROSSING_CLEAR = 6;
 const BENCH_RADIUS = 140, BENCH_SPACING = 45;      // benches only on the origin block
-const MAJOR_WIDTH = 12;                            // a street this wide counts as "major" for signals
 const EXTENT = 620;                                // props are placed within this box around the origin
 const DENSE_RADIUS = 250;                          // beyond this, street trees are thinned to keep the triangle budget sane
 // The fitted street model is axis-aligned, so a kerb line can run through a building whose real frontage is not.
@@ -151,21 +150,13 @@ export class Props {
     for (const p of w.gis.bollards || []) { if (!inBounds(p.x, p.z)) continue; if (inBuilding(p.x, p.z)) { this.placement.bollardsRejected++; continue; } bollard?.add([p.x, gy(p.x, p.z), p.z], 0); this.bollardPositions.push([p.x, p.z]); this.placement.bollards++; }
     for (const c of crossingPts) { if (inBounds(c.x, c.z) && !inBuilding(c.x, c.z)) curbRamp?.add([c.x, gy(c.x, c.z), c.z], 0); }
 
-    // --- traffic signals: OSM signal nodes snapped to the nearest junction, else every major × major junction ---
+    // --- traffic signals: masts stand at the junctions World marked signalised (StreetGrid.applyOsmSignals:
+    //     OSM `highway=traffic_signals` nodes snapped to the fitted grid, majors as a fallback), so the masts,
+    //     the TrafficLights controller and the vehicle lane graph always agree on which junction has lights. ---
     const signalProto = has('street/traffic_signal_post') ? await Assets.load('street/traffic_signal_post') : null;
-    const osmSignals = (w.gis.signals || []).filter((s: any) => Number.isFinite(s.x) && Number.isFinite(s.z));
-    const signalled = new Set<typeof junctions[number]>();
-    if (osmSignals.length) {
-      for (const sig of osmSignals) {
-        let best: typeof junctions[number] | null = null, bd = 30 * 30;
-        for (const j of junctions) { const d = (j.x - sig.x) ** 2 + (j.z - sig.z) ** 2; if (d < bd) { bd = d; best = j; } }
-        if (best) signalled.add(best);
-      }
-    }
-    for (const j of junctions) if (j.a.width >= MAJOR_WIDTH && j.b.width >= MAJOR_WIDTH) signalled.add(j);
     const signalSpots: { x: number; z: number; y: number; rot: number; cx: number; cz: number }[] = [];
     for (const c of junctions) {
-      if (!c.signal || !signalled.has(c) || !inBounds(c.x, c.z)) continue;
+      if (!c.signal || !inBounds(c.x, c.z)) continue;
       const hwA = c.a.width / 2, hwB = c.b.width / 2;
       for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
         const x = c.x + sx * (hwA + 0.7), z = c.z + sz * (hwB + 0.7);

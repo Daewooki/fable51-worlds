@@ -4,7 +4,8 @@ import { BASE } from '../assets/Assets';
 import { CollisionWorld } from '../player/Collision';
 import { Terrain } from './Terrain';
 import { Streets } from './Streets';
-import { StreetSpec } from './StreetGrid';
+import { StreetSpec, applyOsmSignals } from './StreetGrid';
+import { BlockFill, LanduseArea } from './BlockFill';
 import { Buildings, GisBuilding, BuildingOverride, BuildingInfo } from './Buildings';
 import { Plaza, PlazaSpec } from './Plaza';
 import { FacadeBuilder } from './facade/FacadeBuilder';
@@ -14,7 +15,7 @@ import type { StorefrontReg } from './HeroContext';
 import { logoKey } from '../materials/Signage';
 import { localBbox } from '../geo/geo';
 
-export interface GisData { origin: any; buildings: GisBuilding[]; buildingParts: GisBuilding[]; streets: any[]; pois: any[]; trees: any[]; lamps: any[]; signals: any[]; crossings: any[]; hydrants: any[]; benches: any[]; bollards?: any[]; plaza?: any; intersections: any[] }
+export interface GisData { origin: any; buildings: GisBuilding[]; buildingParts: GisBuilding[]; streets: any[]; pois: any[]; trees: any[]; lamps: any[]; signals: any[]; crossings: any[]; hydrants: any[]; benches: any[]; bollards?: any[]; landuse?: LanduseArea[]; plaza?: any; intersections: any[] }
 
 /**
  * One entry of `data/hero.json`: an OSM building whose massing geometry is replaced by a hero module.
@@ -46,6 +47,10 @@ export class World {
   collision = new CollisionWorld();
   terrain!: Terrain;
   streets!: Streets;
+  /** Ground cover between the streets (OSM landuse + fallback block cells). */
+  blockFill: BlockFill | null = null;
+  /** Signal wiring report from `applyOsmSignals` (QA). */
+  signalReport: { signalled: number; fromOsm: number; fromMajor: number; osmUsed: number } | null = null;
   buildings!: Buildings;
   /** Built only when `data/plaza.json` exists (this world may have no plaza at all). */
   plaza: Plaza | null = null;
@@ -93,7 +98,13 @@ export class World {
     this.collision.terrain = (x, z) => this.terrain.heightAt(x, z) + (this.isRoad(x, z) ? Streets.ROAD_Y : Streets.SIDEWALK_Y);
     progress('streets', 0.45);
     this.streets = new Streets(this.streetSpecs, this.terrain, this.collision);
+    // Which crossings run lights: OSM `highway=traffic_signals` nodes snapped to the fitted grid, majors as a
+    // fallback. TrafficLights, the vehicle lane graph and the signal masts all read `Intersection.signal`.
+    this.signalReport = applyOsmSignals(this.streets.crossings, this.gis.signals || []);
     this.group.add(this.streets.group);
+    // Ground cover between the streets, before the buildings so the massing sits on top of it.
+    this.blockFill = new BlockFill(this.terrain, this.gis.landuse || [], this.streetSpecs);
+    this.group.add(this.blockFill.group);
     progress('plaza', 0.55);
     if (this.plazaSpec) { this.plaza = new Plaza(this.plazaSpec, this.terrain, this.collision); this.group.add(this.plaza.group); }
     progress('buildings', 0.62);

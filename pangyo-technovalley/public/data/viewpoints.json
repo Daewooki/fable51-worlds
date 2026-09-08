@@ -1,0 +1,71 @@
+[
+  {
+    "id": "nc-entrance",
+    "title": "NCSOFT R&D Center — 정문 (남측 forecourt)",
+    "camera": {
+      "x": 0,
+      "y": 3.71,
+      "z": 115,
+      "lat": 37.398329,
+      "lon": 127.108974,
+      "heightM": 1.7,
+      "headingDeg": 354.54,
+      "pitchDeg": 14.0,
+      "fovDegVertical": 60
+    },
+    "photo": null,
+    "notes": "Eye level 90 m south of the NC R&D Center's south face (footprint x −57…57, z −25…25), looking grid-north at the curtain wall and the rooftop NCSOFT sign; at 60° vertical FOV the whole 58 m building and its podium are in frame. Reference capture: 대왕판교로644번길 / 판교역로226번길 block looking north across the forecourt."
+  },
+  {
+    "id": "nc-aerial",
+    "title": "NCSOFT R&D Center — aerial (tour stop 1)",
+    "camera": {
+      "x": 40,
+      "y": 140,
+      "z": 220,
+      "lat": 37.397421,
+      "lon": 127.109536,
+      "heightM": 140,
+      "absoluteY": 140,
+      "headingDeg": 344.24,
+      "pitchDeg": -28.22,
+      "fovDegVertical": 60
+    },
+    "photo": null,
+    "notes": "The stage-1/2 target-cut opening frame: 140 m up, 224 m south-south-east of the NC building, looking down at the 판교테크노밸리 core. Not photographable from the ground — kept as the framing reference for the previz."
+  },
+  {
+    "id": "pangyoro-hsquare",
+    "title": "판교역로 남행 — H스퀘어 코너",
+    "camera": {
+      "x": 101.9,
+      "y": 20.75,
+      "z": -278,
+      "lat": 37.401941,
+      "lon": 127.109697,
+      "heightM": 1.7,
+      "headingDeg": 177.4,
+      "pitchDeg": -0.15,
+      "fovDegVertical": 60
+    },
+    "photo": null,
+    "notes": "East sidewalk of 판교역로 at the H스퀘어 bus stop (OSM platform ref 07479 / 07034), looking southbound down the arterial toward the NC block and 판교역. Reference capture: road view southbound from 판교역로 264."
+  },
+  {
+    "id": "pangyoyeok-plaza",
+    "title": "판교역 광장 — 신분당선 출입구 캐노피",
+    "camera": {
+      "x": 186,
+      "y": 14.26,
+      "z": 507,
+      "lat": 37.394972,
+      "lon": 127.111486,
+      "heightM": 1.7,
+      "headingDeg": 205.0,
+      "pitchDeg": 4.0,
+      "fovDegVertical": 60
+    },
+    "photo": null,
+    "notes": "판교역 forecourt, 33 m north-east of the station node (OSM node/5927786493), looking south-west at the 신분당선 entrance canopy with the 알파돔 tower behind it. Reference capture: 판교역 1번 출구 광장."
+  }
+]

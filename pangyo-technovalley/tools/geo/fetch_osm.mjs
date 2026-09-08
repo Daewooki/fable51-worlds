@@ -8,7 +8,10 @@
  * The dump is committed so the world builds offline; this script is a no-op when the file already
  * exists. Pass --refresh to re-download.
  *
- * Run: node tools/geo/fetch_osm.mjs [--refresh]   (plain ESM, no deps)
+ * Run: node tools/geo/fetch_osm.mjs [--refresh|--augment]   (plain ESM, no deps)
+ *   --refresh  re-download everything
+ *   --augment  fetch ONLY the ground-cover polygons (landuse/leisure/parking/water) and merge them
+ *              into the existing dump, so the committed file's other elements stay byte-identical.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -25,6 +28,26 @@ export function bboxFilter(marginM = CLIP_MARGIN_M) {
   const s = (BBOX.south - dlat).toFixed(6), w = (BBOX.west - dlon).toFixed(6);
   const n = (BBOX.north + dlat).toFixed(6), e = (BBOX.east + dlon).toFixed(6);
   return `(${s},${w},${n},${e})`;
+}
+
+/**
+ * Ground-cover polygons: land use, parks/greens, surface car parks and water.
+ * Split out of `overpassQuery` so `--augment` can ask for exactly these without
+ * re-downloading (and re-diffing) the buildings/roads dump.
+ */
+export function landuseClauses(bb = bboxFilter()) {
+  return [
+    `  way["landuse"]${bb};`,
+    `  relation["landuse"]${bb};`,
+    `  way["amenity"="parking"]${bb};`,
+    `  way["natural"~"^(water|wood|scrub|grassland|sand|wetland|bare_rock)$"]${bb};`,
+    `  relation["natural"="water"]${bb};`,
+    `  way["waterway"="riverbank"]${bb};`,
+  ];
+}
+
+export function landuseQuery(bb = bboxFilter()) {
+  return ['[out:json][timeout:180];', '(', ...landuseClauses(bb), ')', ';', 'out geom;'].join('\n');
 }
 
 export function overpassQuery(bb = bboxFilter()) {
@@ -54,6 +77,8 @@ export function overpassQuery(bb = bboxFilter()) {
     `  way["tourism"]${bb};`,
     `  way["leisure"]${bb};`,
     `  way["railway"="platform"]${bb};`,
+    //  ground cover polygons (the `landuse` bin of gis.json: block fill between the fitted streets)
+    ...landuseClauses(bb),
     ')',
     ';',
     'out geom;',
@@ -86,8 +111,28 @@ export async function fetchOverpass(query, { retries = 3, endpoint = ENDPOINT } 
   throw lastErr;
 }
 
+/** Merge `extra.elements` into an existing dump, keyed by `type/id`. Returns the number of new elements. */
+export function mergeElements(base, extra) {
+  const seen = new Set(base.elements.map((e) => `${e.type}/${e.id}`));
+  let added = 0;
+  for (const e of extra.elements || []) { const k = `${e.type}/${e.id}`; if (seen.has(k)) continue; seen.add(k); base.elements.push(e); added++; }
+  return added;
+}
+
 async function main() {
   const refresh = process.argv.includes('--refresh');
+  const augment = process.argv.includes('--augment');
+  if (augment) {
+    // Add only the ground-cover polygons to the committed dump, leaving every other element byte-identical.
+    if (!fs.existsSync(OUT_PATH)) throw new Error('--augment needs an existing osm_raw.json (run without flags first)');
+    const base = JSON.parse(fs.readFileSync(OUT_PATH, 'utf8'));
+    console.log(`augmenting with landuse/leisure/parking/water polygons ${bboxFilter()} …`);
+    const extra = await fetchOverpass(landuseQuery());
+    const added = mergeElements(base, extra);
+    fs.writeFileSync(OUT_PATH, JSON.stringify(base));
+    console.log(`merged ${added} new elements (fetched ${extra.elements.length}); ${OUT_PATH} is now ${(fs.statSync(OUT_PATH).size / 1e6).toFixed(2)} MB`);
+    return;
+  }
   if (fs.existsSync(OUT_PATH) && !refresh) {
     const mb = (fs.statSync(OUT_PATH).size / 1e6).toFixed(2);
     console.log(`osm_raw.json present (${mb} MB) — skipping fetch (use --refresh to re-download)`);

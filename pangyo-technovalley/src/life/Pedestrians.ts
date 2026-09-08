@@ -320,8 +320,13 @@ export class Pedestrians implements Updatable {
 
   stats() {
     const st: Record<string, number> = {};
-    for (const p of this.peds) st[p.state] = (st[p.state] || 0) + 1;
-    return { pedestrians: this.peds.length, pedUpdateMs: Math.round(this.updMs * 100) / 100, pedUpdateMaxMs: Math.round(this.updMax * 100) / 100, pedStates: st, navNodes: this.nav?.nodes.length ?? 0, navEdges: this.nav?.edges.length ?? 0, pedDrawCalls: this.rig.drawCalls };
+    let nan = 0, onSidewalk = 0;
+    for (const p of this.peds) {
+      st[p.state] = (st[p.state] || 0) + 1;
+      if (!Number.isFinite(p.x) || !Number.isFinite(p.y) || !Number.isFinite(p.z)) nan++;
+      else if (this.world.isSidewalk(p.x, p.z) || (this.nav && this.nav.inPlaza(p.x, p.z))) onSidewalk++;
+    }
+    return { pedestrians: this.peds.length, pedNaN: nan, pedOnSidewalk: onSidewalk, pedUpdateMs: Math.round(this.updMs * 100) / 100, pedUpdateMaxMs: Math.round(this.updMax * 100) / 100, pedStates: st, navNodes: this.nav?.nodes.length ?? 0, navEdges: this.nav?.edges.length ?? 0, pedDrawCalls: this.rig.drawCalls };
   }
 }
 export type { NavNode };

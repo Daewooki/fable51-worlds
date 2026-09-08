@@ -14,6 +14,36 @@ export interface Intersection { a: StreetSpec; b: StreetSpec; x: number; z: numb
 
 export function streetLine(s: StreetSpec): [P2, P2] { return s.axis === 'ns' ? [[s.c, s.from], [s.c, s.to]] : [[s.from, s.c], [s.to, s.c]]; }
 
+/**
+ * Decide which grid crossings are signalised, from the OSM `signals` bin (`gis.json.signals`, nodes tagged
+ * `highway=traffic_signals`). Each OSM node is snapped to the nearest crossing within `snapM`; a crossing of
+ * two major streets is signalised as well, because the straight-fit grid collapses several real junctions
+ * onto one point and OSM's signal coverage in Pangyo is partial. Every other crossing becomes unsignalised
+ * (priority), which is what `TrafficLights`, `LaneGraph` (right turns) and `Props` (masts) all read.
+ *
+ * Mutates `crossings` in place and returns the count that stayed signalised.
+ */
+export function applyOsmSignals(
+  crossings: Intersection[],
+  osmSignals: { x: number; z: number }[],
+  opts: { snapM?: number; majorWidth?: number } = {},
+): { signalled: number; fromOsm: number; fromMajor: number; osmUsed: number } {
+  const snap = opts.snapM ?? 30, major = opts.majorWidth ?? 12;
+  const keep = new Set<Intersection>();
+  let osmUsed = 0;
+  for (const s of osmSignals) {
+    if (!Number.isFinite(s.x) || !Number.isFinite(s.z)) continue;
+    let best: Intersection | null = null, bd = snap * snap;
+    for (const c of crossings) { const d = (c.x - s.x) ** 2 + (c.z - s.z) ** 2; if (d < bd) { bd = d; best = c; } }
+    if (best) { if (!keep.has(best)) keep.add(best); osmUsed++; }
+  }
+  const fromOsm = keep.size;
+  for (const c of crossings) if (c.a.width >= major && c.b.width >= major) keep.add(c);
+  for (const c of crossings) c.signal = keep.has(c) && !(c.a.pedestrian || c.b.pedestrian);
+  const signalled = crossings.filter((c) => c.signal).length;
+  return { signalled, fromOsm, fromMajor: keep.size - fromOsm, osmUsed };
+}
+
 /** Compute all crossings between ns and ew streets whose extents overlap. */
 export function intersections(streets: StreetSpec[]): Intersection[] {
   const out: Intersection[] = [];

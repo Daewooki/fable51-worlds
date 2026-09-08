@@ -250,3 +250,10 @@ refs/**/*.png
 
 # portable Blender used by pangyo-technovalley asset generators (user-space, not committed)
 pangyo-technovalley/tools/blender/
+
+# Creator-supplied road-view captures for the pangyo viewpoints: Kakao/Naver imagery is
+# not redistributable, so the world ships viewpoint definitions and the QA script only.
+# Drop your own captures in as pangyo-technovalley/photos/<viewpoint id>.jpg (see that
+# directory's README) and they stay local.
+pangyo-technovalley/photos/*
+!pangyo-technovalley/photos/README.md

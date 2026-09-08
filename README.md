@@ -34,15 +34,15 @@ Same brief, same test conditions, two models. Each built Union Square from scrat
 
 ### 🏢 [판교테크노밸리, Seongnam](pangyo-technovalley/) — *in progress*
 
-<a href="pangyo-technovalley/docs/stage1-target-cut.mp4"><img src="pangyo-technovalley/docs/stage1-f120.png" width="100%" alt="Pangyo Techno Valley: 판교역로 looking south from 30 m at sunset"></a>
+<a href="pangyo-technovalley/docs/stage3-target-cut.mp4"><img src="pangyo-technovalley/docs/stage3-f120.png" width="100%" alt="Pangyo Techno Valley: 판교역로 looking south from 30 m at sunset"></a>
 
-<sub>▶ **[Watch the stage-1 target cut](pangyo-technovalley/docs/stage1-target-cut.mp4)** · 8 s · 1920×1080 · aerial over the NCSOFT R&D Center, down to 판교역로, south toward 판교역</sub>
+<sub>▶ **[Watch the stage-3 target cut](pangyo-technovalley/docs/stage3-target-cut.mp4)** · 8 s · 1920×1080 · aerial over the NCSOFT R&D Center, down to 판교역로, south toward 판교역 · [QA report](pangyo-technovalley/FINAL_QA_REPORT.md)</sub>
 
 | World | Geometry from | Dev port | Status |
 | --- | --- | --- | --- |
 | [Union Square, San Francisco](union-square-sf/) | survey + hand-authored specs | 5173 | complete |
 | [Higashiyama, Kyoto](kyoto-higashiyama/) | survey + hand-authored specs | 5174 | complete |
-| [판교테크노밸리 (Pangyo Techno Valley)](pangyo-technovalley/) | OpenStreetMap + SRTM, built by tools in the repo | 5175 | stage 1 — massing, streets, terrain |
+| [판교테크노밸리 (Pangyo Techno Valley)](pangyo-technovalley/) | OpenStreetMap + SRTM, built by tools in the repo | 5175 | stage 3 — massing, hero modules, ground cover, life, [QA](pangyo-technovalley/FINAL_QA_REPORT.md) |
 
 *More worlds coming.*
 

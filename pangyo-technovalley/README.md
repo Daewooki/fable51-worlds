@@ -220,6 +220,111 @@ modules are in the scene, that detaching the `hero` group leaves *terrain* under
 (so no massing survived), that `probePath` is clear at the roof + 2 m and blocked at y = 20 m
 inside, and that every hero building still has its collision walls.
 
+## Stage 3 — life, routes, ground fill & QA
+
+### Ground fill (`src/world/BlockFill.ts`)
+
+Stages 1–2 painted only the carriageways and the building footprints: everything between the blocks
+was bare terrain — a white plane in daylight. Stage 3 adds a ground-cover layer built from a new
+`landuse` bin in `gis.json`:
+
+```
+node tools/geo/fetch_osm.mjs --augment     # adds ONLY the ground-cover polygons to the cached dump
+node tools/geo/build_gis.mjs               # bins them via landuseClass() -> gis.json.landuse
+```
+
+`--augment` fetches `way/relation["landuse"]`, `way["amenity"="parking"]`, `way["natural"~water|wood|…]`
+and `way["waterway"="riverbank"]` for the same bbox and merges them into `osm_raw.json` by `type/id`,
+so every element that was already there stays byte-identical (196 new elements, 1.29 → 1.68 MB).
+`landuseClass()` maps each area to a **surface** and a **priority**: `water` (natural=water, wetland,
+basin), `paving_dark` (parking, residential), `soil` (pitch, playground, brownfield), `grass` (park,
+garden, grass, forest, village_green), `paving` (commercial, retail, industrial, education).
+
+`BlockFill` then paints them, plus a fallback: the block cells between consecutive fitted street
+centrelines (inset by half the street width + its sidewalk) wherever no OSM polygon covers the ground.
+Each patch is earcut-triangulated, the triangles are clipped to a 10 m grid so the surface follows the
+terrain, and the street corridors (road + both sidewalks) are cut out exactly — otherwise the 운중천
+polygon would be painted straight across 판교역로. Patches merge into **one mesh per surface**, each at
+its own millimetre offset above the terrain so nested areas never z-fight.
+
+| | |
+| --- | --- |
+| OSM ground-cover polygons in `gis.json` | 232 (189 inside the ±620 m box) |
+| fallback block patches | 721 |
+| draw calls / triangles added | **5** / ~83 k |
+| new material | `water` (registered in this world's `src/materials/Library.ts` only) |
+
+### Transit routes (`src/data/recon/routes.json`)
+
+Six route vehicles, using kit ids that already exist in `manifest_vehicles.json`:
+
+| route | street | dir | lane | stops |
+| --- | --- | --- | --- | --- |
+| 9007 판교역 방면 | 판교역로 | S | curb | H스퀘어 · 엔씨.안랩 · 동안교 · 판교역서편 |
+| 9007 판교테크노밸리 방면 | 판교역로 | N | curb | (same, reversed) |
+| 101 대왕판교로 남행 / 북행 | 대왕판교로 | S / N | curb | 삼평교 · NC 블록 · 테크노밸리 남측 |
+| 3100 판교로 동행 / 서행 | 판교로 | E / W | curb | 대왕판교로 · 판교역로 · 분당내곡로 교차 |
+
+Stop positions are the OSM `public_transport=platform` nodes where this bbox has them (엔씨.안랩 07630/07631,
+H스퀘어 07479/07034, 동안교 07450, 판교역서편 07407, 삼평교 07498) and the route numbers are those platforms'
+real `route_ref` tags; no timetable is modelled. `lane: "curb"` is a new picker in `Traffic.ts` — the kerbside
+lane *for the direction of travel* (`curbRight`/`curbLeft` are fixed lane indices and only work one way on a
+two-way street). `vmax` is 11.5 m/s; the lane graph caps block links at 11.2 m/s (≈ 40 km/h), below the posted 50.
+
+### Traffic signals
+
+`Streets` used to signalise **every** grid crossing. `StreetGrid.applyOsmSignals()` now decides once, from
+the OSM `signals` bin: each `highway=traffic_signals` node snaps to the nearest crossing within 30 m, and a
+crossing of two ≥ 12 m streets is signalised as a fallback. `TrafficLights`, the vehicle lane graph
+(`Node.signal`, which also gates right turns) and the signal masts in `Props` all read the same
+`Intersection.signal`, so they cannot disagree. Result: **14 of 19** crossings signalised (6 from the 58 OSM
+nodes, 8 from the fallback). `TrafficLights.attachHeads()` also had a fixed 14 m bind radius, which never
+matched on a 29 m arterial where the corner mast stands 16 m out; the radius is now derived from the
+junction's own widths, so **42** masts are driven instead of 4.
+
+### Pedestrians
+
+`NavGraph.BOUNDS` was 420 m, which cut the 판교역 forecourt (z ≈ 530) out of the graph entirely — no
+pedestrian ever reached the station. It is now 620 m, matching `Props.EXTENT`: 2,254 nav nodes, 240 of
+them pruned as unreachable (down from 322), and 26 live nodes within 120 m of the station. No plaza
+lattice was needed; the station forecourt is reached over the fitted sidewalks of 판교역로 and
+대왕판교로606번길.
+
+### QA
+
+```bash
+node tools/qa/qa_report.mjs     # needs the dev server on :5175; writes FINAL_QA_REPORT.md + docs/qa/*
+npx vitest run test/life.test.mjs
+```
+
+`tools/qa/qa_report.mjs` boots the world through the studio's Playwright launcher with `life=1`, probes and
+screenshots the four `viewpoints.json` cameras into `docs/qa/`, measures the life systems at 0 s and after
+30 s of simulated time, runs a 60 s traffic-light smoke (a route vehicle must come to rest at a stop bar
+whose signal is not green) and writes [`FINAL_QA_REPORT.md`](FINAL_QA_REPORT.md) with the defect list.
+Time is advanced with `__twin.stepLife(seconds, dt)`, which steps only the life systems in fixed 1/30 s
+steps, so the numbers do not depend on the headless frame rate.
+
+Reference photos are **not** committed (Kakao/Naver road view is not redistributable): `photos/` is
+git-ignored except for its README, which says what to capture for each viewpoint.
+
+### Stage-3 target cut
+
+`docs/stage3-target-cut.mp4` — the same 8 s / 1920×1080 / sunset cut, same keys, same driver
+(`studio/tools/stage1_targetcut.mjs --port 5196`, so :5190 is untouched), re-rendered on the ground fill.
+Still: `docs/stage3-f120.png`.
+
+| | |
+| --- | --- |
+| collision check | **path clear — no collisions**, first pass |
+| previz render (240 frames @ 1920×1080) | **114.6 s** (0.48 s/frame) |
+| world load in the Director iframe | 13.5 s |
+| `softwareRender` | **false** (GPU / ANGLE d3d11) |
+| encoded deliverable | 4.0 MB (`-crf 28`; the studio's own `previz.mp4` is 17.1 MB) |
+
+The studio always opens a world with `life=0` (the world contract in `studio/README.md`, enforced in
+`studio/server/render/browser.mjs`), so the previz shows the new ground cover but **no moving agents**.
+The traffic and crowd are covered by `docs/qa/*.png`, `FINAL_QA_REPORT.md` and `test/life.test.mjs`.
+
 ## Licensing / attribution
 
 - Map data © OpenStreetMap contributors, available under the Open Database Licence (ODbL):
