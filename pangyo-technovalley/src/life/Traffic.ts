@@ -226,7 +226,6 @@ export class Traffic implements Updatable {
     const f = this.graph.findLink(r.street, r.dir, r.startT, r.pick); if (!f) return false;
     this.enter(v, f.link, f.s); v.v = Math.min(v.vmax, f.link.vmax) * 0.6;
     v.stopIdx = 0; while (v.stopIdx < v.stops!.length && v.stops![v.stopIdx].link === v.link && v.stops![v.stopIdx].s < v.s) v.stopIdx++;
-    for (let i = 0; i < v.stopIdx; i++) void 0;
     return true;
   }
   private enter(v: Vehicle, link: Link, s: number) {
