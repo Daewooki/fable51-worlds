@@ -1,0 +1,84 @@
+{
+  "date": "2026-09-07T23:00:03.273Z",
+  "checks": [
+    {
+      "name": "Viewer opens directly",
+      "pass": true
+    },
+    {
+      "name": "App interface removed",
+      "pass": true
+    },
+    {
+      "name": "Six scene viewpoints available",
+      "pass": true
+    },
+    {
+      "name": "Left drag orbits the scene",
+      "pass": true
+    },
+    {
+      "name": "Scroll zooms",
+      "pass": true
+    },
+    {
+      "name": "Right drag pans",
+      "pass": true
+    },
+    {
+      "name": "Arrow keys pan the focused viewer",
+      "pass": true
+    },
+    {
+      "name": "Reset restores selected view",
+      "pass": true
+    },
+    {
+      "name": "Viewpoint gion",
+      "pass": true
+    },
+    {
+      "name": "Viewpoint yasaka",
+      "pass": true
+    },
+    {
+      "name": "Viewpoint ninenzaka",
+      "pass": true
+    },
+    {
+      "name": "Viewpoint kiyomizu",
+      "pass": true
+    },
+    {
+      "name": "Viewpoint all",
+      "pass": true
+    },
+    {
+      "name": "Overview haze follows zoom",
+      "pass": true
+    },
+    {
+      "name": "Fullscreen control works",
+      "pass": true
+    },
+    {
+      "name": "Hero screenshot export remains 1600×900",
+      "pass": true
+    },
+    {
+      "name": "Orbit resumes after screenshot tooling",
+      "pass": true
+    },
+    {
+      "name": "Viewer fills mobile viewport",
+      "pass": true
+    },
+    {
+      "name": "No runtime errors",
+      "pass": true,
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "pass": true
+}

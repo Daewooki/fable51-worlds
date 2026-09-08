@@ -1,0 +1,13 @@
+<!doctype html><html><head><style>html,body{margin:0;background:#aabdc3;}canvas{display:block}</style></head><body><script type="module">
+import * as THREE from 'three';
+import { makePagoda } from '../src/world/pagoda.js';
+import { makeYasakaShrine } from '../src/world/shrine.js';
+import { makeKiyomizuTemple,makeTempleGate } from '../src/world/temple.js';
+const scene=new THREE.Scene();scene.background=new THREE.Color('#b9cad0');
+scene.add(new THREE.HemisphereLight('#f3e6c4','#918caf',2.1));const sun=new THREE.DirectionalLight('#fff0cc',2.4);sun.position.set(-25,40,20);scene.add(sun);
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setSize(1600,900);renderer.setPixelRatio(1);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;document.body.appendChild(renderer.domElement);
+const camera=new THREE.PerspectiveCamera(40,1600/900,.1,1000);const ground=new THREE.Mesh(new THREE.PlaneGeometry(800,800),new THREE.MeshToonMaterial({color:'#c1b59d'}));ground.rotation.x=-Math.PI/2;ground.position.y=-.12;scene.add(ground);
+let current;
+window.selectHero=(name)=>{if(current)scene.remove(current);const configs={pagoda:[makePagoda,[26,16,39],[0,13,0],0],shrine:[makeYasakaShrine,[31,18,42],[1,4,-13],0],gate:[makeTempleGate,[18,8,29],[0,6,0],0],temple:[makeKiyomizuTemple,[42,11,49],[0,1,-2],-13]};const[fn,p,t,h]=configs[name];current=fn();scene.add(current);ground.position.y=h-.12;camera.position.set(...p);camera.lookAt(...t);renderer.render(scene,camera);window.heroStats={bounds:new THREE.Box3().setFromObject(current),calls:renderer.info.render.calls,triangles:renderer.info.render.triangles};};
+window.selectHero(new URLSearchParams(location.search).get('hero')||'pagoda');
+</script></body></html>

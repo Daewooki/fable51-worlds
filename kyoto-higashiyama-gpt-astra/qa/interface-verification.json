@@ -1,0 +1,24 @@
+{
+  "createdAt": "2026-09-05T00:38:38.297Z",
+  "errors": [],
+  "galleryCount": 34,
+  "pagodaLabels": [
+    {
+      "label": "Read the Hōkan-ji stone",
+      "position": [
+        185,
+        10.9,
+        186.7
+      ]
+    },
+    {
+      "label": "Read about the three-storey pagoda",
+      "position": [
+        313,
+        44.745911949685535,
+        298.7
+      ]
+    }
+  ],
+  "pass": true
+}

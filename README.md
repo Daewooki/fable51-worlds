@@ -1,7 +1,7 @@
 # fable51-worlds → MV Studio
 
 > **This fork turns [PhiloLabs/fable51-worlds](https://github.com/PhiloLabs/fable51-worlds) — AI-built, walkable Three.js cities — into a music-video production tool, and adds a third city built from public map data alone.**
-> Upstream is the engine. Everything below this box is what was added on top: **+49 commits, ~25k lines, 250+ tests, three worlds filmable through one contract.**
+> Upstream is the engine. Everything below this box is what was added on top: **+50 commits, ~25k lines, 250+ tests, three worlds filmable through one contract.**
 
 <img src="docs/media/pangyo-target-cut.gif" width="100%" alt="Pangyo Techno Valley: aerial over the NCSOFT R&D Center, then south along 판교역로 at sunset — rendered from the browser world by MV Studio">
 
@@ -52,11 +52,23 @@ No game engine. No proprietary 3D tiles. No downloaded meshes. Every building, s
 
 ## ⚔️ Head-to-head: Claude Fable 5.1 vs GPT-6 Astra
 
+Both models' entries are one-shot results.
+
+### Union Square, San Francisco
+
 Same brief, same test conditions, two models. Each built Union Square from scratch, then the Astra world was filmed along the Fable walkthrough's camera route and the two are shown side by side, unedited.
 
 <a href="union-square-sf-gpt-astra/media/fable51-vs-gpt6-astra-union-square.mp4"><img src="union-square-sf-gpt-astra/media/preview.gif" width="100%" alt="Side by side: GPT-6 Astra on the left, Claude Fable 5.1 on the right"></a>
 
 <sub>▶ **[Watch the head-to-head](union-square-sf-gpt-astra/media/fable51-vs-gpt6-astra-union-square.mp4)** · 59 s · left **GPT-6 Astra**, right **Claude Fable 5.1** · [Fable 5.1 build](union-square-sf/) · [GPT-6 Astra build](union-square-sf-gpt-astra/)</sub>
+
+### Higashiyama, Kyoto
+
+Same brief, two models. Each built Higashiyama from scratch, then the Astra world was filmed to the Fable walkthrough's shot sequence and timing. The two are shown side by side, unedited.
+
+<a href="kyoto-higashiyama-gpt-astra/media/fable51-vs-gpt6-astra-kyoto.mp4"><img src="kyoto-higashiyama-gpt-astra/media/preview.gif" width="100%" alt="Kyoto side by side: Codex / GPT-6 Astra on the left, Claude Fable 5.1 on the right"></a>
+
+<sub>▶ **[Watch the Kyoto comparison](kyoto-higashiyama-gpt-astra/media/fable51-vs-gpt6-astra-kyoto.mp4)** · 53.9 s · left **Codex / GPT-6 Astra**, right **Claude Fable 5.1** · [Fable build](kyoto-higashiyama/) · [Codex source and viewer](kyoto-higashiyama-gpt-astra/) · **[Full Codex walkover GIF](kyoto-higashiyama-gpt-astra/media/kyoto-higashiyama-codex-walkover.gif)**</sub>
 
 ---
 
@@ -136,6 +148,7 @@ A world is the substrate. What stands on it is the point.
 | 🔜 | **Animation and video** | Motion as code: shot lists, camera language and continuity held across a sequence minutes long, cut from the world itself rather than generated frame by frame - anime, and documentary camera-matched to the real location |
 | 🔜 | **Agent environments** | Worlds as training and evaluation environments, where the same code that builds the place also supplies the reward and the verification signal - and, played straight, an RPG |
 | 🔜 | **4D, embodiment, robotics** | Scenes that change over time, and simulation where the ground truth comes free with the geometry |
+| 🔜 | **Test-time scaling performance** | Measure how world quality changes with more inference time and compute |
 
 ---
 

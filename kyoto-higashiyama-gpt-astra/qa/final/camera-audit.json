@@ -1,0 +1,316 @@
+{
+  "sourceCapture": "2026-09-05T00:19:09.133Z",
+  "hardware": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+  "softwareFlag": false,
+  "count": 34,
+  "errors": [],
+  "images": [
+    {
+      "id": "gion-opening",
+      "file": "01-gion-opening.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 0.05142857142857143,
+      "clearance": 1.68,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "hanamikoji-north",
+      "file": "02-hanamikoji-north.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 0.3641397495056031,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "hanamikoji-lattice",
+      "file": "03-hanamikoji-lattice.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 0.5798615688859591,
+      "clearance": 1.6800000000000002,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "gion-alley",
+      "file": "04-gion-alley.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 1.0195652173913043,
+      "clearance": 1.68,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "gion-bicycle",
+      "file": "05-gion-bicycle.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 1.2086956521739132,
+      "clearance": 1.6800000000000002,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "shijo-east",
+      "file": "06-shijo-east.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 1.2888888888888888,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "yasaka-gate",
+      "file": "07-yasaka-gate.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 1.4,
+      "clearance": 1.6800000000000002,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "yasaka-oblique",
+      "file": "08-yasaka-oblique.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 2.4766611631822237,
+      "clearance": 1.6800000000000002,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "yasaka-court",
+      "file": "09-yasaka-court.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 3.3,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "yasaka-honden",
+      "file": "10-yasaka-honden.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 3.3,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "maruyama-blossom",
+      "file": "11-maruyama-blossom.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 5.328235294117647,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "maruyama-garden",
+      "file": "12-maruyama-garden.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 6.1251235955056185,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "nene-north",
+      "file": "13-nene-north.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 7.121951219512195,
+      "clearance": 1.6800000000000006,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "nene-walls",
+      "file": "14-nene-walls.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 8.409756097560976,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "ishibe-alley",
+      "file": "15-ishibe-alley.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 7.8,
+      "clearance": 1.6800000000000006,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "kodaiji-edge",
+      "file": "16-kodaiji-edge.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 9.715215622457283,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "pagoda-glimpse",
+      "file": "17-pagoda-glimpse.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 13.388773388773389,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "pagoda-classic",
+      "file": "18-pagoda-classic.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 13.414498141263941,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "pagoda-close",
+      "file": "19-pagoda-close.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 10.915151515151516,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "pagoda-reverse",
+      "file": "20-pagoda-reverse.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 8.36969696969697,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "ninenzaka-lower",
+      "file": "21-ninenzaka-lower.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 14.06,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "ninenzaka-shop",
+      "file": "22-ninenzaka-shop.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 17.829266666666665,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "ninenzaka-steps",
+      "file": "23-ninenzaka-steps.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 14.6,
+      "clearance": 1.6800000000000015,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "ninenzaka-reverse",
+      "file": "24-ninenzaka-reverse.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 17.866666666666667,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "sannenzaka-lower",
+      "file": "25-sannenzaka-lower.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 18.920666666666666,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "sannenzaka-steps",
+      "file": "26-sannenzaka-steps.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 22.2,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "sannenzaka-reverse",
+      "file": "27-sannenzaka-reverse.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 26.459529411764706,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "kiyomizuzaka",
+      "file": "28-kiyomizuzaka.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 30.707764705882354,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "kiyomizu-gate",
+      "file": "29-kiyomizu-gate.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 35.84146341463415,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "kiyomizu-precinct",
+      "file": "30-kiyomizu-precinct.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 44,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "kiyomizu-stage",
+      "file": "31-kiyomizu-stage.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 33.29733383350755,
+      "clearance": 9.702666166492449,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "kyoto-overlook",
+      "file": "32-kyoto-overlook.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 44,
+      "clearance": 4.5,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "kiyomizu-veranda",
+      "file": "33-kiyomizu-veranda.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 44,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    },
+    {
+      "id": "pagoda-postcard",
+      "file": "34-pagoda-postcard.png",
+      "width": 1600,
+      "height": 900,
+      "heightAt": 10,
+      "clearance": 1.6799999999999997,
+      "intersectingColliders": 0
+    }
+  ],
+  "passed": true
+}

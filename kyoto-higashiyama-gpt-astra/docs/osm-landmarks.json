@@ -1,0 +1,871 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-09-04T23:01:06Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+    {
+      "type": "node",
+      "id": 3475015543,
+      "lat": 34.9948477,
+      "lon": 135.7840927,
+      "tags": {
+        "information": "board",
+        "name": "清水寺瀧",
+        "name:en": "Kiyomizu Temple Waterfall",
+        "name:fr": "Cascade du temple Kiyomizu",
+        "name:ja-Hira": "きよみずでら たき",
+        "name:ja-Latn": "Kiyomizu-dera taki",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3475111445,
+      "lat": 34.9949161,
+      "lon": 135.7852941,
+      "tags": {
+        "information": "map",
+        "map_size": "site",
+        "map_type": "scheme",
+        "name": "清水寺境内案内図",
+        "name:en": "Kiyomizu-dera precincts guide map",
+        "name:fr": "Carte des quartiers de Kiyomizu-dera",
+        "name:ja-Hira": "きよみずでら けいだい あんないず",
+        "name:ja-Latn": "Kiyomizu-dera keidai an'nai-zu",
+        "tourism": "information",
+        "wheelchair": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3478237301,
+      "lat": 34.9951021,
+      "lon": 135.7843257,
+      "tags": {
+        "name": "清水寺瀧",
+        "name:en": "Kiyomizu Temple Waterfall",
+        "name:fr": "Cascade du temple Kiyomizu",
+        "name:ja-Hira": "きよみずでら たき",
+        "name:ja-Latn": "Kiyomizu-dera taki",
+        "natural": "spring",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3478407068,
+      "lat": 34.9931123,
+      "lon": 135.78534,
+      "tags": {
+        "historic": "boundary_stone",
+        "name": "清水寺　奥の院道",
+        "name:en": "Kiyomizu-Dera Temple's Okuin Road",
+        "name:fr": "Route du temple Okuno au temple Kiyomizu",
+        "name:ja-Hira": "きよみずでら　 おくのいんどう",
+        "name:ja-Latn": "Kiyomizu-dera okuno-in michi"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3648228389,
+      "lat": 34.9950145,
+      "lon": 135.7852377,
+      "tags": {
+        "historic": "boundary_stone",
+        "name": "「清水寺」境界標",
+        "name:en": "Kiyomizu Temple boundary mark",
+        "name:fr": "Borne frontière \"Kiyomizu-dera\"",
+        "name:ja-Hira": "「 きよみずでら」 きょうかい しるべ",
+        "name:ja-Latn": "'Kiyomizu-dera' kyōkai hyō",
+        "source": "survey"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3752700711,
+      "lat": 34.998475,
+      "lon": 135.7791345,
+      "tags": {
+        "board_type": "history",
+        "information": "board",
+        "name": "法観寺 八坂の塔",
+        "name:en": "Hokanji Temple, Yasaka Pagoda",
+        "name:fr": "Temple Hokan, Pagode de Yasaka",
+        "name:ja-Hira": "ほうかんじ　やさかのとう",
+        "name:ja-Latn": "Hōkan-ji Yasaka-no-tō",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3752700712,
+      "lat": 34.9986464,
+      "lon": 135.779325,
+      "tags": {
+        "board_type": "history",
+        "information": "board",
+        "name": "法観寺 八坂の塔",
+        "name:en": "Hokanji Temple, Yasaka Pagoda",
+        "name:fr": "Temple Hokan, Pagode de Yasaka",
+        "name:ja-Hira": "ほうかんじ　やさかのとう",
+        "name:ja-Latn": "Hōkan-ji Yasaka-no-tō",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "node",
+      "id": 3752700713,
+      "lat": 34.9984113,
+      "lon": 135.7793113,
+      "tags": {
+        "board_type": "history",
+        "information": "board",
+        "name": "法観寺 八坂の塔",
+        "name:en": "Hokanji Temple, Yasaka Pagoda",
+        "name:fr": "Temple Hokanji, Pagode de Yasaka",
+        "name:ja-Hira": "ほうかんじ やさかのとう",
+        "name:ja_rm": "Hōkanji yasaka notō",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "node",
+      "id": 4886634238,
+      "lat": 35.0054044,
+      "lon": 135.7753186,
+      "tags": {
+        "amenity": "restaurant",
+        "name": "花見小路",
+        "name:ja": "花見小路"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5380075730,
+      "lat": 34.9985285,
+      "lon": 135.7807826,
+      "tags": {
+        "addr:street": "二年坂",
+        "name": "北斎グラフィック 二年坂",
+        "name:en": "Hokusai Graphic",
+        "opening_hours": "Mo-Su 10:00-19:00",
+        "phone": "0757085888",
+        "shop": "variety_store"
+      }
+    },
+    {
+      "type": "node",
+      "id": 5468672406,
+      "lat": 34.9902309,
+      "lon": 135.7880665,
+      "tags": {
+        "hiking": "yes",
+        "information": "guidepost",
+        "name": "清水寺 (Kiyomizu-dera Temple)ﾍ500ｍ道案内",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "node",
+      "id": 6222343039,
+      "lat": 35.0005286,
+      "lon": 135.77995,
+      "tags": {
+        "board_type": "notice",
+        "information": "board",
+        "material": "stone",
+        "name": "ねねの道",
+        "name:en": "Nene's path",
+        "name:fr": "Le chemin de Néné",
+        "name:ja-Hira": "ね ね の みち",
+        "name:ja-Latn": "Nenenomichi",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "node",
+      "id": 8817872752,
+      "lat": 34.9944232,
+      "lon": 135.7764583,
+      "tags": {
+        "hiking": "yes",
+        "historic": "yes",
+        "information": "guidepost",
+        "inscription": "左 清水寺道",
+        "material": "stone",
+        "name": "清水寺道道標",
+        "start_date": "1922-08",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9706296095,
+      "lat": 34.9899229,
+      "lon": 135.7874644,
+      "tags": {
+        "hiking": "yes",
+        "information": "guidepost",
+        "name": "清水寺 徒歩5分(駐車場はありません)",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9706317134,
+      "lat": 34.9949382,
+      "lon": 135.7879815,
+      "tags": {
+        "hiking": "yes",
+        "information": "map",
+        "name": "回り道 清水寺 子安の塔口へ迂回してください",
+        "name:en": "Detour route",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "node",
+      "id": 9706426313,
+      "lat": 34.9975228,
+      "lon": 135.7867797,
+      "tags": {
+        "hiking": "yes",
+        "information": "map",
+        "name": "回り道 清水寺 子安の塔口へ迂回してください",
+        "name:en": "Detour route",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11366266679,
+      "lat": 35.0007207,
+      "lon": 135.7799706,
+      "tags": {
+        "camera:direction": "205",
+        "camera:mount": "pole",
+        "camera:type": "fixed",
+        "contact:webcam": "https://www.youtube.com/watch?v=Gxt3YCa2Phc",
+        "man_made": "surveillance",
+        "name": "ねねの道ライブ中継カメラ",
+        "name:en": "Nene no michi (Nene Street), Kyoto Live camera",
+        "surveillance": "webcam",
+        "surveillance:type": "camera",
+        "surveillance:zone": "street"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11810261517,
+      "lat": 34.9965059,
+      "lon": 135.7768225,
+      "tags": {
+        "bus": "yes",
+        "highway": "bus_stop",
+        "name": "五条坂(清水寺)",
+        "network": "スカイホップバス京都",
+        "public_transport": "platform"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11810261529,
+      "lat": 35.0029388,
+      "lon": 135.777208,
+      "tags": {
+        "bus": "yes",
+        "highway": "bus_stop",
+        "name": "祇園･八坂神社",
+        "name:en": "Gion,Yasaka-jinjya-Shrine",
+        "network": "京都観光ループバスK'LOOP",
+        "operator": "ケイルック",
+        "public_transport": "platform"
+      }
+    },
+    {
+      "type": "node",
+      "id": 11810261530,
+      "lat": 34.9978412,
+      "lon": 135.7771061,
+      "tags": {
+        "bench": "no",
+        "bin": "no",
+        "bus": "yes",
+        "highway": "bus_stop",
+        "lit": "yes",
+        "name": "清水寺",
+        "name:en": "Kiyomizu-dera Temple",
+        "network": "京都観光ループバスK'LOOP",
+        "operator": "ケイルック",
+        "public_transport": "platform",
+        "shelter": "no",
+        "tactile_paving": "yes"
+      }
+    },
+    {
+      "type": "node",
+      "id": 13842076701,
+      "lat": 34.9965624,
+      "lon": 135.7809172,
+      "tags": {
+        "amenity": "cafe",
+        "check_date": "2026-05-18",
+        "name": "雲ノ茶 清水三年坂店",
+        "name:en": "Kumonocha"
+      }
+    },
+    {
+      "type": "node",
+      "id": 14121499517,
+      "lat": 34.9949629,
+      "lon": 135.7777749,
+      "tags": {
+        "check_date": "2026-07-10",
+        "information": "map",
+        "map_size": "city",
+        "map_type": "scheme",
+        "name": "清水寺付近観光案内図",
+        "operator": "清水茶わん坂繫栄会",
+        "tourism": "information"
+      }
+    },
+    {
+      "type": "way",
+      "id": 27908626,
+      "center": {
+        "lat": 35.0026525,
+        "lon": 135.7748509
+      },
+      "tags": {
+        "highway": "residential",
+        "name": "花見小路",
+        "name:en": "Hanami-koji",
+        "name:fr": "Ruelle Hanami",
+        "name:ja-Hira": "はなみ こうじ",
+        "name:ja-Latn": "Hanami-kōji",
+        "name:zh-Hans": "花见小路",
+        "name:zh-Hant": "花見小路",
+        "name:zh-Latn-pinyin": "Hua Jian Xiao Lu",
+        "oneway:bicycle": "no",
+        "oneway:motor_vehicle:conditional": "yes @(Mo-Su 21:00-04:00; Sa-Su 09:00-17:00)",
+        "surface": "paving_stones"
+      }
+    },
+    {
+      "type": "way",
+      "id": 28020523,
+      "center": {
+        "lat": 35.0024691,
+        "lon": 135.7744085
+      },
+      "tags": {
+        "access": "private",
+        "highway": "pedestrian",
+        "name": "西花見小路",
+        "name:es": "Callejón Hanami Oeste",
+        "name:ja": "西花見小路",
+        "name:ja-Hira": "にしはなみこうじ",
+        "name:ja-Latn": "Nishi Hanami Kōji",
+        "photography": "no",
+        "surface": "paving_stones"
+      }
+    },
+    {
+      "type": "way",
+      "id": 28020529,
+      "center": {
+        "lat": 35.008019,
+        "lon": 135.7753944
+      },
+      "tags": {
+        "highway": "tertiary",
+        "lanes": "2",
+        "maxspeed": "40",
+        "name": "花見小路通",
+        "source": "Bing",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "way",
+      "id": 30882783,
+      "center": {
+        "lat": 34.998092,
+        "lon": 135.7808329
+      },
+      "tags": {
+        "alt_name": "二寧坂",
+        "alt_name:ja-Hira": "に ねんざか",
+        "alt_name:ja-Latn": "Ninen-zaka",
+        "handrail": "no",
+        "highway": "steps",
+        "incline": "up",
+        "lit": "yes",
+        "name": "二年坂",
+        "name:en": "Two-year Slope",
+        "name:fr": "Pente de Deux Ans",
+        "name:ja-Hira": "に ねんざか",
+        "name:ja-Latn": "Ninen-zaka",
+        "ramp": "no",
+        "step_count": "17",
+        "surface": "paving_stones",
+        "tactile_paving": "no",
+        "tourism": "attraction",
+        "width": "4",
+        "wikidata": "Q80622906",
+        "wikimedia_commons": "Category:Ninen-zaka",
+        "wikipedia": "en:Ninenzaka"
+      }
+    },
+    {
+      "type": "way",
+      "id": 30913263,
+      "center": {
+        "lat": 34.9984475,
+        "lon": 135.780834
+      },
+      "tags": {
+        "alt_name": "二寧坂",
+        "alt_name:ja-Hira": "に ねんざか",
+        "alt_name:ja-Latn": "Ninen-zaka",
+        "highway": "pedestrian",
+        "lit": "yes",
+        "name": "二年坂",
+        "name:en": "Two-year Slope",
+        "name:fr": "Pente de Deux Ans",
+        "name:ja-Hira": "に ねんざか",
+        "name:ja-Latn": "Ninen-zaka",
+        "smoothness": "good",
+        "surface": "paving_stones",
+        "wikidata": "Q80622906",
+        "wikimedia_commons": "Category:Ninen-zaka",
+        "wikipedia": "en:Ninenzaka"
+      }
+    },
+    {
+      "type": "way",
+      "id": 102164608,
+      "center": {
+        "lat": 34.9954283,
+        "lon": 135.7833386
+      },
+      "tags": {
+        "building": "gatehouse",
+        "description:en": "Gate of the Deva Kings",
+        "height": "14",
+        "heritage": "2",
+        "heritage:operator": "文部科学省",
+        "heritage:type": "重要文化財",
+        "historic": "yes",
+        "image": "https://photos.app.goo.gl/o6CCwkzeqt7CYXrn7",
+        "material": "wood",
+        "name": "仁王門",
+        "name:en": "Nio Gate",
+        "name:fr": "Porte Niō",
+        "name:ja-Hira": "におうもん",
+        "name:ja-Latn": "Niōmon",
+        "name:ko": "니오몬",
+        "note": "国指定 重要文化財",
+        "roof:orientation": "along",
+        "roof:shape": "gabled",
+        "source": "Bing, 2007-12",
+        "start_date": "C16",
+        "subject:wikidata": "Q3342330"
+      }
+    },
+    {
+      "type": "way",
+      "id": 179116810,
+      "center": {
+        "lat": 34.9963416,
+        "lon": 135.7808762
+      },
+      "tags": {
+        "alt_name": "産寧坂",
+        "alt_name:ja-Hira": "さんねいざか",
+        "alt_name:ja-Latn": "Sannei-zaka",
+        "handrail": "no",
+        "highway": "steps",
+        "incline": "down",
+        "lit": "yes",
+        "name": "三年坂",
+        "name:en": "Three-year Slope",
+        "name:fr": "Pente de Trois Ans",
+        "name:ja-Hira": "さん ねんざか",
+        "name:ja-Latn": "Sannen-zaka",
+        "ramp": "no",
+        "step_count": "46",
+        "surface": "paving_stones",
+        "tactile_paving": "no",
+        "tourism": "attraction",
+        "wheelchair": "no",
+        "width": "4",
+        "wikidata": "Q11574990",
+        "wikimedia_commons": "Category:Sannei-zaka",
+        "wikipedia": "ja:産寧坂"
+      }
+    },
+    {
+      "type": "way",
+      "id": 328903218,
+      "center": {
+        "lat": 35.0034854,
+        "lon": 135.778387
+      },
+      "tags": {
+        "amenity": "place_of_worship",
+        "contact:facebook": "kyotogionyasakasan",
+        "contact:fax": "+81 75-531-1126",
+        "contact:instagram": "kyotogionyasaka",
+        "contact:phone": "+81 75-561-6155",
+        "contact:tripadvisor": "1174912",
+        "contact:website": "https://www.yasaka-jinja.or.jp/",
+        "contact:youtube": "UCvd9mAIrz7_QZXwL_8dZHwQ",
+        "fee": "no",
+        "landuse": "religious",
+        "name": "八坂神社",
+        "name:en": "Yasaka Shrine",
+        "name:fr": "Sanctuaire de Yasaka",
+        "name:ja-Hira": "やさかじんじゃ",
+        "name:ja-Latn": "Yasaka-jinja",
+        "name:ko": "아사카 신사",
+        "name:zh": "八坂神社",
+        "old_name": "祇園神社;祇園社;祇園感神院",
+        "old_name:ja-Hira": "ぎおんじんじゃ;ぎおんしゃ;ぎおんかんしんいん",
+        "old_name:ja-Latn": "Gion-jinja;Gion-sha;Gion Kanshin-in",
+        "opening_hours": "24/7",
+        "religion": "shinto",
+        "start_date": "656",
+        "wheelchair": "yes",
+        "wikidata": "Q692714",
+        "wikimedia_commons": "Category:Yasaka-jinja (Kyoto)",
+        "wikipedia": "ja:八坂神社"
+      }
+    },
+    {
+      "type": "way",
+      "id": 336641107,
+      "center": {
+        "lat": 34.9944239,
+        "lon": 135.7844825
+      },
+      "tags": {
+        "alt_name:fr": "Temple de l'eau pure",
+        "amenity": "place_of_worship",
+        "charge": "500 JPY",
+        "charge:disabled": "0 JPY",
+        "contact:facebook": "Kiyomizudera.Kyoto",
+        "contact:instagram": "feel_kiyomizudera",
+        "contact:phone": "+81-75-551-1234",
+        "contact:tripadvisor": "https://www.tripadvisor.com/Attraction_Review-g298564-d321401-Reviews-Kiyomizu_dera_Temple-Kyoto_Kyoto_Prefecture_Kinki.html",
+        "contact:website": "https://www.kiyomizudera.or.jp/",
+        "contact:youtube": "https://www.youtube.com/channel/UCBFW3Al5zoKJOVJaLcDUL9Q",
+        "denomination": "yogacara",
+        "denomination:ja": "北法相宗",
+        "fee": "yes",
+        "heritage": "1",
+        "heritage:operator": "whc",
+        "historic": "yes",
+        "landuse": "religious",
+        "name": "清水寺",
+        "name:cs": "Chrám Kijomizu-dera",
+        "name:de": "Kiyomizu-dera",
+        "name:en": "Kiyomizu-dera",
+        "name:es": "Kiyomizu-dera",
+        "name:fr": "Temple Kiyomizu",
+        "name:ja-Hira": "きよみずでら",
+        "name:ja-Latn": "Kiyomizu-dera",
+        "name:ko": "기요미즈데라",
+        "name:ru": "Киёмидзу-дэра",
+        "name:th": "วัดน้ำใส",
+        "name:zh": "清水寺",
+        "opening_hours": "Mo-Su 06:00-18:00",
+        "ref:whc": "688-004",
+        "religion": "buddhist",
+        "source": "Bing, 2007-12",
+        "tourism": "attraction",
+        "whc:criteria": "(ii),(iv)",
+        "whc:inscription_date": "1994",
+        "wheelchair": "yes",
+        "wikidata": "Q221716",
+        "wikimedia_commons": "Category:Kiyomizu-dera",
+        "wikipedia": "ja:清水寺"
+      }
+    },
+    {
+      "type": "way",
+      "id": 337929224,
+      "center": {
+        "lat": 34.9964787,
+        "lon": 135.7813177
+      },
+      "tags": {
+        "building": "hotel",
+        "building:levels": "2",
+        "name": "鈴 三年坂夢子 Rinn Sannenzaka Yumeko",
+        "source": "Bing"
+      }
+    },
+    {
+      "type": "way",
+      "id": 338084407,
+      "center": {
+        "lat": 34.9945087,
+        "lon": 135.7773504
+      },
+      "tags": {
+        "access": "yes",
+        "amenity": "parking",
+        "capacity": "26",
+        "check_date": "2026-07-10",
+        "fee": "yes",
+        "name": "タイムズ五条坂清水寺前第４",
+        "opening_hours": "24/7",
+        "operator": "タイムズパーキング",
+        "parking": "surface",
+        "ref": "0078084",
+        "supervised": "no",
+        "surface": "fine_gravel"
+      }
+    },
+    {
+      "type": "way",
+      "id": 339230948,
+      "center": {
+        "lat": 34.9957876,
+        "lon": 135.7839796
+      },
+      "tags": {
+        "building": "yes",
+        "name": "北法相宗宗務所 清水寺寺務所",
+        "name:en": "Temple Office",
+        "source": "Bing, 2007-12"
+      }
+    },
+    {
+      "type": "way",
+      "id": 371717423,
+      "center": {
+        "lat": 34.9985414,
+        "lon": 135.7793482
+      },
+      "tags": {
+        "alt_name": "八坂寺",
+        "alt_name:en": "Yasaka Temple",
+        "alt_name:fr": "Temple Yasaka",
+        "alt_name:ja-Hira": "やさかでら",
+        "alt_name:ja-Latn": "Yasaka-dera",
+        "amenity": "place_of_worship",
+        "contact:tripadvisor": "10265083",
+        "denomination": "rinzai",
+        "denomination:ja": "臨済宗",
+        "name": "法観寺",
+        "name:en": "Hōkan Temple",
+        "name:fr": "Temple Hòkan",
+        "name:ja-Hira": "ほうかんじ",
+        "name:ja-Latn": "Hōkan-ji",
+        "religion": "buddhist",
+        "source": "Bing",
+        "start_date": "C7",
+        "wikidata": "Q11555353",
+        "wikimedia_commons": "Category:Hōkanji",
+        "wikipedia": "ja:法観寺"
+      }
+    },
+    {
+      "type": "way",
+      "id": 470237770,
+      "center": {
+        "lat": 35.0058495,
+        "lon": 135.7752469
+      },
+      "tags": {
+        "highway": "tertiary",
+        "lanes": "2",
+        "maxspeed": "40",
+        "name": "花見小路通",
+        "oneway:conditional": "yes @(Mo-Su 21:00-04:00)",
+        "source": "Bing",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "way",
+      "id": 526198271,
+      "center": {
+        "lat": 34.9972359,
+        "lon": 135.7809338
+      },
+      "tags": {
+        "alt_name": "産寧坂",
+        "alt_name:ja-Hira": "さんねいざか",
+        "alt_name:ja-Latn": "Sannei-zaka",
+        "highway": "pedestrian",
+        "lit": "yes",
+        "name": "三年坂",
+        "name:en": "Three-year Slope",
+        "name:fr": "Pente de Trois Ans",
+        "name:ja-Hira": "さん ねんざか",
+        "name:ja-Latn": "Sannen-zaka",
+        "smoothness": "good",
+        "surface": "paving_stones",
+        "wikidata": "Q11574990",
+        "wikimedia_commons": "Category:Sannei-zaka",
+        "wikipedia": "ja:産寧坂"
+      }
+    },
+    {
+      "type": "way",
+      "id": 547229146,
+      "center": {
+        "lat": 35.0044807,
+        "lon": 135.7751359
+      },
+      "tags": {
+        "highway": "tertiary",
+        "lanes": "2",
+        "maxspeed": "40",
+        "name": "花見小路通",
+        "oneway:conditional": "yes @(Mo-Su 21:00-04:00)",
+        "source": "Bing",
+        "surface": "paved"
+      }
+    },
+    {
+      "type": "way",
+      "id": 550360162,
+      "center": {
+        "lat": 34.9974031,
+        "lon": 135.7813222
+      },
+      "tags": {
+        "name": "清水三年坂美術館",
+        "opening_hours": "Tu-Su 10:00-16:30",
+        "payment:coins": "yes",
+        "payment:notes": "yes",
+        "tourism": "museum",
+        "wikidata": "Q17213428"
+      }
+    },
+    {
+      "type": "way",
+      "id": 550360170,
+      "center": {
+        "lat": 34.99801,
+        "lon": 135.7808091
+      },
+      "tags": {
+        "alt_name": "二寧坂",
+        "alt_name:ja-Hira": "に ねんざか",
+        "alt_name:ja-Latn": "Ninen-zaka",
+        "highway": "pedestrian",
+        "name": "二年坂",
+        "name:en": "Two-year Slope",
+        "name:fr": "Pente de Deux Ans",
+        "name:ja-Hira": "に ねんざか",
+        "name:ja-Latn": "Ninen-zaka",
+        "smoothness": "good",
+        "surface": "paving_stones",
+        "wikidata": "Q80622906",
+        "wikimedia_commons": "Category:Ninen-zaka",
+        "wikipedia": "en:Ninenzaka"
+      }
+    },
+    {
+      "type": "way",
+      "id": 710696944,
+      "center": {
+        "lat": 34.9982165,
+        "lon": 135.779907
+      },
+      "tags": {
+        "alt_name": "産寧坂",
+        "alt_name:ja-Hira": "さん ねんざか",
+        "alt_name:ja-Latn": "Sannen-zaka",
+        "bicycle": "no",
+        "highway": "pedestrian",
+        "lit": "yes",
+        "motor_vehicle:conditional": "no @ (10:00-17:00)",
+        "name": "三年坂",
+        "name:fr": "Pente de Trois Ans",
+        "name:ja-Hira": "さん ねんざか",
+        "name:ja-Latn": "Sannen-zaka",
+        "smoothness": "good",
+        "surface": "paving_stones",
+        "wikidata": "Q11574990",
+        "wikimedia_commons": "Category:Sannei-zaka",
+        "wikipedia": "ja:産寧坂"
+      }
+    },
+    {
+      "type": "way",
+      "id": 952668783,
+      "center": {
+        "lat": 34.9948178,
+        "lon": 135.7777152
+      },
+      "tags": {
+        "access": "yes",
+        "amenity": "parking",
+        "fee": "yes",
+        "name": "タイムズ五条坂清水寺前第２",
+        "opening_hours": "24/7",
+        "operator": "タイムズパーキング",
+        "parking": "surface",
+        "supervised": "no",
+        "surface": "asphalt"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1251544286,
+      "center": {
+        "lat": 34.9961937,
+        "lon": 135.7807994
+      },
+      "tags": {
+        "alt_name": "産寧坂",
+        "alt_name:ja-Hira": "さんねいざか",
+        "alt_name:ja-Latn": "Sannei-zaka",
+        "highway": "pedestrian",
+        "name": "三年坂",
+        "name:en": "Three-year Slope",
+        "name:fr": "Pente de Trois Ans",
+        "name:ja-Hira": "さん ねんざか",
+        "name:ja-Latn": "Sannen-zaka",
+        "smoothness": "good",
+        "surface": "paving_stones",
+        "wikidata": "Q11574990",
+        "wikimedia_commons": "Category:Sannei-zaka",
+        "wikipedia": "ja:産寧坂"
+      }
+    },
+    {
+      "type": "way",
+      "id": 1491152444,
+      "center": {
+        "lat": 34.9990005,
+        "lon": 135.7807601
+      },
+      "tags": {
+        "alt_name": "二寧坂",
+        "alt_name:ja-Hira": "に ねんざか",
+        "alt_name:ja-Latn": "Ninen-zaka",
+        "highway": "service",
+        "lit": "yes",
+        "name": "二年坂",
+        "name:en": "Two-year Slope",
+        "name:fr": "Pente de Deux Ans",
+        "name:ja-Hira": "に ねんざか",
+        "name:ja-Latn": "Ninen-zaka",
+        "smoothness": "good",
+        "wikidata": "Q80622906",
+        "wikimedia_commons": "Category:Ninen-zaka",
+        "wikipedia": "en:Ninenzaka"
+      }
+    }
+  ]
+}

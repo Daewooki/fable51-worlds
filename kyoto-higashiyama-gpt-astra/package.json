@@ -1,0 +1,20 @@
+{
+  "name": "kyoto-unhurried",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A procedural Kyoto environment in a minimal Three.js 3D viewer",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "qa": "node qa/viewer.mjs"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0",
+    "vite": "^6.4.3"
+  }
+}

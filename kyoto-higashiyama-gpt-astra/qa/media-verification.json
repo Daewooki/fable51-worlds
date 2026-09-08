@@ -1,0 +1,108 @@
+{
+  "verifiedAt": "2026-09-08T03:20:00.010Z",
+  "checks": [
+    {
+      "file": "kyoto-higashiyama-codex-walkover.mp4",
+      "pass": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 1920,
+          "height": 1080,
+          "avg_frame_rate": "30/1",
+          "nb_read_frames": "1977"
+        }
+      ],
+      "format": {
+        "duration": "65.900000",
+        "size": "23458803"
+      },
+      "decodeErrors": ""
+    },
+    {
+      "file": "fable51-vs-gpt6-astra-kyoto.mp4",
+      "pass": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 3840,
+          "height": 1208,
+          "avg_frame_rate": "30/1",
+          "nb_read_frames": "1617"
+        }
+      ],
+      "format": {
+        "duration": "53.900000",
+        "size": "34040179"
+      },
+      "decodeErrors": ""
+    },
+    {
+      "file": "kyoto-higashiyama-codex-walkover.gif",
+      "pass": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "gif",
+          "width": 640,
+          "height": 360,
+          "avg_frame_rate": "25/3",
+          "nb_read_frames": "527"
+        }
+      ],
+      "format": {
+        "duration": "65.880000",
+        "size": "29296774"
+      },
+      "decodeErrors": ""
+    },
+    {
+      "file": "preview.gif",
+      "pass": true,
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "gif",
+          "width": 960,
+          "height": 302,
+          "avg_frame_rate": "10/1",
+          "nb_read_frames": "40"
+        }
+      ],
+      "format": {
+        "duration": "4.000000",
+        "size": "4018652"
+      },
+      "decodeErrors": ""
+    },
+    {
+      "name": "Native browser playback: kyoto-higashiyama-codex-walkover.mp4",
+      "pass": true,
+      "error": null,
+      "width": 1920,
+      "height": 1080,
+      "played": true,
+      "seekTime": 31
+    },
+    {
+      "name": "Native browser playback: fable51-vs-gpt6-astra-kyoto.mp4",
+      "pass": true,
+      "error": null,
+      "width": 3840,
+      "height": 1208,
+      "played": true,
+      "seekTime": 31
+    },
+    {
+      "name": "GIF animates in browser",
+      "pass": true
+    }
+  ],
+  "pass": true
+}
