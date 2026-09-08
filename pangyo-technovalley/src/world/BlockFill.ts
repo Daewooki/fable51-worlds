@@ -20,6 +20,7 @@ import { Materials } from '../materials/Library';
 import type { Terrain } from './Terrain';
 import type { StreetSpec } from './StreetGrid';
 import { P2, pointInPolygon } from '../util/Geometry2D';
+import { localBbox } from '../geo/geo';
 
 /** One ground-cover polygon out of `gis.json.landuse`. */
 export interface LanduseArea {
@@ -37,12 +38,31 @@ const SURFACE: Record<string, { material: string; y: number }> = {
   water: { material: 'water', y: 0.052 },
 };
 const FALLBACK_SURFACE = 'paving_dark';
-const CELL = 10;          // rasterisation grid (m): interior cells are two triangles
-const EXTENT = 620;       // same box as Props — beyond it the terrain is background
+const CELL = 8;           // rasterisation grid (m): the terrain's own grid resolution (Terrain.res), so a
+                          // cell never spans more than one heightfield quad and the fill follows the hills
+/** The ground-cover box: the whole reconstruction bbox, in local metres. Beyond it there is no data at all. */
+export const FILL_BBOX = localBbox();
 const MIN_BLOCK = 6;      // ignore block cells thinner than this after the sidewalk inset
 const MIN_CELL_AREA = 0.8; // drop slivers left by the clip
 
-interface Patch { poly: P2[]; holes?: P2[][]; surface: string }
+interface Patch { poly: P2[]; holes?: P2[][]; surface: string; under?: LanduseArea[] }
+/**
+ * Surface classes painted with a TRANSLUCENT material. `priority` stacks the classes by y offset, which
+ * is enough while every class is opaque: the higher one simply hides the lower. Water is not opaque, so
+ * whatever is painted under it shows through — the 봇들 park's grass and its three rectangular pitches
+ * were plainly visible on the bottom of the 운중천, and two overlapping water polygons blended twice and
+ * read as a darker rectangle of "deep water". So nothing is painted under a translucent patch: what
+ * shows through it is the terrain, which is what a river bed actually is.
+ */
+const TRANSLUCENT_SURFACES = new Set(['water']);
+/** Axis-aligned bounds of a ring, for the cheap overlap test. */
+function bboxOf(poly: P2[]): { x0: number; x1: number; z0: number; z1: number } {
+  let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+  for (const [x, z] of poly) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (z < z0) z0 = z; if (z > z1) z1 = z; }
+  return { x0, x1, z0, z1 };
+}
+type Box = ReturnType<typeof bboxOf>;
+const boxesOverlap = (a: Box, b: Box) => a.x1 > b.x0 && b.x1 > a.x0 && a.z1 > b.z0 && b.z1 > a.z0;
 /** A street's road+sidewalk corridor: `across` is x for an ns street, z for an ew street. */
 interface Corridor { axis: 'ns' | 'ew'; lo: number; hi: number; from: number; to: number }
 
@@ -98,26 +118,38 @@ export function triangulate(contour: P2[], holes?: P2[][]): [P2, P2, P2][] {
 /**
  * Block cells of the fitted street grid: the rectangles between consecutive ns and ew centrelines,
  * inset on each side by half that street's width plus its sidewalk. Exported for the tests.
+ *
+ * A street only bounds the ground where it actually runs: a `StreetSpec` carries `from`/`to` along
+ * its own axis, and outside that span there is no carriageway to inset away from. So the sidewalk
+ * inset for a boundary line is applied only to the cells its span overlaps — otherwise a 300 m side
+ * street cut a 15 m strip of missing ground across the entire 1.7 km box.
  */
-export function blockCells(streets: StreetSpec[], extent = EXTENT): { x0: number; x1: number; z0: number; z1: number }[] {
-  const axisLines = (axis: 'ns' | 'ew') => {
-    const byC: { c: number; half: number }[] = [];
+export function blockCells(streets: StreetSpec[], bbox = FILL_BBOX): { x0: number; x1: number; z0: number; z1: number }[] {
+  interface Line { c: number; half: number; from: number; to: number }
+  const axisLines = (axis: 'ns' | 'ew', lo: number, hi: number, spanLo: number, spanHi: number): Line[] => {
+    const byC: Line[] = [];
     for (const s of streets) {
       if (s.axis !== axis) continue;
       const half = s.width / 2 + s.sidewalk;
       const near = byC.find((b) => Math.abs(b.c - s.c) < 6);
-      if (near) { near.half = Math.max(near.half, half); continue; }
-      byC.push({ c: s.c, half });
+      if (near) { near.half = Math.max(near.half, half); near.from = Math.min(near.from, s.from); near.to = Math.max(near.to, s.to); continue; }
+      byC.push({ c: s.c, half, from: Math.min(s.from, s.to), to: Math.max(s.from, s.to) });
     }
     byC.sort((a, b) => a.c - b.c);
-    // the world edge acts as the outermost boundary on both sides
-    return [{ c: -extent, half: 0 }, ...byC.filter((b) => Math.abs(b.c) < extent), { c: extent, half: 0 }];
+    // the bbox edge acts as the outermost boundary on both sides, and spans the whole cross-axis
+    const edge = (c: number): Line => ({ c, half: 0, from: spanLo, to: spanHi });
+    return [edge(lo), ...byC.filter((b) => b.c > lo && b.c < hi), edge(hi)];
   };
-  const xs = axisLines('ns'), zs = axisLines('ew');
+  const xs = axisLines('ns', bbox.minX, bbox.maxX, bbox.minZ, bbox.maxZ);
+  const zs = axisLines('ew', bbox.minZ, bbox.maxZ, bbox.minX, bbox.maxX);
   const out: { x0: number; x1: number; z0: number; z1: number }[] = [];
   for (let i = 0; i < xs.length - 1; i++) for (let j = 0; j < zs.length - 1; j++) {
-    const x0 = xs[i].c + xs[i].half, x1 = xs[i + 1].c - xs[i + 1].half;
-    const z0 = zs[j].c + zs[j].half, z1 = zs[j + 1].c - zs[j + 1].half;
+    const za = zs[j].c, zb = zs[j + 1].c, xa = xs[i].c, xb = xs[i + 1].c;
+    // a boundary only insets the cells its own from/to span reaches
+    const insetX = (l: Line) => (l.to > za && l.from < zb ? l.half : 0);
+    const insetZ = (l: Line) => (l.to > xa && l.from < xb ? l.half : 0);
+    const x0 = xa + insetX(xs[i]), x1 = xb - insetX(xs[i + 1]);
+    const z0 = za + insetZ(zs[j]), z1 = zb - insetZ(zs[j + 1]);
     if (x1 - x0 < MIN_BLOCK || z1 - z0 < MIN_BLOCK) continue;
     out.push({ x0, x1, z0, z1 });
   }
@@ -142,25 +174,38 @@ export class BlockFill {
     }
     const patches: Patch[] = [];
     // --- 1. OSM ground cover -------------------------------------------------
-    const inExtent = (p: P2[]) => p.some(([x, z]) => Math.abs(x) < EXTENT + CELL && Math.abs(z) < EXTENT + CELL);
+    const inExtent = (p: P2[]) => p.some(([x, z]) => x > FILL_BBOX.minX - CELL && x < FILL_BBOX.maxX + CELL && z > FILL_BBOX.minZ - CELL && z < FILL_BBOX.maxZ + CELL);
     const ordered = [...(landuse || [])].sort((a, b) => a.priority - b.priority || b.areaM2 - a.areaM2);
-    for (const a of ordered) {
-      if (!SURFACE[a.surface] || !Array.isArray(a.footprint) || a.footprint.length < 4) continue;
-      if (!inExtent(a.footprint)) continue;
-      patches.push({ poly: a.footprint, holes: (a.holes || []).filter((h) => h.length >= 4), surface: a.surface });
+    const eligible = ordered.filter((a) => SURFACE[a.surface] && Array.isArray(a.footprint) && a.footprint.length >= 4 && inExtent(a.footprint));
+    // the translucent patches, and their bounds: nothing may be painted under one of these (see above).
+    const veils = eligible.filter((a) => TRANSLUCENT_SURFACES.has(a.surface));
+    const veilBox = veils.map((a) => bboxOf(a.footprint));
+    /** The translucent areas that cover `poly`; `selfIndex` excludes a veil from veiling itself (and any later one). */
+    const veilsOver = (poly: P2[], selfIndex = veils.length): LanduseArea[] | undefined => {
+      if (!veils.length) return undefined;
+      const b = bboxOf(poly);
+      const out = veils.filter((_, i) => i < selfIndex && boxesOverlap(b, veilBox[i]));
+      return out.length ? out : undefined;
+    };
+    for (const a of eligible) {
+      const self = veils.indexOf(a);
+      patches.push({
+        poly: a.footprint, holes: (a.holes || []).filter((h) => h.length >= 4), surface: a.surface,
+        under: veilsOver(a.footprint, self >= 0 ? self : undefined),
+      });
       this.areas++;
     }
     // --- 2. fallback block cells where OSM has nothing ------------------------
     const cover = new Coverage(ordered.filter((a) => SURFACE[a.surface]));
     for (const b of blockCells(streets)) {
       const cells = this.subdivide(b, cover);
-      for (const c of cells) { patches.push({ poly: c, surface: FALLBACK_SURFACE }); this.blocks++; }
+      for (const c of cells) { patches.push({ poly: c, surface: FALLBACK_SURFACE, under: veilsOver(c) }); this.blocks++; }
     }
     // --- 3. rasterise + merge per surface ------------------------------------
     const geos = new Map<string, THREE.BufferGeometry[]>();
     for (const p of patches) {
       const s = SURFACE[p.surface]; if (!s) continue;
-      const g = this.rasterise(p.poly, p.holes, s.y);
+      const g = this.rasterise(p.poly, p.holes, s.y, p.under);
       if (!g) continue;
       let arr = geos.get(p.surface); if (!arr) geos.set(p.surface, (arr = []));
       arr.push(g);
@@ -233,7 +278,7 @@ export class BlockFill {
   }
 
   /** Grid-clip a polygon and drape every vertex on the terrain at `yOff` above it. */
-  private rasterise(poly: P2[], holes: P2[][] | undefined, yOff: number): THREE.BufferGeometry | null {
+  private rasterise(poly: P2[], holes: P2[][] | undefined, yOff: number, under?: LanduseArea[]): THREE.BufferGeometry | null {
     // Triangulate FIRST (earcut, via three's ShapeUtils) and grid-clip the triangles, not the ring:
     // Sutherland–Hodgman is only exact for a convex subject, and these rings (rivers, parks) are anything but.
     const tris = triangulate(poly, holes);
@@ -241,6 +286,12 @@ export class BlockFill {
     const pos: number[] = [], uv: number[] = [], idx: number[] = [];
     const emit = (frag: P2[]) => {
       if (frag.length < 3 || area2(frag) < MIN_CELL_AREA) return;
+      if (under && under.length) {
+        // a translucent patch covers this ground: painting under it would show through
+        let cx = 0, cz = 0; for (const [x, z] of frag) { cx += x; cz += z; }
+        cx /= frag.length; cz /= frag.length;
+        for (const b of under) if (pointInPolygon(cx, cz, b.footprint) && !(b.holes || []).some((h) => h.length >= 3 && pointInPolygon(cx, cz, h))) return;
+      }
       const base = pos.length / 3;
       for (const [x, z] of frag) { pos.push(x, this.terrain.heightAt(x, z) + yOff, z); uv.push(x, z); }
       // wind every fan so the face normal points +y regardless of the source winding: a triangle whose
@@ -254,8 +305,8 @@ export class BlockFill {
     for (const tri of tris) {
       let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
       for (const [x, z] of tri) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (z < minZ) minZ = z; if (z > maxZ) maxZ = z; }
-      minX = Math.max(minX, -EXTENT); maxX = Math.min(maxX, EXTENT);
-      minZ = Math.max(minZ, -EXTENT); maxZ = Math.min(maxZ, EXTENT);
+      minX = Math.max(minX, FILL_BBOX.minX); maxX = Math.min(maxX, FILL_BBOX.maxX);
+      minZ = Math.max(minZ, FILL_BBOX.minZ); maxZ = Math.min(maxZ, FILL_BBOX.maxZ);
       if (!(maxX > minX && maxZ > minZ)) continue;
       const i0 = Math.floor(minX / CELL), i1 = Math.floor((maxX - 1e-6) / CELL);
       const j0 = Math.floor(minZ / CELL), j1 = Math.floor((maxZ - 1e-6) / CELL);
@@ -304,7 +355,9 @@ class Coverage {
   covers(x: number, z: number): boolean {
     const arr = this.grid.get((Math.floor(x / this.cell) + 2048) * 8192 + (Math.floor(z / this.cell) + 2048));
     if (!arr) return false;
-    for (const a of arr) if (pointInPolygon(x, z, a.footprint)) return true;
+    // a point inside a hole (the courtyard of a ring-shaped park, the island in the pond) is NOT
+    // covered — the ground there is bare, so the fallback block cell must still be emitted.
+    for (const a of arr) if (pointInPolygon(x, z, a.footprint) && !(a.holes || []).some((h) => h.length >= 3 && pointInPolygon(x, z, h))) return true;
     return false;
   }
 }

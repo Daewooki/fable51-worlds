@@ -47,9 +47,14 @@ const DEFECTS = [
   ['Thin façade sliver near 판교역', 'low', 'Some footprints near the station are long and 3–5 m deep (OSM canopy/podium outlines). The façade builder still details them, producing thin slivers of curtain wall with no depth.'],
   ['No interiors', 'low', 'Nothing in this world is enterable. `probePath` reports the massing as solid; there are no floors, lobbies or storefront interiors (union-square-sf has two, this world has none).'],
   ['Straight-fit street grid', 'high', 'Every street is axis-aligned by construction (`tools/geo/build_streets.mjs`): bearing folded to the grid, `c` = length-weighted mean offset. 경부고속도로 (9.5° off-axis), 대왕판교로 (9.6°) and 분당내곡로 (9.4°) are visibly straighter than reality, and two named ways (판교로227번길, 판교로255번길) were dropped for being > 25° off both axes.'],
+  ['Ground cover now spans the whole extract (fixed)', 'low', 'The fallback block fill used to stop at a symmetric \u00b1620 m box, so the outer third of the reconstruction was bare white terrain with streets running off into nothing. It now covers the full local bbox (x \u2212903\u2026805, z \u2212870\u2026553 \u2014 `BlockFill.FILL_BBOX` = `geo.localBbox()`) at the terrain\'s own 8 m resolution, so the fill ends exactly where the OSM extract does and not before. What remains is the extract boundary itself: beyond it there is no data of any kind.'],
   ['Terrain is SRTM 30 m', 'medium', 'Elevation is SRTM 1-arcsec sampled on a 25 m grid and IDW-gridded at 8 m. Cut-and-fill, podium platforms, underpasses (화랑지하차도, 낙생고가차도) and the 판교역 box are not modelled — streets and block fill are simply draped on the smoothed heightfield.'],
   ['Generic façades', 'medium', 'Façades are procedural (`AutoSpec`), not surveyed: bay widths, floor heights and materials are inferred from the footprint and height. Only the NC R&D Center has an authored spec.'],
   ['No storefront census', 'low', 'This world ships no `storefronts.json`, so no ground-floor tenant is identified; every retail bay is a blank fascia even where OSM has a shop POI at that address.'],
+  ['Water is a coloured surface, not a modelled channel', 'medium', 'Stage 3 shipped the water class flat and opaque and the 운중천 / 금토천 read as a pale flood plain. It is now a darker blue-grey at alpha 0.75 (`src/materials/Library.ts`), and the ground cover underneath it is cut away (`BlockFill.TRANSLUCENT_SURFACES`) so what shows through is the terrain rather than the park grass and its three rectangular pitches, which used to be plainly visible on the river bed. It is still one patch draped on the SRTM heightfield: no normal map, no flow, no ripple, no bank geometry and no cut-in bed — the terrain does not dip under the water, so the surface sits at ground level + 5 cm wherever OSM drew the polygon. Treat any watercourse in a frame as a coloured surface.'],
+  ['Block-fill patch seams and mottling', 'medium', 'The ground cover is rasterised on an 8 m grid and merged per surface class, and each patch carries planar `uv = (x, z)`. Neighbouring patches meet on hard cell lines, the procedural paving/concrete textures tile visibly at that pitch, and the per-class millimetre y-offsets show as faint edges where two classes abut. In the QA frames this reads as blotching across the 판교역 forecourt and the NC block. Nothing is missing \u2014 it is one flat material stretched over a whole block.'],
+  ['판교역 forecourt is generic block fill', 'medium', 'The `pangyoyeok-plaza` viewpoint was re-sited in stage 3.1 (from x 186 / z 507 heading 205\u00b0 to x 152 / z 549 heading 39\u00b0) so that the 신분당선 entrance canopy is centred with the 알파돔 tower behind it instead of small against a blank curtain wall. It is the best probe-clear stand available: every position nearer the canopy is inside the surrounding massing. The frame is still weak for a reason no camera can fix \u2014 there is no station box, no plaza module, no furniture and no signage here, only three canopies dropped on the OSM `subway_entrance` nodes and a flat paved patch.'],
+  ['`pois` excludes ground-cover areas', 'low', 'Every OSM way/relation that lands in the `landuse` ground-cover bin is now kept OUT of `gis.json.pois` (`tools/geo/build_gis.mjs` \u00a77): `fetch_osm --augment` had filed all 232 areas as points of interest as well, so parks, car parks and ponds came back as POIs and were double-counted by anything reading that bin. The count fell 460 \u2192 378, with no change to buildings (564), fitted streets (23) or the NC height (58 m). A POI census that wants those areas should read `landuse` alongside `pois`.'],
 ];
 
 const NEXT = [
@@ -69,6 +74,15 @@ async function run() {
   const { browser, page, errors, softwareRender } = await launchWorld({
     world: 'pangyo-technovalley', port: 5175, width: 1280, height: 720, time: 'day', quality: 'med', extraQuery: '&life=1',
   });
+  // Everything from here on runs inside try/finally: any throw (a missing __twin member, a
+  // screenshot failure, a bad viewpoint) used to leave the headless Chromium running forever.
+  try {
+    await body();
+  } finally {
+    await browser.close().catch(() => {});
+  }
+
+  async function body() {
   const bootMs = Date.now() - t0;
   await page.waitForFunction(() => typeof window.__twin?.probePath === 'function', null, { timeout: 120_000 });
 
@@ -87,6 +101,14 @@ async function run() {
       landuse: (w.gis.landuse || []).length,
     };
   });
+
+  // ---- life at boot --------------------------------------------------------
+  // Captured HERE, before the screenshot loop: the world keeps animating in real time while
+  // Playwright drives it, so a `lifeStats()` taken after four 600 ms screenshot waits is not
+  // "at 0 s" - it is boot + ~3 s. Taken here the column really is the boot state, and
+  // `wallMsBetween` records the real time that passed before the simulated steps.
+  const atBoot = await page.evaluate(() => window.__twin.lifeStats());
+  const atBootMs = Date.now();
 
   // ---- viewpoints: probe, then screenshot ----------------------------------
   const vpProbe = await page.evaluate((ids) => {
@@ -112,16 +134,20 @@ async function run() {
     await page.screenshot({ path: file, type: 'png' });
     shots.push({ id: v.id, title: v.title, ok: placed.ok, pos: placed.pos, file: path.relative(PKG, file).replace(/\\/g, '/'), bytes: fs.statSync(file).size });
     console.log(`shot ${v.id} ${placed.ok ? 'ok' : 'FAILED'} -> ${file}`);
+    // setView() returns false for an id the runtime does not know: the frame just shot is then
+    // whatever the camera happened to be pointing at, so the report must not pass.
+    if (!placed.ok) { console.error(`viewpoint ${v.id} is unknown to the runtime (setView returned false)`); process.exitCode = 1; }
   }
 
-  // ---- life smoke: counts at 0 s and after 30 s of simulated time -----------
+  // ---- life smoke: counts at boot and after 30 s of simulated time ----------
+  const wallMsBetween = Date.now() - atBootMs;
   const life = await page.evaluate(async (seconds) => {
     const t = window.__twin;
-    const before = t.lifeStats();
     t.stepLife(seconds, 1 / 30);
-    const after = t.lifeStats();
-    return { before, after };
+    return { after: t.lifeStats() };
   }, SIM_LIFE_S);
+  life.before = atBoot;
+  life.wallMsBetween = wallMsBetween;
 
   // ---- traffic-light smoke -------------------------------------------------
   const lights = await page.evaluate(({ seconds, dt }) => {
@@ -170,12 +196,9 @@ async function run() {
     return { calls: r.render.calls, triangles: r.render.triangles, geometries: r.memory.geometries, textures: r.memory.textures };
   });
 
-  await browser.close();
-
   const measured = [];
   const blockedVp = vpProbe.probes.map((p, i) => (p.blocked ? viewpoints[i].id : null)).filter(Boolean);
   if (blockedVp.length) measured.push(['Viewpoint camera blocked', 'high', `probePath reports ${blockedVp.join(', ')} inside geometry — the camera would start inside a wall.`]);
-  const dead = life.after.navNodes ? null : null;
   if (life.after.pedNaN > 0 || life.after.vehicleNaN > 0) measured.push(['NaN agent positions', 'high', `${life.after.pedNaN} pedestrians / ${life.after.vehicleNaN} vehicles at a non-finite position after ${SIM_LIFE_S} s.`]);
   if (world.signalReport && world.signalReport.osmUsed < (gis.signals || []).length) {
     measured.push(['Most OSM signal nodes collapse onto few junctions', 'medium',
@@ -183,7 +206,6 @@ async function run() {
   }
   const laggards = lights.routes.filter((r) => r.redStops === 0);
   if (laggards.length === lights.routes.length) measured.push(['No route vehicle stopped at a red light', 'high', `Over ${SIM_LIGHT_S} s of simulated time none of the ${lights.routes.length} route vehicles came to rest at a signalised stop bar.`]);
-  void dead;
 
   const defects = [...DEFECTS, ...measured];
   const redStopTotal = lights.routes.reduce((a, r) => a + r.redStops, 0);
@@ -199,10 +221,11 @@ async function run() {
   if (!anyRedStop) process.exitCode = 1;
   if (blockedVp.length) process.exitCode = 1;
   if (errors.length) process.exitCode = 1;
+  }
 }
 
 function report(d) {
-  const m = gis.meta, c = m.counts;
+  const m = gis.meta, c = m.counts, L = d.lights.lightStats;
   const bs = d.world.ground?.bySurface || {};
   const surfRows = Object.entries(bs).map(([k, v]) => `| \`${k}\` | ${fmt(v.patches)} | ${fmt(v.tris)} |`).join('\n');
   const vpRows = d.shots.map((s, i) => {
@@ -221,7 +244,7 @@ Generated ${new Date().toISOString().slice(0, 19).replace('T', ' ')}Z by \`tools
 ${d.softwareRender ? '\n> Rendered with the SwiftShader software rasteriser (no GPU was available to the headless browser).\n' : ''}
 ## Reconstruction boundary
 
-WGS84 bbox ${m.bboxWgs84.south}–${m.bboxWgs84.north} N, ${m.bboxWgs84.west}–${m.bboxWgs84.east} E (≈ 1.28 km N–S × 1.59 km E–W): 판교테크노밸리 and 판교역/알파돔, centred on the NCSOFT R&D Center. Local frame origin = the area centroid of OSM way 694434545 (엔씨소프트 R&D 센터), ${m.constants ? '' : ''}lat ${gis.origin.lat}, lon ${gis.origin.lon}, ground elevation ${gis.origin.elev_m} m; grid bearing ${gis.gridBearingDeg}° (local +x = grid east, +z = grid south, y = 0 at the NC building's ground level).
+WGS84 bbox ${m.bboxWgs84.south}–${m.bboxWgs84.north} N, ${m.bboxWgs84.west}–${m.bboxWgs84.east} E (≈ 1.28 km N–S × 1.59 km E–W): 판교테크노밸리 and 판교역/알파돔, centred on the NCSOFT R&D Center. Local frame origin = the area centroid of OSM way 694434545 (엔씨소프트 R&D 센터), lat ${gis.origin.lat}, lon ${gis.origin.lon}, ground elevation ${gis.origin.elev_m} m; grid bearing ${gis.gridBearingDeg}° (local +x = grid east, +z = grid south, y = 0 at the NC building's ground level).
 
 ## Data provenance and attribution
 
@@ -242,7 +265,7 @@ WGS84 bbox ${m.bboxWgs84.south}–${m.bboxWgs84.north} N, ${m.bboxWgs84.west}–
 
 **Real (measured from public data):** building footprints and their positions; ${gis.buildings.filter((b) => b.heightSource !== 'area-default').length} of ${c.buildings} building heights; the street network's names, widths (OSM \`width\` or \`lanes × 3.25 m\`), lane counts and one-way flags; traffic-signal and crossing node positions; bus-stop platform positions and route numbers; ground-cover polygons; terrain shape at 30 m horizontal resolution.
 
-**Approximated (authored or inferred):** every street is a straight, axis-aligned line (see defect 8); façades are procedural; the three hero modules (NC R&D Center, 판교역 canopies, 알파돔 tower massing) are procedural Three.js geometry, not surveyed models; there are no interiors; the terrain is a smoothed SRTM heightfield with no cut-and-fill; block fill is a flat patch draped on that heightfield; signal timing is a synthetic 60 s coordinated cycle, not the real plan; the pedestrian and vehicle populations are synthetic.
+**Approximated (authored or inferred):** every street is a straight, axis-aligned line (see defect 8); façades are procedural; the three hero modules (NC R&D Center, 판교역 canopies, 알파돔 tower massing) are procedural Three.js geometry, not surveyed models; there are no interiors; the terrain is a smoothed SRTM heightfield with no cut-and-fill; block fill is a flat patch draped on that heightfield; signal timing is a synthetic ${L.cycle} s coordinated cycle, not the real plan; the pedestrian and vehicle populations are synthetic.
 
 ## Counts
 
@@ -277,8 +300,10 @@ ${vpRows}
 ## Life systems
 
 Simulated with \`__twin.stepLife\` (fixed 1/30 s steps), so the numbers are deterministic and independent of frame rate.
+The **at boot** column is read once, immediately after \`__twin.ready\`, before the viewpoint screenshots; the world then ran
+${(d.life.wallMsBetween / 1000).toFixed(1)} s of real time (four screenshots) before the ${SIM_LIFE_S} s of simulated time in the second column.
 
-| Metric | at 0 s | after ${SIM_LIFE_S} s |
+| Metric | at boot | + ${SIM_LIFE_S} s simulated |
 |---|---|---|
 | Pedestrians alive | ${fmt(d.life.before.pedestrians)} | ${fmt(d.life.after.pedestrians)} |
 | …on a sidewalk / plaza | ${fmt(d.life.before.pedOnSidewalk)} | ${fmt(d.life.after.pedOnSidewalk)} |
@@ -301,7 +326,7 @@ ${routeRows}
 
 Over ${SIM_LIGHT_S} s of simulated time the route vehicles came to a full stop at a signalised stop bar showing red/amber **${fmt(d.redStopTotal)} times** (${d.lights.routes.filter((r) => r.redStops > 0).length} of ${d.lights.routes.length} routes) — ${d.anyRedStop ? '**PASS**' : '**FAIL**'}. Background traffic was also observed stopped at red on ${fmt(d.lights.bgRedStopFrames)} of the ${Math.round(SIM_LIGHT_S / SIM_DT / 10)} sampled steps. ${d.lights.routes.filter((r) => r.firstRedStop).slice(0, 1).map((r) => `First observed stop: ${r.name} at t = ${r.firstRedStop.t} s, ${r.firstRedStop.street} junction (${r.firstRedStop.x}, ${r.firstRedStop.z}), signal ${r.firstRedStop.colour}.`).join('')}
 
-Signals: ${d.lights.lightStats.signals} controlled crossings driving ${d.lights.lightStats.heads} lamp heads on a ${'60'} s coordinated cycle (NS green 25 → amber 3 → all-red 2 → EW green 25 → amber 3 → all-red 2) with a per-junction offset. Pedestrian crossings read the same clock.
+Signals: ${d.lights.lightStats.signals} controlled crossings driving ${d.lights.lightStats.heads} lamp heads on a ${L.cycle} s coordinated cycle (NS green ${L.green} → amber ${L.amber} → all-red ${L.allRed} → EW green ${L.green} → amber ${L.amber} → all-red ${L.allRed}, read back from \`TrafficLights.stats()\`) with a per-junction offset. Pedestrian crossings read the same clock.
 
 ## Cost
 

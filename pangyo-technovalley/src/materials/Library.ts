@@ -178,5 +178,13 @@ Materials.register('shop_lit', () => { const m = new THREE.MeshStandardMaterial(
 Materials.register('road_brick', () => new THREE.MeshStandardMaterial({ map: (() => { const t = genTexture('road_brick', 512, Painters.brick([128, 82, 66], 91)); const c = t.clone(); c.repeat.set(1 / 1.2, 1 / 1.2); c.needsUpdate = true; return c; })(), roughness: 0.9 }));
 Materials.register('colusa', () => new THREE.MeshStandardMaterial({ map: (() => { const t = genTexture('colusa', 1024, Painters.ashlar([132, 124, 108], 61, 8, 4, 9)); const c = t.clone(); c.repeat.set(1 / 4, 1 / 4); c.needsUpdate = true; return c; })(), normalMap: (() => { const t = genNormalMap('ashlar', 512, Painters.ashlarHeight(8, 4), 2.2); const c = t.clone(); c.repeat.set(1 / 4, 1 / 4); c.needsUpdate = true; return c; })(), roughness: 0.9 }));
 Materials.register('colusa_base', () => new THREE.MeshStandardMaterial({ map: (() => { const t = genTexture('colusa_base', 1024, Painters.ashlar([112, 104, 90], 62, 6, 3, 8)); const c = t.clone(); c.repeat.set(1 / 3, 1 / 3); c.needsUpdate = true; return c; })(), normalMap: (() => { const t = genNormalMap('ashlar6', 512, Painters.ashlarHeight(6, 3), 2.0); const c = t.clone(); c.repeat.set(1 / 3, 1 / 3); c.needsUpdate = true; return c; })(), roughness: 0.9 }));
-// Pangyo additions (not in union-square-sf's library): still water for the 봇들 retention ponds painted by BlockFill.
-Materials.register('water', () => { const m = new THREE.MeshStandardMaterial({ color: 0x2e4756, roughness: 0.09, metalness: 0.15, envMapIntensity: 1.4 }); return m; });
+// Pangyo additions (not in union-square-sf's library): still water for the 봇들 retention ponds and the
+// 운중천/금토천 channels painted by BlockFill. Stage 3 shipped this flat and opaque, and at 0.75 lightness
+// against pale paving the streams read as a flood plain rather than as water. It is now a darker blue-grey
+// and slightly translucent (alpha 0.75), so the terrain under it shows through at the shallow edges and the
+// surface separates from the ground cover it sits 5 cm above. `depthWrite: false` keeps the water from
+// occluding itself where two patches overlap.
+Materials.register('water', () => new THREE.MeshStandardMaterial({
+  color: 0x16303d, roughness: 0.08, metalness: 0.25, envMapIntensity: 1.4,
+  transparent: true, opacity: 0.75, depthWrite: false,
+}));

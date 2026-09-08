@@ -4,7 +4,19 @@ import type { CollisionWorld } from '../player/Collision';
 import { pointInPolygon } from '../util/Geometry2D';
 import type { Buildings } from '../world/Buildings';
 
-export interface Viewpoint { id: string; title: string; camera: { lat: number; lon: number; heightM: number; headingDeg: number; pitchDeg: number; fovDegVertical: number; absoluteY?: number }; photo?: { file: string | null; sourceUrl?: string; author?: string; license?: string } | null; notes?: string; confidence?: string; local?: { x: number; z: number } }
+export interface Viewpoint { id: string; title: string; camera: { lat: number; lon: number; x?: number; z?: number; heightM: number; headingDeg: number; pitchDeg: number; fovDegVertical: number; absoluteY?: number }; photo?: { file: string | null; sourceUrl?: string; author?: string; license?: string } | null; notes?: string; confidence?: string; local?: { x: number; z: number } }
+
+/**
+ * Local (x, z) of a viewpoint. The authored `camera.x/z` (local metres) are the source of truth —
+ * `lat/lon` are the same point re-projected with `localToGeo` for anyone reading the file as GIS,
+ * and rounding them to 6 decimals costs ~0.1 m. Falls back to lat/lon when x/z are absent.
+ */
+export function viewpointLocal(v: Viewpoint): { x: number; z: number } {
+  const { x, z } = v.camera;
+  if (Number.isFinite(x) && Number.isFinite(z)) return { x: x as number, z: z as number };
+  const l = geoToLocal(v.camera.lat, v.camera.lon);
+  return { x: l.x, z: l.z };
+}
 
 /** Convert compass heading (deg cw from true north) to local yaw for WalkControls (yaw=0 looks toward -z = grid north, positive yaw turns left/ccw). */
 export function compassToYaw(headingDeg: number): number {
@@ -19,13 +31,13 @@ export class Viewpoints {
   list: Viewpoint[] = [];
   async load(url: string) {
     try { const r = await fetch(url); if (!r.ok) throw new Error('HTTP ' + r.status); const j = await r.json(); this.list = Array.isArray(j) ? j : j.viewpoints || []; } catch { console.info('[viewpoints] no data/viewpoints.json - reference viewpoints disabled'); }
-    for (const v of this.list) { const l = geoToLocal(v.camera.lat, v.camera.lon); v.local = { x: l.x, z: l.z }; }
+    for (const v of this.list) v.local = viewpointLocal(v);
     return this.list;
   }
   get(id: string) { return this.list.find((v) => v.id === id); }
   /** Resolve camera placement (eye position + yaw/pitch/fov) for a viewpoint. */
   place(v: Viewpoint, world: CollisionWorld, buildings?: Buildings) {
-    const { x, z } = v.local!;
+    const { x, z } = v.local ?? viewpointLocal(v);
     const ground = world.floorAt(x, z, world.terrain(x, z) + 0.5, 100);
     let y = v.camera.absoluteY !== undefined ? v.camera.absoluteY : ground + v.camera.heightM;
     // elevated viewpoints taken from a roof/terrace: lift the camera above the building it falls inside

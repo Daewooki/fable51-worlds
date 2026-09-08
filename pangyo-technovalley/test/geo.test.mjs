@@ -193,3 +193,26 @@ describe('generated data (needs npm run geo)', () => {
     expect(Array.isArray(spec.meta.dropped)).toBe(true);
   });
 });
+
+// The QA harness and the runtime both place these cameras from the authored local `camera.x/z`
+// (src/debug/Viewpoints.ts:viewpointLocal); `lat/lon` are the same point re-projected with
+// localToGeo, for anyone reading the file as GIS. They must agree, or the two placements diverge.
+describe('viewpoints.json local ↔ WGS84 round-trip', () => {
+  const viewpoints = readJson('src/data/recon/viewpoints.json');
+  const published = readJson('public/data/viewpoints.json');
+
+  it('is synced to public/data', () => expect(published).toEqual(viewpoints));
+
+  it('round-trips every camera lat/lon back to its authored x/z within 0.5 m', () => {
+    expect(viewpoints.length).toBeGreaterThan(0);
+    for (const v of viewpoints) {
+      const c = v.camera;
+      expect(Number.isFinite(c.x) && Number.isFinite(c.z), `${v.id} has local x/z`).toBe(true);
+      const back = geoToLocal(c.lat, c.lon);
+      expect(Math.hypot(back.x - c.x, back.z - c.z), `${v.id}: lat/lon is ${Math.hypot(back.x - c.x, back.z - c.z).toFixed(2)} m from x/z`).toBeLessThan(0.5);
+      const fwd = localToGeo(c.x, c.z);
+      expect(fwd.lat).toBeCloseTo(c.lat, 5);
+      expect(fwd.lon).toBeCloseTo(c.lon, 5);
+    }
+  });
+});

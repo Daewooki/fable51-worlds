@@ -97,5 +97,5 @@ export class TrafficLights implements Updatable {
       }
     }
   }
-  stats() { return { signals: this.crossings.length, heads: this.crossings.reduce((a, c) => a + c.heads.length, 0), t: Math.round(this.time) }; }
+  stats() { return { signals: this.crossings.length, heads: this.crossings.reduce((a, c) => a + c.heads.length, 0), t: Math.round(this.time), cycle: CYCLE, green: GREEN, amber: AMBER, allRed: ALL_RED }; }
 }

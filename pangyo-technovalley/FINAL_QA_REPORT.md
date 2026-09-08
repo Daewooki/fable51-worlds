@@ -1,6 +1,6 @@
 # FINAL QA REPORT — Pangyo Techno Valley (pangyo-technovalley)
 
-Generated 2026-09-08 07:15:24Z by `tools/qa/qa_report.mjs` (stage 3).
+Generated 2026-09-08 07:50:26Z by `tools/qa/qa_report.mjs` (stage 3).
 
 ## Reconstruction boundary
 
@@ -10,7 +10,7 @@ WGS84 bbox 37.395–37.4065 N, 127.099–127.117 E (≈ 1.28 km N–S × 1.59 km
 
 | Layer | Source | Notes |
 |---|---|---|
-| Buildings, building parts, roads, POIs, signals, crossings, benches | **OpenStreetMap** via the Overpass API (`tools/geo/fetch_osm.mjs`), snapshot `2026-09-08T04:08:23Z` | 564 footprints (435 inside the bbox) + 118 parts, 794 highway ways, 460 POIs, 58 traffic-signal nodes, 65 crossing nodes |
+| Buildings, building parts, roads, POIs, signals, crossings, benches | **OpenStreetMap** via the Overpass API (`tools/geo/fetch_osm.mjs`), snapshot `2026-09-08T04:08:23Z` | 564 footprints (435 inside the bbox) + 118 parts, 794 highway ways, 378 POIs, 58 traffic-signal nodes, 65 crossing nodes |
 | Ground cover (landuse / leisure / parking / water) | **OpenStreetMap**, fetched by `fetch_osm.mjs --augment` and binned by `build_gis.mjs` | 232 polygons — added in stage 3 for the block fill |
 | Elevation | **OpenTopoData `srtm30m`** (SRTM 1-arcsec, EGM96), 25 m grid; per-point fallback AWS Terrarium tiles zoom 14 | as recorded in `gis.json.meta.elevationSource` |
 | Building heights | OSM `height` → `building:levels × 3.6 + 1` → `heights_override.json` → area default | resolution order recorded per building in `heightSource` |
@@ -38,8 +38,8 @@ WGS84 bbox 37.395–37.4065 N, 127.099–127.117 E (≈ 1.28 km N–S × 1.59 km
 | Grid crossings | 19, of which **14 signalised** (6 from OSM signal nodes, 8 from the major×major fallback) |
 | Signal masts placed / lamp heads driven | 42 / 42 |
 | Street lamps / trees / benches placed | 427 / 441 / 15 |
-| Ground-cover polygons used | 189 OSM areas + 721 fallback block patches |
-| Block-fill draw calls / triangles | **5** / 82,851 |
+| Ground-cover polygons used | 232 OSM areas + 1,607 fallback block patches |
+| Block-fill draw calls / triangles | **5** / 188,946 |
 | Reference viewpoints | 4 (0 with photos — captures are local only) |
 | Tour stops | 6 |
 
@@ -47,11 +47,11 @@ WGS84 bbox 37.395–37.4065 N, 127.099–127.117 E (≈ 1.28 km N–S × 1.59 km
 
 | Surface | Patches | Triangles |
 |---|---|---|
-| `paving` | 57 | 27,192 |
-| `paving_dark` | 736 | 31,492 |
-| `grass` | 83 | 16,677 |
-| `soil` | 16 | 636 |
-| `water` | 10 | 6,854 |
+| `paving` | 80 | 56,158 |
+| `paving_dark` | 1,627 | 97,882 |
+| `grass` | 96 | 23,532 |
+| `soil` | 20 | 1,584 |
+| `water` | 9 | 9,790 |
 
 ## Viewpoints
 
@@ -62,51 +62,53 @@ All four cameras are defined in `src/data/recon/viewpoints.json` in local coordi
 | `nc-entrance` | NCSOFT R&D Center — 정문 (남측 forecourt) | 0.0, 3.7, 115.0 | clear | ![nc-entrance](docs/qa/nc-entrance.png) |
 | `nc-aerial` | NCSOFT R&D Center — aerial (tour stop 1) | 40.0, 140.0, 220.0 | clear | ![nc-aerial](docs/qa/nc-aerial.png) |
 | `pangyoro-hsquare` | 판교역로 남행 — H스퀘어 코너 | 101.9, 20.8, -278.0 | clear | ![pangyoro-hsquare](docs/qa/pangyoro-hsquare.png) |
-| `pangyoyeok-plaza` | 판교역 광장 — 신분당선 출입구 캐노피 | 186.0, 14.3, 507.0 | clear | ![pangyoyeok-plaza](docs/qa/pangyoyeok-plaza.png) |
+| `pangyoyeok-plaza` | 판교역 광장 — 신분당선 출입구 캐노피 | 152.0, 13.0, 549.0 | clear | ![pangyoyeok-plaza](docs/qa/pangyoyeok-plaza.png) |
 
 ## Life systems
 
 Simulated with `__twin.stepLife` (fixed 1/30 s steps), so the numbers are deterministic and independent of frame rate.
+The **at boot** column is read once, immediately after `__twin.ready`, before the viewpoint screenshots; the world then ran
+3.3 s of real time (four screenshots) before the 30 s of simulated time in the second column.
 
-| Metric | at 0 s | after 30 s |
+| Metric | at boot | + 30 s simulated |
 |---|---|---|
 | Pedestrians alive | 220 | 220 |
-| …on a sidewalk / plaza | 218 | 218 |
+| …on a sidewalk / plaza | 219 | 218 |
 | …at a NaN position | 0 | 0 |
-| Vehicles alive | 100 | 102 |
-| …moving / stopped | 98 / 2 | 90 / 12 |
+| Vehicles alive | 104 | 102 |
+| …moving / stopped | 104 / 0 | 90 / 12 |
 | …at a NaN position | 0 | 0 |
 | Route vehicles (of 6 routes) | 6/6 | 6/6 |
 | Unresolved routes (warnings) | 0 | 0 |
 | Nav graph | 2,254 nodes / 2,278 edges | — |
-| Pedestrian update cost | 0.96 ms (max 1.45 ms) | 0.65 ms |
+| Pedestrian update cost | 1.9 ms (max 3.59 ms) | 0.66 ms |
 
 ### Transit routes
 
 | Route | Street | Dir | Lane | Stops | min m/s | max m/s | red-light stops (60 s) | stops served |
 |---|---|---|---|---|---|---|---|---|
-| 9007 판교역 방면 | 판교역로 | S | curb | 4 | 0 | 11.01 | 5 | 1 |
+| 9007 판교역 방면 | 판교역로 | S | curb | 4 | 0 | 11.01 | 6 | 1 |
 | 9007 판교테크노밸리 방면 | 판교역로 | N | curb | 4 | 0 | 10.04 | 35 | 2 |
 | 101 대왕판교로 남행 | 대왕판교로 | S | curb | 3 | 0 | 11.2 | 0 | 1 |
 | 101 대왕판교로 북행 | 대왕판교로 | N | curb | 3 | 0 | 11.01 | 0 | 1 |
-| 3100 판교로 동행 | 판교로 | E | curb | 3 | 0 | 11.18 | 247 | 0 |
+| 3100 판교로 동행 | 판교로 | E | curb | 3 | 0 | 11.17 | 246 | 0 |
 | 3100 판교로 서행 | 판교로 | W | curb | 3 | 0 | 10.46 | 0 | 1 |
 
 ### Traffic-light smoke
 
-Over 60 s of simulated time the route vehicles came to a full stop at a signalised stop bar showing red/amber **287 times** (3 of 6 routes) — **PASS**. Background traffic was also observed stopped at red on 56 of the 60 sampled steps. First observed stop: 9007 판교역 방면 at t = 25.8 s, 판교역로 junction (85.1, -148.4), signal red.
+Over 60 s of simulated time the route vehicles came to a full stop at a signalised stop bar showing red/amber **287 times** (3 of 6 routes) — **PASS**. Background traffic was also observed stopped at red on 58 of the 60 sampled steps. First observed stop: 9007 판교역 방면 at t = 25.7 s, 판교역로 junction (85.1, -148.4), signal red.
 
-Signals: 14 controlled crossings driving 42 lamp heads on a 60 s coordinated cycle (NS green 25 → amber 3 → all-red 2 → EW green 25 → amber 3 → all-red 2) with a per-junction offset. Pedestrian crossings read the same clock.
+Signals: 14 controlled crossings driving 42 lamp heads on a 60 s coordinated cycle (NS green 25 → amber 3 → all-red 2 → EW green 25 → amber 3 → all-red 2, read back from `TrafficLights.stats()`) with a per-junction offset. Pedestrian crossings read the same clock.
 
 ## Cost
 
 | Metric | Value |
 |---|---|
-| Cold boot (launch → `__twin.ready`, headless) | 7,603 ms |
-| In-page load (`[pangyo] load`) | 4,523 ms |
-| Draw calls (aerial viewpoint, 1280×720) | 764 |
-| Triangles submitted | 4,172,775 |
-| Geometries / textures resident | 648 / 53 |
+| Cold boot (launch → `__twin.ready`, headless) | 7,724 ms |
+| In-page load (`[pangyo] load`) | 4,586 ms |
+| Draw calls (aerial viewpoint, 1280×720) | 782 |
+| Triangles submitted | 4,281,788 |
+| Geometries / textures resident | 741 / 53 |
 | Page errors during the run | none |
 
 ## Defects
@@ -119,10 +121,15 @@ Signals: 14 controlled crossings driving 42 lamp heads on a 60 s coordinated cyc
 6. **Thin façade sliver near 판교역** _(low)_ — Some footprints near the station are long and 3–5 m deep (OSM canopy/podium outlines). The façade builder still details them, producing thin slivers of curtain wall with no depth.
 7. **No interiors** _(low)_ — Nothing in this world is enterable. `probePath` reports the massing as solid; there are no floors, lobbies or storefront interiors (union-square-sf has two, this world has none).
 8. **Straight-fit street grid** _(high)_ — Every street is axis-aligned by construction (`tools/geo/build_streets.mjs`): bearing folded to the grid, `c` = length-weighted mean offset. 경부고속도로 (9.5° off-axis), 대왕판교로 (9.6°) and 분당내곡로 (9.4°) are visibly straighter than reality, and two named ways (판교로227번길, 판교로255번길) were dropped for being > 25° off both axes.
-9. **Terrain is SRTM 30 m** _(medium)_ — Elevation is SRTM 1-arcsec sampled on a 25 m grid and IDW-gridded at 8 m. Cut-and-fill, podium platforms, underpasses (화랑지하차도, 낙생고가차도) and the 판교역 box are not modelled — streets and block fill are simply draped on the smoothed heightfield.
-10. **Generic façades** _(medium)_ — Façades are procedural (`AutoSpec`), not surveyed: bay widths, floor heights and materials are inferred from the footprint and height. Only the NC R&D Center has an authored spec.
-11. **No storefront census** _(low)_ — This world ships no `storefronts.json`, so no ground-floor tenant is identified; every retail bay is a blank fascia even where OSM has a shop POI at that address.
-12. **Most OSM signal nodes collapse onto few junctions** _(medium)_ — 58 OSM `highway=traffic_signals` nodes snap onto only 6 fitted junctions (6 matched within 30 m); the straight-fit grid has 19 crossings where the real network has far more, so signal placement is coarse. 8 further junctions were signalised by the major×major fallback.
+9. **Ground cover now spans the whole extract (fixed)** _(low)_ — The fallback block fill used to stop at a symmetric ±620 m box, so the outer third of the reconstruction was bare white terrain with streets running off into nothing. It now covers the full local bbox (x −903…805, z −870…553 — `BlockFill.FILL_BBOX` = `geo.localBbox()`) at the terrain's own 8 m resolution, so the fill ends exactly where the OSM extract does and not before. What remains is the extract boundary itself: beyond it there is no data of any kind.
+10. **Terrain is SRTM 30 m** _(medium)_ — Elevation is SRTM 1-arcsec sampled on a 25 m grid and IDW-gridded at 8 m. Cut-and-fill, podium platforms, underpasses (화랑지하차도, 낙생고가차도) and the 판교역 box are not modelled — streets and block fill are simply draped on the smoothed heightfield.
+11. **Generic façades** _(medium)_ — Façades are procedural (`AutoSpec`), not surveyed: bay widths, floor heights and materials are inferred from the footprint and height. Only the NC R&D Center has an authored spec.
+12. **No storefront census** _(low)_ — This world ships no `storefronts.json`, so no ground-floor tenant is identified; every retail bay is a blank fascia even where OSM has a shop POI at that address.
+13. **Water is a coloured surface, not a modelled channel** _(medium)_ — Stage 3 shipped the water class flat and opaque and the 운중천 / 금토천 read as a pale flood plain. It is now a darker blue-grey at alpha 0.75 (`src/materials/Library.ts`), and the ground cover underneath it is cut away (`BlockFill.TRANSLUCENT_SURFACES`) so what shows through is the terrain rather than the park grass and its three rectangular pitches, which used to be plainly visible on the river bed. It is still one patch draped on the SRTM heightfield: no normal map, no flow, no ripple, no bank geometry and no cut-in bed — the terrain does not dip under the water, so the surface sits at ground level + 5 cm wherever OSM drew the polygon. Treat any watercourse in a frame as a coloured surface.
+14. **Block-fill patch seams and mottling** _(medium)_ — The ground cover is rasterised on an 8 m grid and merged per surface class, and each patch carries planar `uv = (x, z)`. Neighbouring patches meet on hard cell lines, the procedural paving/concrete textures tile visibly at that pitch, and the per-class millimetre y-offsets show as faint edges where two classes abut. In the QA frames this reads as blotching across the 판교역 forecourt and the NC block. Nothing is missing — it is one flat material stretched over a whole block.
+15. **판교역 forecourt is generic block fill** _(medium)_ — The `pangyoyeok-plaza` viewpoint was re-sited in stage 3.1 (from x 186 / z 507 heading 205° to x 152 / z 549 heading 39°) so that the 신분당선 entrance canopy is centred with the 알파돔 tower behind it instead of small against a blank curtain wall. It is the best probe-clear stand available: every position nearer the canopy is inside the surrounding massing. The frame is still weak for a reason no camera can fix — there is no station box, no plaza module, no furniture and no signage here, only three canopies dropped on the OSM `subway_entrance` nodes and a flat paved patch.
+16. **`pois` excludes ground-cover areas** _(low)_ — Every OSM way/relation that lands in the `landuse` ground-cover bin is now kept OUT of `gis.json.pois` (`tools/geo/build_gis.mjs` §7): `fetch_osm --augment` had filed all 232 areas as points of interest as well, so parks, car parks and ponds came back as POIs and were double-counted by anything reading that bin. The count fell 460 → 378, with no change to buildings (564), fitted streets (23) or the NC height (58 m). A POI census that wants those areas should read `landuse` alongside `pois`.
+17. **Most OSM signal nodes collapse onto few junctions** _(medium)_ — 58 OSM `highway=traffic_signals` nodes snap onto only 6 fitted junctions (6 matched within 30 m); the straight-fit grid has 19 crossings where the real network has far more, so signal placement is coarse. 8 further junctions were signalised by the major×major fallback.
 
 ## Next steps
 

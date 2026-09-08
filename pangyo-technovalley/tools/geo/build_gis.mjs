@@ -469,8 +469,38 @@ function main() {
     })));
   }
 
-  // 7. Point features and POIs
-  const POI_KEYS = ['shop', 'amenity', 'tourism', 'office', 'leisure', 'historic', 'craft', 'healthcare', 'public_transport', 'railway', 'man_made', 'emergency', 'barrier', 'advertising', 'entrance', 'place', 'natural'];
+  // 7. Ground-cover polygons (the `landuse` bin): what the runtime's BlockFill paints between the streets.
+  //    Only closed areas; buildings are excluded (they have their own massing). `surface` is the runtime's
+  //    material class and `priority` its stacking order (a pitch draws over the park it sits in).
+  //    Computed BEFORE the POI bin so those ways can be kept out of it: `--augment` brought in
+  //    `leisure=park`, `natural=water` and `amenity=parking` areas, and their tags also match POI_KEYS,
+  //    so without this every ground-cover area would ALSO have been filed as a point of interest.
+  const landuse = [];
+  const landuseOsmIds = new Set();
+  for (const e of els) {
+    if (e.type !== 'way' && e.type !== 'relation') continue;
+    const t = e.tags || {};
+    if (t.building || t['building:part'] || t.highway) continue;
+    const cls = landuseClass(t);
+    if (!cls) continue;
+    const ring = outerRing(e);
+    if (!ring || ring.length < 4) continue;
+    const p = repPoint(e); if (!p || !inBbox(p.lat, p.lon, CLIP_MARGIN_M)) continue;
+    const footprint = ringToLocal(ring);
+    const areaM2 = r2(Math.abs(signedAreaLocal(footprint)));
+    if (areaM2 < 20) continue;
+    const holes = e.type === 'relation' ? (e.members || []).filter((m) => m.role === 'inner' && m.geometry && m.geometry.length >= 4).map((m) => ringToLocal(m.geometry)) : [];
+    const osmId = `${e.type}/${e.id}`;
+    landuseOsmIds.add(osmId);
+    landuse.push({
+      osmId, name: t.name || null, kind: cls.kind, surface: cls.surface, priority: cls.priority,
+      footprint, holes: holes.length ? holes : undefined, areaM2, centroid: toXZ(p),
+    });
+  }
+  landuse.sort((a, b) => a.priority - b.priority || b.areaM2 - a.areaM2);
+
+  // 7b. Point features and POIs
+  const POI_KEYS =['shop', 'amenity', 'tourism', 'office', 'leisure', 'historic', 'craft', 'healthcare', 'public_transport', 'railway', 'man_made', 'emergency', 'barrier', 'advertising', 'entrance', 'place', 'natural'];
   const DEDICATED = (t) =>
     t.natural === 'tree' ? 'trees' : t.highway === 'street_lamp' ? 'lamps' : t.highway === 'traffic_signals' ? 'signals' : t.highway === 'crossing' ? 'crossings'
     : t.emergency === 'fire_hydrant' ? 'hydrants' : t.amenity === 'bench' ? 'benches' : t.barrier === 'bollard' ? 'bollards' : null;
@@ -494,6 +524,7 @@ function main() {
     if (!key) continue;
     if (e.type === 'way' && (t.highway || (t.railway && t.railway !== 'platform'))) continue; // linear features handled above
     if (e.type === 'relation' && t.type === 'route') continue;
+    if (e.type !== 'node' && landuseOsmIds.has(`${e.type}/${e.id}`)) continue; // already a ground-cover area (§7)
     const p = repPoint(e); if (!p || !inBbox(p.lat, p.lon, CLIP_MARGIN_M)) continue;
     const [x, z] = toXZ(p);
     pois.push({
@@ -503,30 +534,6 @@ function main() {
       lat: +p.lat.toFixed(6), lon: +p.lon.toFixed(6), tags: t,
     });
   }
-
-  // 7b. Ground-cover polygons (the `landuse` bin): what the runtime's BlockFill paints between the streets.
-  //     Only closed areas; buildings are excluded (they have their own massing). `surface` is the runtime's
-  //     material class and `priority` its stacking order (a pitch draws over the park it sits in).
-  const landuse = [];
-  for (const e of els) {
-    if (e.type !== 'way' && e.type !== 'relation') continue;
-    const t = e.tags || {};
-    if (t.building || t['building:part'] || t.highway) continue;
-    const cls = landuseClass(t);
-    if (!cls) continue;
-    const ring = outerRing(e);
-    if (!ring || ring.length < 4) continue;
-    const p = repPoint(e); if (!p || !inBbox(p.lat, p.lon, CLIP_MARGIN_M)) continue;
-    const footprint = ringToLocal(ring);
-    const areaM2 = r2(Math.abs(signedAreaLocal(footprint)));
-    if (areaM2 < 20) continue;
-    const holes = e.type === 'relation' ? (e.members || []).filter((m) => m.role === 'inner' && m.geometry && m.geometry.length >= 4).map((m) => ringToLocal(m.geometry)) : [];
-    landuse.push({
-      osmId: `${e.type}/${e.id}`, name: t.name || null, kind: cls.kind, surface: cls.surface, priority: cls.priority,
-      footprint, holes: holes.length ? holes : undefined, areaM2, centroid: toXZ(p),
-    });
-  }
-  landuse.sort((a, b) => a.priority - b.priority || b.areaM2 - a.areaM2);
 
   // 8. Intersections in local coords (from elevation.json when present)
   const intersections = (elev?.intersections || []).map((it) => { const [x, z] = toXZ(it); return { name: it.name, x, z, lat: it.lat, lon: it.lon, elevAbsM: it.elev_m, y: relY(it.elev_m) }; });

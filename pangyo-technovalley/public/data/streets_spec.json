@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generated": "2026-09-08T04:15:32.408Z",
+  "generated": "2026-09-08T07:35:21.730Z",
   "generator": "tools/geo/build_streets.mjs",
   "method": "named OSM ways of kinds [motorway|trunk|primary|secondary|tertiary|residential|unclassified|living_street|pedestrian] with ≥ 120 m inside the bbox, fitted to the grid axes (±25°); c = length-weighted mean perpendicular offset; from/to = extent, snapped to the bbox edge within 40 m; width = OSM width or lanes × 3.25 m",
   "gridBearingDeg": 84.541,
