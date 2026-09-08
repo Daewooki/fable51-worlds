@@ -32,10 +32,17 @@ export class Props {
   signals: SignalHead[] = [];
   lampPositions: [number, number, number][] = [];
   plazaLampPositions: [number, number, number][] = [];
+  /** Ground-plane positions of the placed street furniture (exposed so QA can re-check them against the footprints). */
+  benchPositions: [number, number][] = [];
+  hydrantPositions: [number, number][] = [];
+  bollardPositions: [number, number][] = [];
   /** Footprint index used to veto placements; also handy for QA. */
   footprints!: FootprintIndex;
   /** Placement bookkeeping (exposed for the boot test / HUD). */
-  placement = { lamps: 0, lampsRejected: 0, trees: 0, treesRejected: 0, benches: 0, benchesRejected: 0, signalMasts: 0, signalMastsRejected: 0 };
+  placement = {
+    lamps: 0, lampsRejected: 0, trees: 0, treesRejected: 0, benches: 0, benchesRejected: 0,
+    signalMasts: 0, signalMastsRejected: 0, hydrants: 0, hydrantsRejected: 0, bollards: 0, bollardsRejected: 0,
+  };
   constructor(public world: World, public app: App) { this.group.name = 'props'; }
 
   async build() {
@@ -130,6 +137,7 @@ export class Props {
         if (inBuilding(x, z)) { this.placement.benchesRejected++; continue; }
         const rot = s.axis === 'ns' ? (side > 0 ? -Math.PI / 2 : Math.PI / 2) : side > 0 ? 0 : Math.PI;
         bench?.add([x, gy(x, z), z], rot);
+        this.benchPositions.push([x, z]);
         this.world.collision.addBox(x, z, 1.8, 0.7, gy(x, z), gy(x, z) + 0.9, rot);
         this.placement.benches++;
       }
@@ -138,9 +146,9 @@ export class Props {
     // --- OSM-mapped props (this extract has none of these except a few benches; the code stays generic) ---
     for (const p of w.gis.trees || []) { if (!inBounds(p.x, p.z)) continue; if (inBuilding(p.x, p.z)) { this.placement.treesRejected++; continue; } this.world.treeSpots.push([p.x, gy(p.x, p.z), p.z]); treeGrate?.add([p.x, gy(p.x, p.z) + 0.005, p.z], 0); this.placement.trees++; }
     for (const p of w.gis.lamps || []) { if (!inBounds(p.x, p.z)) continue; if (inBuilding(p.x, p.z, FOOTPRINT_CLEAR_LAMP)) { this.placement.lampsRejected++; continue; } lampPed?.add([p.x, gy(p.x, p.z), p.z], 0); this.lampPositions.push([p.x, gy(p.x, p.z) + 4.6, p.z]); this.placement.lamps++; }
-    for (const p of w.gis.hydrants || []) { if (inBounds(p.x, p.z)) hydrant?.add([p.x, gy(p.x, p.z), p.z], 0); }
-    for (const p of w.gis.benches || []) { if (inBounds(p.x, p.z)) bench?.add([p.x, gy(p.x, p.z), p.z], 0); }
-    for (const p of w.gis.bollards || []) { if (inBounds(p.x, p.z)) bollard?.add([p.x, gy(p.x, p.z), p.z], 0); }
+    for (const p of w.gis.hydrants || []) { if (!inBounds(p.x, p.z)) continue; if (inBuilding(p.x, p.z)) { this.placement.hydrantsRejected++; continue; } hydrant?.add([p.x, gy(p.x, p.z), p.z], 0); this.hydrantPositions.push([p.x, p.z]); this.placement.hydrants++; }
+    for (const p of w.gis.benches || []) { if (!inBounds(p.x, p.z)) continue; if (inBuilding(p.x, p.z)) { this.placement.benchesRejected++; continue; } bench?.add([p.x, gy(p.x, p.z), p.z], 0); this.benchPositions.push([p.x, p.z]); this.placement.benches++; }
+    for (const p of w.gis.bollards || []) { if (!inBounds(p.x, p.z)) continue; if (inBuilding(p.x, p.z)) { this.placement.bollardsRejected++; continue; } bollard?.add([p.x, gy(p.x, p.z), p.z], 0); this.bollardPositions.push([p.x, p.z]); this.placement.bollards++; }
     for (const c of crossingPts) { if (inBounds(c.x, c.z) && !inBuilding(c.x, c.z)) curbRamp?.add([c.x, gy(c.x, c.z), c.z], 0); }
 
     // --- traffic signals: OSM signal nodes snapped to the nearest junction, else every major × major junction ---
@@ -165,7 +173,7 @@ export class Props {
         const y = gy(x, z);
         signalSpots.push({ x, z, y, rot: sx < 0 ? (sz < 0 ? Math.PI : Math.PI / 2) : sz < 0 ? -Math.PI / 2 : 0, cx: c.x, cz: c.z });
         this.placement.signalMasts++;
-        if (sx * sz > 0 && hydrant && !(w.gis.hydrants || []).length && !inBuilding(x + sx * 1.2, z - sz * 1.0)) hydrant.add([x + sx * 1.2, y, z - sz * 1.0], 0);
+        if (sx * sz > 0 && hydrant && !(w.gis.hydrants || []).length && !inBuilding(x + sx * 1.2, z - sz * 1.0)) { hydrant.add([x + sx * 1.2, y, z - sz * 1.0], 0); this.hydrantPositions.push([x + sx * 1.2, z - sz * 1.0]); this.placement.hydrants++; }
         if (sx * sz < 0 && signPole && !inBuilding(x + sx * 1.5, z + sz * 0.5)) signPole.add([x + sx * 1.5, y, z + sz * 0.5], 0);
       }
     }

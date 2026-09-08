@@ -88,6 +88,29 @@ describe('pangyo-technovalley boots', () => {
     expect(bad, `trees inside buildings: ${bad.slice(0, 10).join('; ')}`).toEqual([]);
   }, TIMEOUT);
 
+  it('places no bench, bollard or hydrant inside a building footprint', async () => {
+    const props = await page.evaluate(() => ({
+      benches: window.__twin.props.benchPositions,
+      bollards: window.__twin.props.bollardPositions,
+      hydrants: window.__twin.props.hydrantPositions,
+      placement: window.__twin.props.placement,
+    }));
+    const idx = buildFootprintIndex([...GIS.buildings, ...GIS.buildingParts]);
+    const check = (name, pts) => {
+      const bad = pts.filter(([x, z]) => isInsideFootprint(x, z, idx, 0.5))
+        .map(([x, z]) => `(${x.toFixed(1)}, ${z.toFixed(1)}) in ${footprintAt(x, z, idx) || 'clearance band'}`);
+      expect(bad, `${name} inside buildings: ${bad.slice(0, 10).join('; ')}`).toEqual([]);
+    };
+    check('benches', props.benches);
+    check('bollards', props.bollards);
+    check('hydrants', props.hydrants);
+    // every placed item is accounted for in the counters, and at least the procedural benches exist
+    expect(props.benches.length).toBe(props.placement.benches);
+    expect(props.bollards.length).toBe(props.placement.bollards);
+    expect(props.hydrants.length).toBe(props.placement.hydrants);
+    expect(props.benches.length).toBeGreaterThan(0);
+  }, TIMEOUT);
+
   it('reports load time and render cost', async () => {
     const s = await page.evaluate(() => ({ loadMs: window.__twin.loadMs, stats: window.__twin.app.stats(), placement: window.__twin.props.placement }));
     console.log(`[boot] in-page load ${s.loadMs} ms, launchWorld wall clock ${wallClockMs} ms, ` +
