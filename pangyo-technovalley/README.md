@@ -367,6 +367,13 @@ steps, so the numbers do not depend on the headless frame rate. The run exits no
 blocked camera, an unknown viewpoint id, or a light smoke with no red-light stop, and it closes the
 browser in a `finally`.
 
+**Cameras are checked against the trees too.** `probePath` only knows about collision walls and structure,
+and the procedural street trees have no collider at all — so a camera standing in a crown probes *clear*
+while the frame is 60 % leaves, which is what happened to `pangyoro-hsquare` (0.6 m off a tree row spaced
+every 12 m, with the next trunk 8.8 m dead ahead). The QA pass and `test/life.test.mjs` now also require
+every camera to stand 2 m clear of any placed tree **and** to have none inside a 2.5 m sight corridor for
+the first 18 m; a camera that fails reads `BLOCKED-BY-TREE` and fails the run.
+
 **Viewpoint coordinates.** Each camera in `viewpoints.json` carries both the authored local `x`/`z` (the
 source of truth — that is what was aimed) and the same point as `lat`/`lon`, recomputed with
 `localToGeo`. `Viewpoints.place()` prefers `x`/`z` when both are finite and falls back to `lat`/`lon`, and

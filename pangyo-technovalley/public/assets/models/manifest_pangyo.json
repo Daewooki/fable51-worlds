@@ -27,7 +27,7 @@
  },
  "pangyo/pangyo_station_canopy": {
   "file": "assets/models/pangyo/pangyo_station_canopy.glb",
-  "tris": 536,
+  "tris": 548,
   "bbox_threejs": {
    "min": [
     -9.0,
@@ -40,7 +40,7 @@
     4.192651748657227
    ]
   },
-  "sizeBytes": 32008,
+  "sizeBytes": 32856,
   "kind": "hero_prop",
   "height": 6.0,
   "footprint": [

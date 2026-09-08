@@ -268,9 +268,12 @@ def build_station_canopy():
     parts.append(box("can_glass_b", (CAN_W, CAN_D / 2 + 0.4, 0.09), (0, -CAN_D / 4, CAN_H + 0.15), "glass_clear",
                      rotation=(math.radians(6), 0, 0)))
     parts.append(box_bottom("can_ridge", (CAN_W, 0.3, 0.22), (0, 0, CAN_H - 0.02), "metal_alu"))
-    # station sign band on the front
+    # station sign band on the front, faced on BOTH sides: a real entrance sign is read from the
+    # plaza as well as from the street, and the yaws here are unsurveyed, so a one-sided band left
+    # whichever approach the canopy happens to face away from looking at an unlit black slab.
     parts.append(box_bottom("can_signband", (7.6, 0.22, 1.0), (0, CAN_D / 2 - 0.6, CAN_H - 2.4), "metal_black"))
     parts.append(box_bottom("can_signface", (7.0, 0.10, 0.7), (0, CAN_D / 2 - 0.44, CAN_H - 2.25), "emissive_white"))
+    parts.append(box_bottom("can_signface_b", (7.0, 0.10, 0.7), (0, CAN_D / 2 - 0.76, CAN_H - 2.25), "emissive_white"))
     return join(parts, "pangyo_station_canopy")
 
 

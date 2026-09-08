@@ -56,13 +56,39 @@ interface Patch { poly: P2[]; holes?: P2[][]; surface: string; under?: LanduseAr
  */
 const TRANSLUCENT_SURFACES = new Set(['water']);
 /** Axis-aligned bounds of a ring, for the cheap overlap test. */
-function bboxOf(poly: P2[]): { x0: number; x1: number; z0: number; z1: number } {
+export function bboxOf(poly: P2[]): { x0: number; x1: number; z0: number; z1: number } {
   let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
   for (const [x, z] of poly) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (z < z0) z0 = z; if (z > z1) z1 = z; }
   return { x0, x1, z0, z1 };
 }
-type Box = ReturnType<typeof bboxOf>;
+export type Box = ReturnType<typeof bboxOf>;
 const boxesOverlap = (a: Box, b: Box) => a.x1 > b.x0 && b.x1 > a.x0 && a.z1 > b.z0 && b.z1 > a.z0;
+
+/** Does this area cover (x, z)? Inside the outer ring and NOT inside one of its holes. */
+export function areaCovers(a: { footprint: P2[]; holes?: P2[][] }, x: number, z: number): boolean {
+  if (!pointInPolygon(x, z, a.footprint)) return false;
+  return !(a.holes || []).some((h) => h.length >= 3 && pointInPolygon(x, z, h));
+}
+
+/**
+ * The translucent areas that could cover `poly`, by bounding box. `selfIndex` keeps a veil from
+ * veiling itself (and every veil after it), so overlapping water polygons are painted exactly once.
+ */
+export function veilsOver(poly: P2[], veils: LanduseArea[], boxes: Box[], selfIndex = veils.length): LanduseArea[] | undefined {
+  if (!veils.length) return undefined;
+  const b = bboxOf(poly);
+  const out = veils.filter((_, i) => i < selfIndex && boxesOverlap(b, boxes[i]));
+  return out.length ? out : undefined;
+}
+
+/** Is a rasterised fragment's centre already claimed by a translucent patch above it? */
+export function underVeil(frag: P2[], veils?: LanduseArea[]): boolean {
+  if (!veils || !veils.length || !frag.length) return false;
+  let cx = 0, cz = 0;
+  for (const [x, z] of frag) { cx += x; cz += z; }
+  cx /= frag.length; cz /= frag.length;
+  return veils.some((v) => areaCovers(v, cx, cz));
+}
 /** A street's road+sidewalk corridor: `across` is x for an ns street, z for an ew street. */
 interface Corridor { axis: 'ns' | 'ew'; lo: number; hi: number; from: number; to: number }
 
@@ -122,7 +148,10 @@ export function triangulate(contour: P2[], holes?: P2[][]): [P2, P2, P2][] {
  * A street only bounds the ground where it actually runs: a `StreetSpec` carries `from`/`to` along
  * its own axis, and outside that span there is no carriageway to inset away from. So the sidewalk
  * inset for a boundary line is applied only to the cells its span overlaps — otherwise a 300 m side
- * street cut a 15 m strip of missing ground across the entire 1.7 km box.
+ * street cut a 15 m strip of missing ground across the entire 1.7 km box. The decision is per CELL,
+ * not per metre: a street that stops half way along a cell still insets that whole cell, because the
+ * cells are the grid the fill is built on. The cells are bounded by the cross-axis streets, so that
+ * is at worst one block of over-inset, and never a strip across the world.
  */
 export function blockCells(streets: StreetSpec[], bbox = FILL_BBOX): { x0: number; x1: number; z0: number; z1: number }[] {
   interface Line { c: number; half: number; from: number; to: number }
@@ -180,18 +209,11 @@ export class BlockFill {
     // the translucent patches, and their bounds: nothing may be painted under one of these (see above).
     const veils = eligible.filter((a) => TRANSLUCENT_SURFACES.has(a.surface));
     const veilBox = veils.map((a) => bboxOf(a.footprint));
-    /** The translucent areas that cover `poly`; `selfIndex` excludes a veil from veiling itself (and any later one). */
-    const veilsOver = (poly: P2[], selfIndex = veils.length): LanduseArea[] | undefined => {
-      if (!veils.length) return undefined;
-      const b = bboxOf(poly);
-      const out = veils.filter((_, i) => i < selfIndex && boxesOverlap(b, veilBox[i]));
-      return out.length ? out : undefined;
-    };
     for (const a of eligible) {
       const self = veils.indexOf(a);
       patches.push({
         poly: a.footprint, holes: (a.holes || []).filter((h) => h.length >= 4), surface: a.surface,
-        under: veilsOver(a.footprint, self >= 0 ? self : undefined),
+        under: veilsOver(a.footprint, veils, veilBox, self >= 0 ? self : undefined),
       });
       this.areas++;
     }
@@ -199,7 +221,7 @@ export class BlockFill {
     const cover = new Coverage(ordered.filter((a) => SURFACE[a.surface]));
     for (const b of blockCells(streets)) {
       const cells = this.subdivide(b, cover);
-      for (const c of cells) { patches.push({ poly: c, surface: FALLBACK_SURFACE, under: veilsOver(c) }); this.blocks++; }
+      for (const c of cells) { patches.push({ poly: c, surface: FALLBACK_SURFACE, under: veilsOver(c, veils, veilBox) }); this.blocks++; }
     }
     // --- 3. rasterise + merge per surface ------------------------------------
     const geos = new Map<string, THREE.BufferGeometry[]>();
@@ -286,12 +308,8 @@ export class BlockFill {
     const pos: number[] = [], uv: number[] = [], idx: number[] = [];
     const emit = (frag: P2[]) => {
       if (frag.length < 3 || area2(frag) < MIN_CELL_AREA) return;
-      if (under && under.length) {
-        // a translucent patch covers this ground: painting under it would show through
-        let cx = 0, cz = 0; for (const [x, z] of frag) { cx += x; cz += z; }
-        cx /= frag.length; cz /= frag.length;
-        for (const b of under) if (pointInPolygon(cx, cz, b.footprint) && !(b.holes || []).some((h) => h.length >= 3 && pointInPolygon(cx, cz, h))) return;
-      }
+      // a translucent patch covers this ground: painting under it would show through
+      if (underVeil(frag, under)) return;
       const base = pos.length / 3;
       for (const [x, z] of frag) { pos.push(x, this.terrain.heightAt(x, z) + yOff, z); uv.push(x, z); }
       // wind every fan so the face normal points +y regardless of the source winding: a triangle whose
@@ -335,7 +353,7 @@ export class BlockFill {
 }
 
 /** Bucketed point-in-any-polygon test over the landuse areas (used to skip fallback block cells). */
-class Coverage {
+export class Coverage {
   private cell = 64;
   private grid = new Map<number, LanduseArea[]>();
   constructor(areas: LanduseArea[]) {
@@ -357,7 +375,7 @@ class Coverage {
     if (!arr) return false;
     // a point inside a hole (the courtyard of a ring-shaped park, the island in the pond) is NOT
     // covered — the ground there is bare, so the fallback block cell must still be emitted.
-    for (const a of arr) if (pointInPolygon(x, z, a.footprint) && !(a.holes || []).some((h) => h.length >= 3 && pointInPolygon(x, z, h))) return true;
+    for (const a of arr) if (areaCovers(a, x, z)) return true;
     return false;
   }
 }

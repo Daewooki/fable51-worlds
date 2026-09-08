@@ -137,6 +137,32 @@ describe('pangyo-technovalley life systems (stage 3)', () => {
       return t.probePath({ points: pts, clearance: 0.9 });
     }, VIEWPOINTS);
     probes.forEach((p, i) => expect(p, `${VIEWPOINTS[i].id} camera is inside geometry`).toMatchObject({ blocked: false }));
+
+    // Street trees are instanced vegetation with NO collider, so probePath calls a camera standing
+    // in a crown "clear". pangyoro-hsquare did exactly that: 0.6 m off a 12 m-spaced tree row with
+    // the next trunk 8.8 m dead ahead, and ~60 % of the frame was leaves. Both checks are needed:
+    // a plan clearance (TREE_CLEAR_M) and an empty sight cone in front of the camera.
+    const trees = await page.evaluate((vps) => {
+      const w = window.__twin.world, spots = w.treeSpots || [];
+      return vps.map((v) => {
+        const c = v.camera;
+        const yaw = -((c.headingDeg - (-5.459)) * Math.PI) / 180;   // compassToYaw, grid north bearing -5.459
+        const fx = -Math.sin(yaw), fz = -Math.cos(yaw);
+        let near = Infinity, inView = null;
+        for (const [tx, , tz] of spots) {
+          const dx = tx - c.x, dz = tz - c.z;
+          const d = Math.hypot(dx, dz); if (d < near) near = d;
+          const along = dx * fx + dz * fz, lat = Math.abs(dx * fz - dz * fx);
+          if (along > 0 && along < 18 && lat < 2.5 && (!inView || along < inView.along)) inView = { along: +along.toFixed(1), lat: +lat.toFixed(2) };
+        }
+        return { id: v.id, near: +near.toFixed(2), inView, spots: spots.length };
+      });
+    }, VIEWPOINTS);
+    expect(trees[0].spots, 'no trees placed at all').toBeGreaterThan(100);
+    for (const t of trees) {
+      expect(t.near, `${t.id} stands ${t.near} m from a street tree (blocked-by-tree)`).toBeGreaterThanOrEqual(2.0);
+      expect(t.inView, `${t.id} has a tree ${JSON.stringify(t.inView)} in its sight line`).toBe(null);
+    }
     for (const v of VIEWPOINTS) expect(await page.evaluate((id) => window.__twin.setView(id), v.id), `setView(${v.id})`).toBe(true);
   }, TIMEOUT);
 

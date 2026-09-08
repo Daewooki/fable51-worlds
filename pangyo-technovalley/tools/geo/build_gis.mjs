@@ -500,7 +500,7 @@ function main() {
   landuse.sort((a, b) => a.priority - b.priority || b.areaM2 - a.areaM2);
 
   // 7b. Point features and POIs
-  const POI_KEYS =['shop', 'amenity', 'tourism', 'office', 'leisure', 'historic', 'craft', 'healthcare', 'public_transport', 'railway', 'man_made', 'emergency', 'barrier', 'advertising', 'entrance', 'place', 'natural'];
+  const POI_KEYS = ['shop', 'amenity', 'tourism', 'office', 'leisure', 'historic', 'craft', 'healthcare', 'public_transport', 'railway', 'man_made', 'emergency', 'barrier', 'advertising', 'entrance', 'place', 'natural'];
   const DEDICATED = (t) =>
     t.natural === 'tree' ? 'trees' : t.highway === 'street_lamp' ? 'lamps' : t.highway === 'traffic_signals' ? 'signals' : t.highway === 'crossing' ? 'crossings'
     : t.emergency === 'fire_hydrant' ? 'hydrants' : t.amenity === 'bench' ? 'benches' : t.barrier === 'bollard' ? 'bollards' : null;

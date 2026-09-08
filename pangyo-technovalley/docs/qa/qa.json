@@ -1,7 +1,7 @@
 {
- "generatedAt": "2026-09-08T07:50:26.457Z",
+ "generatedAt": "2026-09-08T08:40:16.963Z",
  "world": {
-  "loadMs": 4586,
+  "loadMs": 4616,
   "buildings": 564,
   "buildingParts": 118,
   "detailed": 18,
@@ -60,7 +60,7 @@
   },
   "landuse": 232
  },
- "bootMs": 7724,
+ "bootMs": 7583,
  "softwareRender": false,
  "errors": [],
  "shots": [
@@ -75,7 +75,7 @@
     "heading": 354.53999999999996
    },
    "file": "docs/qa/nc-entrance.png",
-   "bytes": 434600
+   "bytes": 434545
   },
   {
    "id": "nc-aerial",
@@ -88,20 +88,20 @@
     "heading": 344.24
    },
    "file": "docs/qa/nc-aerial.png",
-   "bytes": 1161364
+   "bytes": 1161604
   },
   {
    "id": "pangyoro-hsquare",
    "title": "판교역로 남행 — H스퀘어 코너",
    "ok": true,
    "pos": {
-    "x": 101.9,
-    "y": 20.75313289761544,
-    "z": -278,
+    "x": 113,
+    "y": 21.146305298805235,
+    "z": -276,
     "heading": 177.39999999999998
    },
    "file": "docs/qa/pangyoro-hsquare.png",
-   "bytes": 753229
+   "bytes": 620696
   },
   {
    "id": "pangyoyeok-plaza",
@@ -114,7 +114,7 @@
     "heading": 39
    },
    "file": "docs/qa/pangyoyeok-plaza.png",
-   "bytes": 532659
+   "bytes": 532824
   }
  ],
  "vpProbe": {
@@ -130,9 +130,9 @@
     220
    ],
    [
-    101.9,
-    20.75313289761544,
-    -278
+    113,
+    21.146305298805235,
+    -276
    ],
    [
     152,
@@ -155,8 +155,8 @@
    },
    {
     "blocked": false,
-    "top": 19.06,
-    "ground": 18.9,
+    "top": 19.33,
+    "ground": 19.3,
     "structure": false
    },
    {
@@ -165,6 +165,26 @@
     "ground": 11.18,
     "structure": false
    }
+  ],
+  "trees": 441,
+  "treeClear": 2,
+  "treeDist": [
+   69.87,
+   29,
+   13.51,
+   63.48
+  ],
+  "treeInView": [
+   null,
+   null,
+   null,
+   null
+  ],
+  "inTree": [
+   false,
+   false,
+   false,
+   false
   ]
  },
  "life": {
@@ -173,11 +193,11 @@
    "vehicles": 102,
    "pedNaN": 0,
    "pedOnSidewalk": 218,
-   "pedUpdateMs": 0.66,
-   "pedUpdateMaxMs": 1.06,
+   "pedUpdateMs": 0.68,
+   "pedUpdateMaxMs": 1.04,
    "pedStates": {
-    "walk": 204,
-    "wait": 14,
+    "walk": 201,
+    "wait": 17,
     "look": 2
    },
    "navNodes": 2254,
@@ -195,11 +215,11 @@
    "routeWarnings": [],
    "links": 458,
    "nodes": 19,
-   "msUpdate": 0.148,
+   "msUpdate": 0.153,
    "lights": {
     "signals": 14,
     "heads": 42,
-    "t": 34,
+    "t": 33,
     "cycle": 60,
     "green": 25,
     "amber": 3,
@@ -210,9 +230,9 @@
    "pedestrians": 220,
    "vehicles": 104,
    "pedNaN": 0,
-   "pedOnSidewalk": 219,
-   "pedUpdateMs": 1.9,
-   "pedUpdateMaxMs": 3.59,
+   "pedOnSidewalk": 220,
+   "pedUpdateMs": 1.74,
+   "pedUpdateMaxMs": 3.43,
    "pedStates": {
     "walk": 201,
     "look": 5,
@@ -244,7 +264,7 @@
     "allRed": 2
    }
   },
-  "wallMsBetween": 3268
+  "wallMsBetween": 3238
  },
  "lights": {
   "routes": [
@@ -252,11 +272,11 @@
     "name": "9007 판교역 방면",
     "minSpeed": 0,
     "maxSpeed": 11.01,
-    "redStops": 6,
-    "dwellStops": 142,
+    "redStops": 5,
+    "dwellStops": 143,
     "served": 1,
     "firstRedStop": {
-     "t": 25.7,
+     "t": 25.8,
      "x": 85.1,
      "z": -148.4,
      "colour": "red",
@@ -299,12 +319,12 @@
    {
     "name": "3100 판교로 동행",
     "minSpeed": 0,
-    "maxSpeed": 11.17,
-    "redStops": 246,
+    "maxSpeed": 11.18,
+    "redStops": 248,
     "dwellStops": 0,
     "served": 0,
     "firstRedStop": {
-     "t": 27.6,
+     "t": 27.5,
      "x": -275.1,
      "z": -442.3,
      "colour": "red",
@@ -321,26 +341,25 @@
     "firstRedStop": null
    }
   ],
-  "bgRedStopFrames": 58,
+  "bgRedStopFrames": 56,
   "after": {
    "pedestrians": 220,
    "vehicles": 100,
    "pedNaN": 0,
    "pedOnSidewalk": 220,
-   "pedUpdateMs": 0.66,
-   "pedUpdateMaxMs": 1.15,
+   "pedUpdateMs": 0.81,
+   "pedUpdateMaxMs": 3.17,
    "pedStates": {
-    "walk": 205,
-    "wait": 13,
-    "look": 1,
-    "idle": 1
+    "walk": 208,
+    "wait": 10,
+    "look": 2
    },
    "navNodes": 2254,
    "navEdges": 2278,
    "pedDrawCalls": 30,
    "total": 110,
-   "moving": 95,
-   "stopped": 5,
+   "moving": 96,
+   "stopped": 4,
    "buses": 6,
    "railVehicles": 0,
    "bikes": 0,
@@ -350,7 +369,7 @@
    "routeWarnings": [],
    "links": 458,
    "nodes": 19,
-   "msUpdate": 0.175,
+   "msUpdate": 0.165,
    "lights": {
     "signals": 14,
     "heads": 42,
@@ -373,7 +392,7 @@
  },
  "render": {
   "calls": 782,
-  "triangles": 4281788,
+  "triangles": 4281824,
   "geometries": 741,
   "textures": 53
  }

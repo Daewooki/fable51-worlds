@@ -179,11 +179,16 @@ Materials.register('road_brick', () => new THREE.MeshStandardMaterial({ map: (()
 Materials.register('colusa', () => new THREE.MeshStandardMaterial({ map: (() => { const t = genTexture('colusa', 1024, Painters.ashlar([132, 124, 108], 61, 8, 4, 9)); const c = t.clone(); c.repeat.set(1 / 4, 1 / 4); c.needsUpdate = true; return c; })(), normalMap: (() => { const t = genNormalMap('ashlar', 512, Painters.ashlarHeight(8, 4), 2.2); const c = t.clone(); c.repeat.set(1 / 4, 1 / 4); c.needsUpdate = true; return c; })(), roughness: 0.9 }));
 Materials.register('colusa_base', () => new THREE.MeshStandardMaterial({ map: (() => { const t = genTexture('colusa_base', 1024, Painters.ashlar([112, 104, 90], 62, 6, 3, 8)); const c = t.clone(); c.repeat.set(1 / 3, 1 / 3); c.needsUpdate = true; return c; })(), normalMap: (() => { const t = genNormalMap('ashlar6', 512, Painters.ashlarHeight(6, 3), 2.0); const c = t.clone(); c.repeat.set(1 / 3, 1 / 3); c.needsUpdate = true; return c; })(), roughness: 0.9 }));
 // Pangyo additions (not in union-square-sf's library): still water for the 봇들 retention ponds and the
-// 운중천/금토천 channels painted by BlockFill. Stage 3 shipped this flat and opaque, and at 0.75 lightness
-// against pale paving the streams read as a flood plain rather than as water. It is now a darker blue-grey
-// and slightly translucent (alpha 0.75), so the terrain under it shows through at the shallow edges and the
-// surface separates from the ground cover it sits 5 cm above. `depthWrite: false` keeps the water from
-// occluding itself where two patches overlap.
+// 운중천/금토천 channels painted by BlockFill. Stage 3 shipped this flat and opaque, and against pale
+// paving the streams read as a flood plain rather than as water. It is now a darker blue-grey and slightly
+// translucent (alpha 0.75), so what shows through is the terrain — the river bed.
+//
+// Translucency is only safe because BlockFill cuts the ground cover away under a translucent class
+// (`TRANSLUCENT_SURFACES`) and never paints two water polygons over the same ground: that is what stops
+// the park grass and its pitches showing through the river, and what stops an overlapping wetland
+// blending twice into a darker rectangle. `depthWrite: false` is the ordinary transparent-material
+// setting (the water writes colour, not depth, so nothing behind it is occluded by an unwritten pixel);
+// it is NOT what fixes the double blend.
 Materials.register('water', () => new THREE.MeshStandardMaterial({
   color: 0x16303d, roughness: 0.08, metalness: 0.25, envMapIntensity: 1.4,
   transparent: true, opacity: 0.75, depthWrite: false,

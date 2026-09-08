@@ -118,8 +118,15 @@ export function anchorsFor(world) {
       const list = Array.isArray(vps) ? vps : vps.viewpoints || [];
       for (const v of list) {
         const cam = v.camera;
-        if (!cam || !Number.isFinite(cam.lat) || !Number.isFinite(cam.lon)) continue;
-        const { x, z } = geoToLocal(g, cam.lat, cam.lon);
+        if (!cam) continue;
+        // A viewpoint's authored local x/z is the source of truth (it is what the world's own
+        // Viewpoints.place() uses); lat/lon is the same point re-projected, and the two can drift
+        // when one is edited by hand. Prefer x/z, fall back to lat/lon for a file that has none.
+        const local = Number.isFinite(cam.x) && Number.isFinite(cam.z)
+          ? { x: cam.x, z: cam.z }
+          : (Number.isFinite(cam.lat) && Number.isFinite(cam.lon) ? geoToLocal(g, cam.lat, cam.lon) : null);
+        if (!local) continue;
+        const { x, z } = local;
         // Viewpoints.place() in the world's own debug UI uses absoluteY directly as local y
         // when present (it is already local-frame height, not a raw NAVD88 elevation); fall
         // back to heightM (approximating "ground" as y=0, since we have no terrain query here).

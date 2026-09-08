@@ -1,6 +1,6 @@
 # FINAL QA REPORT — Pangyo Techno Valley (pangyo-technovalley)
 
-Generated 2026-09-08 07:50:26Z by `tools/qa/qa_report.mjs` (stage 3).
+Generated 2026-09-08 08:40:16Z by `tools/qa/qa_report.mjs` (stage 3).
 
 ## Reconstruction boundary
 
@@ -55,25 +55,28 @@ WGS84 bbox 37.395–37.4065 N, 127.099–127.117 E (≈ 1.28 km N–S × 1.59 km
 
 ## Viewpoints
 
-All four cameras are defined in `src/data/recon/viewpoints.json` in local coordinates **and** WGS84, and are probed with `__twin.probePath` (0.9 m clearance) before the screenshot.
+All four cameras are defined in `src/data/recon/viewpoints.json` in local coordinates **and** WGS84, and are checked twice before
+the screenshot: `__twin.probePath` at 0.9 m clearance (walls and structure) **and** against the 441 placed street trees,
+which have no collider at all and so pass `probePath` while filling the frame: a camera must stand 2 m clear of every
+tree in plan **and** have none inside a 2.5 m-wide sight corridor for the first 18 m ahead of it.
 
-| id | Title | Camera (x, y, z) | Probe | Screenshot |
+| id | Title | Camera (x, y, z) | Probe + trees | Screenshot |
 |---|---|---|---|---|
-| `nc-entrance` | NCSOFT R&D Center — 정문 (남측 forecourt) | 0.0, 3.7, 115.0 | clear | ![nc-entrance](docs/qa/nc-entrance.png) |
-| `nc-aerial` | NCSOFT R&D Center — aerial (tour stop 1) | 40.0, 140.0, 220.0 | clear | ![nc-aerial](docs/qa/nc-aerial.png) |
-| `pangyoro-hsquare` | 판교역로 남행 — H스퀘어 코너 | 101.9, 20.8, -278.0 | clear | ![pangyoro-hsquare](docs/qa/pangyoro-hsquare.png) |
-| `pangyoyeok-plaza` | 판교역 광장 — 신분당선 출입구 캐노피 | 152.0, 13.0, 549.0 | clear | ![pangyoyeok-plaza](docs/qa/pangyoyeok-plaza.png) |
+| `nc-entrance` | NCSOFT R&D Center — 정문 (남측 forecourt) | 0.0, 3.7, 115.0 | clear (nearest tree 69.87 m) | ![nc-entrance](docs/qa/nc-entrance.png) |
+| `nc-aerial` | NCSOFT R&D Center — aerial (tour stop 1) | 40.0, 140.0, 220.0 | clear (nearest tree 29 m) | ![nc-aerial](docs/qa/nc-aerial.png) |
+| `pangyoro-hsquare` | 판교역로 남행 — H스퀘어 코너 | 113.0, 21.1, -276.0 | clear (nearest tree 13.51 m) | ![pangyoro-hsquare](docs/qa/pangyoro-hsquare.png) |
+| `pangyoyeok-plaza` | 판교역 광장 — 신분당선 출입구 캐노피 | 152.0, 13.0, 549.0 | clear (nearest tree 63.48 m) | ![pangyoyeok-plaza](docs/qa/pangyoyeok-plaza.png) |
 
 ## Life systems
 
 Simulated with `__twin.stepLife` (fixed 1/30 s steps), so the numbers are deterministic and independent of frame rate.
 The **at boot** column is read once, immediately after `__twin.ready`, before the viewpoint screenshots; the world then ran
-3.3 s of real time (four screenshots) before the 30 s of simulated time in the second column.
+3.2 s of real time (four screenshots) before the 30 s of simulated time in the second column.
 
 | Metric | at boot | + 30 s simulated |
 |---|---|---|
 | Pedestrians alive | 220 | 220 |
-| …on a sidewalk / plaza | 219 | 218 |
+| …on a sidewalk / plaza | 220 | 218 |
 | …at a NaN position | 0 | 0 |
 | Vehicles alive | 104 | 102 |
 | …moving / stopped | 104 / 0 | 90 / 12 |
@@ -81,22 +84,22 @@ The **at boot** column is read once, immediately after `__twin.ready`, before th
 | Route vehicles (of 6 routes) | 6/6 | 6/6 |
 | Unresolved routes (warnings) | 0 | 0 |
 | Nav graph | 2,254 nodes / 2,278 edges | — |
-| Pedestrian update cost | 1.9 ms (max 3.59 ms) | 0.66 ms |
+| Pedestrian update cost | 1.74 ms (max 3.43 ms) | 0.68 ms |
 
 ### Transit routes
 
 | Route | Street | Dir | Lane | Stops | min m/s | max m/s | red-light stops (60 s) | stops served |
 |---|---|---|---|---|---|---|---|---|
-| 9007 판교역 방면 | 판교역로 | S | curb | 4 | 0 | 11.01 | 6 | 1 |
+| 9007 판교역 방면 | 판교역로 | S | curb | 4 | 0 | 11.01 | 5 | 1 |
 | 9007 판교테크노밸리 방면 | 판교역로 | N | curb | 4 | 0 | 10.04 | 35 | 2 |
 | 101 대왕판교로 남행 | 대왕판교로 | S | curb | 3 | 0 | 11.2 | 0 | 1 |
 | 101 대왕판교로 북행 | 대왕판교로 | N | curb | 3 | 0 | 11.01 | 0 | 1 |
-| 3100 판교로 동행 | 판교로 | E | curb | 3 | 0 | 11.17 | 246 | 0 |
+| 3100 판교로 동행 | 판교로 | E | curb | 3 | 0 | 11.18 | 248 | 0 |
 | 3100 판교로 서행 | 판교로 | W | curb | 3 | 0 | 10.46 | 0 | 1 |
 
 ### Traffic-light smoke
 
-Over 60 s of simulated time the route vehicles came to a full stop at a signalised stop bar showing red/amber **287 times** (3 of 6 routes) — **PASS**. Background traffic was also observed stopped at red on 58 of the 60 sampled steps. First observed stop: 9007 판교역 방면 at t = 25.7 s, 판교역로 junction (85.1, -148.4), signal red.
+Over 60 s of simulated time the route vehicles came to a full stop at a signalised stop bar showing red/amber **288 times** (3 of 6 routes) — **PASS**. Background traffic was also observed stopped at red on 56 of the 60 sampled steps. First observed stop: 9007 판교역 방면 at t = 25.8 s, 판교역로 junction (85.1, -148.4), signal red.
 
 Signals: 14 controlled crossings driving 42 lamp heads on a 60 s coordinated cycle (NS green 25 → amber 3 → all-red 2 → EW green 25 → amber 3 → all-red 2, read back from `TrafficLights.stats()`) with a per-junction offset. Pedestrian crossings read the same clock.
 
@@ -104,10 +107,10 @@ Signals: 14 controlled crossings driving 42 lamp heads on a 60 s coordinated cyc
 
 | Metric | Value |
 |---|---|
-| Cold boot (launch → `__twin.ready`, headless) | 7,724 ms |
-| In-page load (`[pangyo] load`) | 4,586 ms |
+| Cold boot (launch → `__twin.ready`, headless) | 7,583 ms |
+| In-page load (`[pangyo] load`) | 4,616 ms |
 | Draw calls (aerial viewpoint, 1280×720) | 782 |
-| Triangles submitted | 4,281,788 |
+| Triangles submitted | 4,281,824 |
 | Geometries / textures resident | 741 / 53 |
 | Page errors during the run | none |
 

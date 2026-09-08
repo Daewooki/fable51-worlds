@@ -38,18 +38,18 @@
     "id": "pangyoro-hsquare",
     "title": "판교역로 남행 — H스퀘어 코너",
     "camera": {
-      "x": 101.9,
-      "y": 20.75,
-      "z": -278,
-      "lat": 37.401952,
-      "lon": 127.109569,
+      "x": 113,
+      "y": 21.15,
+      "z": -276,
+      "lat": 37.401943,
+      "lon": 127.109696,
       "heightM": 1.7,
       "headingDeg": 177.4,
       "pitchDeg": -0.15,
       "fovDegVertical": 60
     },
     "photo": null,
-    "notes": "East sidewalk of 판교역로 at the H스퀘어 bus stop (OSM platform ref 07479 / 07034), looking southbound down the arterial toward the NC block and 판교역. Reference capture: road view southbound from 판교역로 264."
+    "notes": "H스퀘어 forecourt at the 판교역로 bus stop (OSM platform ref 07479 / 07034), looking southbound down the arterial toward the NC block and 판교역. Moved 11 m east off the kerb in the stage-3.1 fix round: the authored stand (101.9, -278) sits 0.6 m off the procedural street-tree row, which is spaced every 12 m, so the nearest crown filled ~60 % of the frame while probePath still called the camera clear (trees have no collider). From here the nearest tree is 13.5 m away and none is in the sight line. Reference capture: road view southbound from 판교역로 264."
   },
   {
     "id": "pangyoyeok-plaza",

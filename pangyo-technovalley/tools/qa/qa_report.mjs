@@ -24,6 +24,8 @@ const REPO = path.resolve(PKG, '..');
 const OUT_DIR = path.join(PKG, 'docs', 'qa');
 const REPORT = path.join(PKG, 'FINAL_QA_REPORT.md');
 const SIM_LIFE_S = 30, SIM_LIGHT_S = 60, SIM_DT = 0.1;
+/** A viewpoint camera must stand at least this far (m, in plan) from any placed street tree. */
+const TREE_CLEAR_M = 2.0;
 
 // the repo path contains a space, so the import specifier must be a file:// URL
 const { launchWorld } = await import(pathToFileURL(path.join(REPO, 'studio/server/render/browser.mjs')).href);
@@ -76,12 +78,6 @@ async function run() {
   });
   // Everything from here on runs inside try/finally: any throw (a missing __twin member, a
   // screenshot failure, a bad viewpoint) used to leave the headless Chromium running forever.
-  try {
-    await body();
-  } finally {
-    await browser.close().catch(() => {});
-  }
-
   async function body() {
   const bootMs = Date.now() - t0;
   await page.waitForFunction(() => typeof window.__twin?.probePath === 'function', null, { timeout: 120_000 });
@@ -111,15 +107,41 @@ async function run() {
   const atBootMs = Date.now();
 
   // ---- viewpoints: probe, then screenshot ----------------------------------
-  const vpProbe = await page.evaluate((ids) => {
+  // `probePath` only knows about collision walls and structure. Street trees are instanced
+  // vegetation with no collider at all, so a camera can be standing inside a 6 m crown and still
+  // probe "clear" - which is exactly what happened to pangyoro-hsquare (~60 % of the frame was
+  // one trunk and its canopy). Every camera is therefore also held TREE_CLEAR_M away from every
+  // placed tree, in plan.
+  const vpProbe = await page.evaluate(({ ids, treeClear }) => {
     const t = window.__twin, w = t.world;
+    const trees = w.treeSpots || [];
     const pts = ids.map((v) => {
       const c = v.camera;
       const y = c.absoluteY !== undefined ? c.absoluteY : w.collision.floorAt(c.x, c.z, w.terrain.heightAt(c.x, c.z) + 0.5, 100) + (c.heightM ?? 1.7);
       return [c.x, y, c.z];
     });
-    return { pts, probes: t.probePath({ points: pts, clearance: 0.9 }) };
-  }, viewpoints);
+    const probes = t.probePath({ points: pts, clearance: 0.9 });
+    const treeDist = [], treeInView = [];
+    ids.forEach((v, i) => {
+      const [x, , z] = pts[i];
+      // compassToYaw: yaw 0 looks toward -z (grid north, true bearing -5.459)
+      const yaw = -((v.camera.headingDeg - (-5.459)) * Math.PI) / 180;
+      const fx = -Math.sin(yaw), fz = -Math.cos(yaw);
+      let near = Infinity, view = null;
+      for (const [tx, , tz] of trees) {
+        const dx = tx - x, dz = tz - z;
+        const d = Math.hypot(dx, dz); if (d < near) near = d;
+        const along = dx * fx + dz * fz, lat = Math.abs(dx * fz - dz * fx);
+        if (along > 0 && along < 18 && lat < 2.5 && (!view || along < view.along)) view = { along: +along.toFixed(1), lat: +lat.toFixed(2) };
+      }
+      treeDist.push(Number.isFinite(near) ? +near.toFixed(2) : null);
+      treeInView.push(view);
+    });
+    return {
+      pts, probes, trees: trees.length, treeClear, treeDist, treeInView,
+      inTree: treeDist.map((d, i) => (d !== null && d < treeClear) || !!treeInView[i]),
+    };
+  }, { ids: viewpoints, treeClear: TREE_CLEAR_M });
 
   const shots = [];
   for (const v of viewpoints) {
@@ -199,6 +221,8 @@ async function run() {
   const measured = [];
   const blockedVp = vpProbe.probes.map((p, i) => (p.blocked ? viewpoints[i].id : null)).filter(Boolean);
   if (blockedVp.length) measured.push(['Viewpoint camera blocked', 'high', `probePath reports ${blockedVp.join(', ')} inside geometry — the camera would start inside a wall.`]);
+  const inTreeVp = vpProbe.inTree.map((t, i) => (t ? `${viewpoints[i].id} (nearest ${vpProbe.treeDist[i]} m${vpProbe.treeInView[i] ? `, one ${vpProbe.treeInView[i].along} m dead ahead` : ''})` : null)).filter(Boolean);
+  if (inTreeVp.length) measured.push(['Viewpoint camera blocked by a street tree', 'high', `${inTreeVp.join('; ')} — within ${TREE_CLEAR_M} m of a placed tree, or with one inside the 2.5 m sight corridor for the first 18 m. Trees have no collider, so \`probePath\` calls such a camera clear while the frame is mostly foliage.`]);
   if (life.after.pedNaN > 0 || life.after.vehicleNaN > 0) measured.push(['NaN agent positions', 'high', `${life.after.pedNaN} pedestrians / ${life.after.vehicleNaN} vehicles at a non-finite position after ${SIM_LIFE_S} s.`]);
   if (world.signalReport && world.signalReport.osmUsed < (gis.signals || []).length) {
     measured.push(['Most OSM signal nodes collapse onto few junctions', 'medium',
@@ -219,8 +243,14 @@ async function run() {
   console.log(`lights route red stops ${redStopTotal} (${lights.routes.filter((r) => r.redStops).length}/${lights.routes.length} routes)`);
   console.log(`render ${render.calls} draw calls, ${fmt(render.triangles)} triangles`);
   if (!anyRedStop) process.exitCode = 1;
-  if (blockedVp.length) process.exitCode = 1;
+  if (blockedVp.length || inTreeVp.length) process.exitCode = 1;
   if (errors.length) process.exitCode = 1;
+  }
+
+  try {
+    await body();
+  } finally {
+    await browser.close().catch(() => {});
   }
 }
 
@@ -229,8 +259,10 @@ function report(d) {
   const bs = d.world.ground?.bySurface || {};
   const surfRows = Object.entries(bs).map(([k, v]) => `| \`${k}\` | ${fmt(v.patches)} | ${fmt(v.tris)} |`).join('\n');
   const vpRows = d.shots.map((s, i) => {
-    const p = d.vpProbe.probes[i];
-    return `| \`${s.id}\` | ${s.title} | ${d.vpProbe.pts[i].map((n) => n.toFixed(1)).join(', ')} | ${p.blocked ? '**BLOCKED**' : 'clear'} | ![${s.id}](${s.file}) |`;
+    const p = d.vpProbe.probes[i], dist = d.vpProbe.treeDist[i];
+    const iv = d.vpProbe.treeInView[i];
+    const verdict = p.blocked ? '**BLOCKED**' : d.vpProbe.inTree[i] ? `**BLOCKED-BY-TREE** (${iv ? `${iv.along} m ahead` : `${dist} m`})` : `clear (nearest tree ${dist ?? '—'} m)`;
+    return `| \`${s.id}\` | ${s.title} | ${d.vpProbe.pts[i].map((n) => n.toFixed(1)).join(', ')} | ${verdict} | ![${s.id}](${s.file}) |`;
   }).join('\n');
   const routeRows = routes.map((r, i) => {
     const l = d.lights.routes[i] || {};
@@ -291,9 +323,12 @@ ${surfRows}
 
 ## Viewpoints
 
-All four cameras are defined in \`src/data/recon/viewpoints.json\` in local coordinates **and** WGS84, and are probed with \`__twin.probePath\` (0.9 m clearance) before the screenshot.
+All four cameras are defined in \`src/data/recon/viewpoints.json\` in local coordinates **and** WGS84, and are checked twice before
+the screenshot: \`__twin.probePath\` at 0.9 m clearance (walls and structure) **and** against the ${fmt(d.vpProbe.trees)} placed street trees,
+which have no collider at all and so pass \`probePath\` while filling the frame: a camera must stand ${TREE_CLEAR_M} m clear of every
+tree in plan **and** have none inside a 2.5 m-wide sight corridor for the first 18 m ahead of it.
 
-| id | Title | Camera (x, y, z) | Probe | Screenshot |
+| id | Title | Camera (x, y, z) | Probe + trees | Screenshot |
 |---|---|---|---|---|
 ${vpRows}
 
