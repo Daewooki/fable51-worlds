@@ -33,6 +33,21 @@ describe('pangyo hero module assets', () => {
     }
   });
 
+  // `origin: bottom_center` is a claim about geometry, and for two of the three modules it is literally
+  // true (bbox min.y = 0). The canopy is the exception on purpose: its origin is the PLAZA slab, and the
+  // stair well cut into that slab drops 1.02 m below it. The manifest has to SAY so (`originNote`) — a
+  // placement that trusted the bbox minimum would float every canopy a metre above the pavement.
+  it('measures the canopy stair offset and documents it in the manifest', () => {
+    const canopy = MANIFEST['pangyo/pangyo_station_canopy'];
+    expect(canopy.bbox_threejs.min[1], 'canopy bbox min.y (stair well below the slab)').toBeCloseTo(-1.02, 2);
+    expect(canopy.originNote, 'canopy originNote').toMatch(/-1\.02/);
+    expect(canopy.bbox_threejs.max[1] - canopy.bbox_threejs.min[1]).toBeGreaterThan(canopy.height);
+    for (const id of ['pangyo/nc_rnd_center', 'pangyo/alphadome_tower']) {
+      expect(MANIFEST[id].bbox_threejs.min[1], `${id} sits on its origin`).toBeCloseTo(0, 6);
+      expect(MANIFEST[id].originNote).toBeUndefined();
+    }
+  });
+
   it('names a module for every hero entry and prop', () => {
     const modules = new Set(['pangyo/nc_rnd_center', 'pangyo/nc_podium', 'pangyo/alphadome_tower']);
     for (const e of HERO) expect(modules.has(e.module), `${e.osmId} -> ${e.module}`).toBe(true);
@@ -96,6 +111,37 @@ describe('pangyo hero modules in the world', () => {
     expect(names.filter((n) => n === 'pangyo/pangyo_station_canopy').length).toBe(PROPS.length);
     expect(names).toContain('pangyo/nc_rnd_center');
     expect(names).toContain('pangyo/alphadome_tower');
+  }, TIMEOUT);
+
+  // The geometric half of the manifest claim above: in the scene, the canopy's lowest vertex really is
+  // 1.02 m (times its placement scale) below the object origin the placer put on the pavement.
+  it('places the canopy origin on the pavement with its stair well below it', async () => {
+    const m = await page.evaluate(() => {
+      const out = [];
+      window.__twin.app.scene.traverse((o) => {
+        if (o.name !== 'pangyo/pangyo_station_canopy') return;
+        o.updateWorldMatrix(true, true);
+        const originY = o.matrixWorld.elements[13], sy = o.scale.y;
+        let minY = Infinity, maxY = -Infinity;
+        o.traverse((c) => {
+          const g = c.geometry; if (!g?.attributes?.position) return;
+          c.updateWorldMatrix(true, false);
+          const p = g.attributes.position, e = c.matrixWorld.elements;
+          for (let i = 0; i < p.count; i++) {
+            const x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+            const wy = e[1] * x + e[5] * y + e[9] * z + e[13];
+            if (wy < minY) minY = wy; if (wy > maxY) maxY = wy;
+          }
+        });
+        out.push({ originY, sy, below: (originY - minY) / sy, above: (maxY - originY) / sy });
+      });
+      return out;
+    });
+    expect(m.length).toBe(PROPS.length);
+    for (const c of m) {
+      expect(c.below, `canopy stair well below its origin (${JSON.stringify(c)})`).toBeCloseTo(1.02, 1);
+      expect(c.above, `canopy height above its origin (${JSON.stringify(c)})`).toBeCloseTo(6.42, 1);
+    }
   }, TIMEOUT);
 
   it('leaves no massing or façade geometry for the hero buildings', async () => {

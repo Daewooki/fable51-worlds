@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "geo": "node tools/geo/fetch_osm.mjs && node tools/geo/fetch_elevation.mjs && node tools/geo/build_gis.mjs && node tools/geo/build_streets.mjs && node tools/geo/sync_data.mjs",
+    "assets": "node tools/bpl/run_blender.mjs",
     "dev": "vite --port 5175 --strictPort",
     "build": "node tools/geo/sync_data.mjs && tsc --noEmit && vite build",
     "preview": "vite preview --port 4175 --strictPort",

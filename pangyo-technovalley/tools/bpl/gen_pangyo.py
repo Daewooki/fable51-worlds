@@ -347,7 +347,10 @@ def main():
          {"kind": "hero", "height": NC_H, "footprint": [NC_W, NC_D], "front": "-Z", "origin": "bottom_center",
           "note": "fit height 58 m excludes the rooftop sign, which stands 3 m proud on purpose"}),
         ("pangyo/pangyo_station_canopy", build_station_canopy,
-         {"kind": "hero_prop", "height": CAN_H, "footprint": [CAN_W, CAN_D], "front": "-Z", "origin": "bottom_center"}),
+         {"kind": "hero_prop", "height": CAN_H, "footprint": [CAN_W, CAN_D], "front": "-Z", "origin": "bottom_center",
+          "originNote": "bottom_center is the PLAZA slab (z = 0). The stair well is cut into it, so the top "
+                        "flight of steps and the balustrade footing hang below the origin: bbox min.y = -1.02 m. "
+                        "Placement must put y = 0 on the pavement, not on the module's bbox minimum."}),
         ("pangyo/alphadome_tower", build_alphadome_tower,
          {"kind": "hero", "height": AD_H, "footprint": [AD_W, AD_D], "front": "-Z", "origin": "bottom_center",
           "note": "fit height 100 m excludes the crown mast"}),

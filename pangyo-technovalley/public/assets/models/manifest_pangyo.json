@@ -48,7 +48,8 @@
    8.0
   ],
   "front": "-Z",
-  "origin": "bottom_center"
+  "origin": "bottom_center",
+  "originNote": "bottom_center is the PLAZA slab (z = 0). The stair well is cut into it, so the top flight of steps and the balustrade footing hang below the origin: bbox min.y = -1.02 m. Placement must put y = 0 on the pavement, not on the module's bbox minimum."
  },
  "pangyo/alphadome_tower": {
   "file": "assets/models/pangyo/alphadome_tower.glb",
