@@ -32,6 +32,18 @@ Same brief, same test conditions, two models. Each built Union Square from scrat
 
 <sub>▶ **[Watch the walkthrough](kyoto-higashiyama/media/kyoto-higashiyama-walkthrough.mp4)** · 54 s · 1920×1080 · seven scenes, Gion to Kiyomizu-dera at sunset</sub>
 
+### 🏢 [판교테크노밸리, Seongnam](pangyo-technovalley/) — *in progress*
+
+<a href="pangyo-technovalley/docs/stage1-target-cut.mp4"><img src="pangyo-technovalley/docs/stage1-f120.png" width="100%" alt="Pangyo Techno Valley: 판교역로 looking south from 30 m at sunset"></a>
+
+<sub>▶ **[Watch the stage-1 target cut](pangyo-technovalley/docs/stage1-target-cut.mp4)** · 8 s · 1920×1080 · aerial over the NCSOFT R&D Center, down to 판교역로, south toward 판교역</sub>
+
+| World | Geometry from | Dev port | Status |
+| --- | --- | --- | --- |
+| [Union Square, San Francisco](union-square-sf/) | survey + hand-authored specs | 5173 | complete |
+| [Higashiyama, Kyoto](kyoto-higashiyama/) | survey + hand-authored specs | 5174 | complete |
+| [판교테크노밸리 (Pangyo Techno Valley)](pangyo-technovalley/) | OpenStreetMap + SRTM, built by tools in the repo | 5175 | stage 1 — massing, streets, terrain |
+
 *More worlds coming.*
 
 ---
@@ -46,8 +58,8 @@ timeline, render a **previz** MP4 headlessly at full resolution, hand that previ
 the camera path and a Blender import script. A phone can be used as a virtual camera, and a
 sentence can be turned into a camera path.
 
-It drives both worlds through one small contract (`window.__twin` plus a postMessage
-bridge), so a third world becomes filmable as soon as it implements it.
+It drives all three worlds through one small contract (`window.__twin` plus a postMessage
+bridge), so a new world becomes filmable as soon as it implements it.
 **[Setup, walkthrough, the world contract and troubleshooting →](studio/README.md)**
 
 ---

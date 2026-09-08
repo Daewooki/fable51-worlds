@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 // One-terminal launcher for MV Studio: world dev server(s) + studio server + Director UI.
 //
-//   node tools/up.mjs                       union-square-sf + server + UI
-//   node tools/up.mjs --world kyoto         kyoto-higashiyama instead
-//   node tools/up.mjs --world all           both worlds
+//   node tools/up.mjs                       every world + server + UI
+//   node tools/up.mjs --world kyoto         kyoto-higashiyama only (union / pangyo likewise)
+//   node tools/up.mjs --world all           all three worlds
 //   node tools/up.mjs --lan                 bind the server to 0.0.0.0 (phone camera) and print the LAN URL
 //   node tools/up.mjs --open                open the Director in the default browser once everything is up
-//   node tools/up.mjs --stop                kill whatever is listening on 5173/5174/5180/5190 and exit
+//   node tools/up.mjs --stop                kill whatever is listening on 5173/5174/5175/5180/5190 and exit
 //
 // Ctrl+C stops every process it started (process trees included, on Windows too).
 // A port that is already serving is reused, not restarted, and is left running on exit.
@@ -23,14 +23,15 @@ const WIN = process.platform === 'win32';
 const WORLDS = {
   'union-square-sf': { port: 5173 },
   'kyoto-higashiyama': { port: 5174 },
+  'pangyo-technovalley': { port: 5175 },
 };
-const ALIASES = { union: 'union-square-sf', 'union-square': 'union-square-sf', kyoto: 'kyoto-higashiyama' };
+const ALIASES = { union: 'union-square-sf', 'union-square': 'union-square-sf', kyoto: 'kyoto-higashiyama', pangyo: 'pangyo-technovalley' };
 const PORTS = { ui: 5180, server: 5190 };
 
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf(`--${k}`); return i >= 0 ? (argv[i + 1] && !argv[i + 1].startsWith('--') ? argv[i + 1] : true) : d; };
-// Default to every world: the Director can open a project of either, and a world whose dev
-// server is down just shows "not running" — cheaper to start both than to explain.
+// Default to every world: the Director can open a project of any of them, and a world whose
+// dev server is down just shows "not running" — cheaper to start them all than to explain.
 const worldArg = String(opt('world', 'all'));
 const lan = !!opt('lan', false);
 const open = !!opt('open', false);
@@ -72,7 +73,7 @@ if (stopOnly) {
   const all = [...Object.values(WORLDS).map((w) => w.port), PORTS.ui, PORTS.server];
   let n = 0;
   for (const port of all) for (const pid of listeningPids(port)) { say(`stopping pid ${pid} on :${port}`); killPid(pid); n++; }
-  say(n ? `stopped ${n} process(es)` : 'nothing was listening on 5173/5174/5180/5190');
+  say(n ? `stopped ${n} process(es)` : `nothing was listening on ${all.join('/')}`);
   process.exit(0);
 }
 

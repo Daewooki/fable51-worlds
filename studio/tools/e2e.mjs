@@ -13,10 +13,13 @@
  *   cd studio
  *   node tools/e2e.mjs                                   # union-square-sf, temp projects dir
  *   node tools/e2e.mjs --world kyoto-higashiyama
+ *   node tools/e2e.mjs --world pangyo-technovalley
  *   node tools/e2e.mjs --projects D:/tmp/e2e --keep      # keep the artifacts to look at
  *
- * Requires: the world's Vite dev server up (5173 / 5174), ffmpeg + ffprobe on PATH,
+ * Requires: the world's Vite dev server up (5173 / 5174 / 5175), ffmpeg + ffprobe on PATH,
  * Playwright chromium installed (the render and export jobs drive it inside the server).
+ * `--port` (default 5191) is the throwaway studio server's own port — keep it off :5190 so
+ * a real studio server can stay up alongside it.
  */
 import fs from 'node:fs'; import os from 'node:os'; import path from 'node:path';
 import { spawn, execFileSync } from 'node:child_process';

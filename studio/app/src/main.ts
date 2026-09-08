@@ -11,7 +11,7 @@ import { esc } from './dom';
 import { WORLDS, createShot } from '../../schemas/project.mjs';
 import { sample, duration } from '../../schemas/keys.mjs';
 
-const WORLD_PORTS: Record<string, number> = { 'union-square-sf': 5173, 'kyoto-higashiyama': 5174 };
+const WORLD_PORTS: Record<string, number> = { 'union-square-sf': 5173, 'kyoto-higashiyama': 5174, 'pangyo-technovalley': 5175 };
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
 const panelLeft = $('#panel-left-main');
@@ -229,7 +229,10 @@ const MODE_LOCKED = 'none';
 let unlocked = false;
 let unlockMode: 'walk' | 'orbit' = 'walk';
 
-const worldSupportsModes = () => ctx.project?.world === 'union-square-sf';
+// pangyo-technovalley runs a generalized copy of union-square-sf's runtime, so it has the
+// same walk/orbit controllers behind the same `setMode` — hence a set, not one name.
+const MODE_WORLDS = new Set(['union-square-sf', 'pangyo-technovalley']);
+const worldSupportsModes = () => MODE_WORLDS.has(ctx.project?.world ?? '');
 
 function renderViewportControls() {
   const supported = worldSupportsModes();

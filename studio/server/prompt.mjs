@@ -1,6 +1,7 @@
 // Prompt -> camera-path generation. Two layers:
-//   - anchorsFor(world): named landmark positions/look-points for a world, drawn from
-//     hand-picked "tour" stops plus (where available) that world's public/data/viewpoints.json.
+//   - anchorsFor(world): named landmark positions/look-points for a world, drawn from that
+//     world's own public/data/tour.json when it ships one, else from the hand-picked TOURS
+//     table below, plus (where available) that world's public/data/viewpoints.json.
 //   - promptToKeys(...): either hands 4 of those anchors straight to anchorsToKeys() (provider
 //     'none' — no network, no API key, always available) or asks an LLM to plan a fuller move
 //     using the anchor list as grounding, then validates whatever comes back with validateKey.
@@ -88,8 +89,24 @@ const TOURS = {
   ],
 };
 
+// A world that ships its own `public/data/tour.json` (the runtime's tour-mode stops:
+// `[{ title, subtitle?, pos:[x,y,z], look:[x,y,z], duration, hold, time? }]`) is the
+// authority on its own landmarks — the studio should not carry a second, drifting copy of
+// them. The TOURS table above stays as the fallback for the two worlds that hard-code their
+// tour in code (union-square-sf, kyoto-higashiyama) and ship no such file.
+function tourStops(world) {
+  try {
+    const raw = fs.readFileSync(path.join(ROOT, world, 'public/data/tour.json'), 'utf8');
+    const list = JSON.parse(raw);
+    if (!Array.isArray(list)) return null;
+    const stops = list.filter((t) => Array.isArray(t?.pos) && t.pos.length === 3 && Array.isArray(t?.look) && t.look.length === 3);
+    return stops.length ? stops : null;
+  } catch { return null; } // no tour.json for this world, or it is not readable JSON
+}
+
 export function anchorsFor(world) {
-  const out = (TOURS[world] || []).map((t, i) => ({ id: `tour${i}`, title: t.title, pos: t.pos, look: t.look }));
+  const tour = tourStops(world) || TOURS[world] || [];
+  const out = tour.map((t, i) => ({ id: `tour${i}`, title: t.title || `stop ${i + 1}`, pos: t.pos, look: t.look }));
   const g = GEO[world];
   if (g) {
     try {

@@ -4,7 +4,7 @@
 // (studio/app/src/main.ts) — stays load-safe in a browser bundle. Importing `node:crypto`
 // directly makes Vite substitute a throw-on-access stub for client code, which crashed the
 // whole module at import time even for callers that never invoke newId().
-export const WORLDS = ['union-square-sf', 'kyoto-higashiyama'];
+export const WORLDS = ['union-square-sf', 'kyoto-higashiyama', 'pangyo-technovalley'];
 export const newId = () => crypto.randomUUID().slice(0, 13);
 
 export function createProject({ name, world }) {

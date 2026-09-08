@@ -10,7 +10,7 @@ Blender instead — **export** the world as a GLB with the camera path and an im
 Nothing here is a service. It is a Node server, a Vite UI and a browser, all on localhost.
 
 ```
- Director UI (5180) ──postMessage──▶ world iframe (5173 / 5174)
+ Director UI (5180) ──postMessage──▶ world iframe (5173 / 5174 / 5175)
         │                                    ▲
         │ HTTP/WS                            │ Playwright (headless, same world, same URL)
         ▼                                    │
@@ -23,8 +23,9 @@ Nothing here is a service. It is a Node server, a Vite UI and a browser, all on 
 
 ```bash
 # once per world
-cd union-square-sf   && npm install
-cd kyoto-higashiyama && npm install
+cd union-square-sf     && npm install
+cd kyoto-higashiyama   && npm install
+cd pangyo-technovalley && npm install
 
 # the studio itself
 cd studio && npm install
@@ -56,10 +57,10 @@ Also needed:
 
 ```bash
 cd studio
-npm run up            # both worlds (:5173, :5174) + studio server (:5190) + Director UI (:5180)
-npm run up:union      # only union-square-sf   (npm run up:kyoto for only kyoto)
+npm run up            # all three worlds (:5173, :5174, :5175) + studio server (:5190) + Director UI (:5180)
+npm run up:union      # only union-square-sf   (also up:kyoto, up:pangyo)
 npm run up:lan        # server bound to 0.0.0.0 for the phone camera; prints the LAN URL
-npm run down          # stop whatever is listening on 5173/5174/5180/5190
+npm run down          # stop whatever is listening on 5173/5174/5175/5180/5190
 ```
 
 `tools/up.mjs` spawns the three processes, prefixes their logs (`[union-square-sf]`,
@@ -73,9 +74,10 @@ browser), `--stop`.
 job runs — the studio drives the *live* world, it does not have its own copy of it.
 
 ```bash
-# 1. the world  (pick one; the studio can drive either)
-cd union-square-sf   && npx vite --port 5173 --strictPort
-cd kyoto-higashiyama && npm run dev            # already pinned to 5174
+# 1. the world  (pick one; the studio can drive any of them)
+cd union-square-sf     && npx vite --port 5173 --strictPort
+cd kyoto-higashiyama   && npm run dev          # already pinned to 5174
+cd pangyo-technovalley && npx vite --port 5175 --strictPort
 
 # 2. the studio server                → http://localhost:5190
 cd studio && npm run dev
@@ -98,7 +100,7 @@ the UI is the only URL you need.
 2. **New shot** — fps / width / height / time of day. 30 fps, 1920×1080, sunset is the
    default. The world loads into the centre iframe and the status line says `world ready`.
 3. **Block the camera.** Three ways: press **Unlock controls** under the viewport and fly
-   the world by hand in the iframe (union-square-sf only — see *Unlocking the camera*
+   the world by hand in the iframe (not kyoto-higashiyama — see *Unlocking the camera*
    below), drive it from a phone (below), or type a prompt into **Prompt → path** and hit
    Generate to get a 4-key move built from that world's landmark anchors.
 4. **Keyframes** (right panel) — set `t`, choose `air` (free camera) or `walk` (eye height
@@ -164,19 +166,20 @@ sampled camera position (10 Hz plus every key time) through the `world`, `props`
 `vegetation` groups; a first hit more than 1.5 m above the terrain is a structure, and a
 camera below that surface (minus 1 m clearance) is blocked. It is a roof test, not a wall
 test: a camera 30 cm outside a façade is "clear", and a camera under a canopy or an arcade
-reads as blocked. Both worlds implement it (kyoto in its adapter).
+reads as blocked. All three worlds implement it (kyoto in its adapter).
 
 ---
 
 ## Unlocking the camera
 
-Under `?studio=1` both worlds switch their own camera controllers **off**, so nothing fights
+Under `?studio=1` every world switches its own camera controllers **off**, so nothing fights
 the pose the Director sets when you scrub. That also means dragging in the iframe does
 nothing by default. The **Unlock controls** toggle under the viewport hands the camera back
 to the world (`walk` or `orbit`, picked in the select next to it); toggle it off and the
 Director owns the camera again.
 
-- **union-square-sf** — both modes work. Note that unlocking hands over to the world's own
+- **union-square-sf** and **pangyo-technovalley** — both modes work (pangyo runs a
+  generalized copy of union's runtime). Note that unlocking hands over to the world's own
   controller, which resumes from *its* last pose, so the view jumps once when you unlock;
   block from there, then **Add key @ t**.
 - **kyoto-higashiyama** — the button reads `n/a`. That world is a first-person walker with
@@ -193,6 +196,12 @@ Director owns the camera again.
 - **provider `none`** (the default, no key, no network) hands you four of that world's
   named landmark anchors spread over the duration you asked for. It always works, and it is
   what the tests and `tools/e2e.mjs` use.
+- **Where the anchors come from.** If the world ships `public/data/tour.json` (its runtime's
+  own tour stops) that file *is* the anchor list — `pangyo-technovalley` works this way, so
+  its landmarks live in the world and the studio holds no second copy of them. The two
+  worlds that hard-code their tour in code (union-square-sf, kyoto-higashiyama) fall back to
+  the `TOURS` table in `server/prompt.mjs`. union-square-sf additionally contributes its
+  `public/data/viewpoints.json` entries, converted from lat/lon by the `GEO` table there.
 - **provider `anthropic` / `openai`** gives the model the same anchor list as grounding and
   asks it to plan a fuller move. Whatever comes back is validated key-by-key against the
   schema before it is accepted, so a malformed plan is an error, not a broken shot.
@@ -331,12 +340,15 @@ Higgsfield (Seedance) is not a key but a CLI login; the panel shows whether
 
 ## What a world has to provide
 
-Both worlds in this repo are plain Three.js apps that were written to be walked, not to be
-filmed. The studio drives them through a small contract; a third world becomes drivable the
+The worlds in this repo are plain Three.js apps that were written to be walked, not to be
+filmed. The studio drives them through a small contract; a new world becomes drivable the
 moment it implements this. `union-square-sf/src/debug/{Qa,StudioBridge}.ts` and
-`kyoto-higashiyama/src/studio.js` are the two existing implementations, and they are worth
+`kyoto-higashiyama/src/studio.js` are the two reference implementations, and they are worth
 reading in that order — the Kyoto one is the honest measure of how much is actually
 required, because that world shares no code at all with the first.
+`pangyo-technovalley` is the third world; it reuses union-square-sf's bridge byte for byte,
+so what it demonstrates instead is that the contract survives being fed a different city's
+data (OSM buildings, SRTM terrain, fitted street specs, `tour.json` landmarks).
 
 **1. Query parameters.** The world is always opened as
 
@@ -393,9 +405,11 @@ renders on demand instead.
 one of them has to exist.
 
 **5. Register the world** in `studio/schemas/project.mjs` (`WORLDS`),
-`studio/server/render/browser.mjs` (`WORLD_PORTS`) and `studio/app/src/main.ts`
-(`WORLD_PORTS`), and add landmark anchors to `TOURS` in `studio/server/prompt.mjs` so
-prompt→path has something to aim at.
+`studio/server/render/browser.mjs` (`WORLD_PORTS`), `studio/app/src/main.ts` (`WORLD_PORTS`,
+and `MODE_WORLDS` if it has walk/orbit camera modes to hand back) and `studio/tools/up.mjs`
+(`WORLDS` + `ALIASES`), and give prompt→path something to aim at: ship
+`public/data/tour.json` in the world (preferred — `anchorsFor()` reads it) or add an entry
+to `TOURS` in `studio/server/prompt.mjs`.
 
 ---
 
@@ -403,16 +417,18 @@ prompt→path has something to aim at.
 
 ```bash
 cd studio && npx vitest run          # unit + integration; the browser tests need
-                                     # BOTH world dev servers up (5173 and 5174)
+                                     # ALL THREE world dev servers up (5173, 5174, 5175)
 npx tsc --noEmit -p app              # Director UI types
 
 # the postMessage bridge, per world
 node union-square-sf/tools/qa/studio_bridge_test.mjs
 node kyoto-higashiyama/tools/studio_bridge_test.mjs
+node pangyo-technovalley/tools/qa/studio_bridge_test.mjs
 
 # the whole pipeline, end to end, against a throwaway projects dir
 cd studio && node tools/e2e.mjs --world union-square-sf
-             node tools/e2e.mjs --world kyoto-higashiyama --port 5192
+             node tools/e2e.mjs --world kyoto-higashiyama   --port 5192
+             node tools/e2e.mjs --world pangyo-technovalley --port 5194
 ```
 
 `tools/e2e.mjs` starts its own studio server on its own port, so it is safe to run while a
@@ -422,21 +438,23 @@ real one is up. `--projects <dir> --keep` leaves the artifacts behind to look at
 
 ## Measured on
 
-RTX 3070, Windows 11, Node 22, Chromium via Playwright with `--use-angle=d3d11`, both
-worlds served by Vite 6.4.3 dev servers. All figures from `node tools/e2e.mjs`, which
-includes the world's load-and-build time in the first render of each run.
+RTX 3070, Windows 11, Node 22, Chromium via Playwright with `--use-angle=d3d11`, every
+world served by a Vite dev server. All figures from `node tools/e2e.mjs`, which includes the
+world's load-and-build time in the first render of each run.
 
-| Step | union-square-sf | kyoto-higashiyama |
-| --- | --- | --- |
-| create project + prompt → keys (provider `none`) | < 0.1 s | < 0.1 s |
-| previz, 2 s @ 640×360 — 60 frames | **26.1 s** | **28.2 s** |
-| previz, 10 s @ 1920×1080 — 300 frames | **143.0 s** (0.48 s/frame) | **72.8 s** (0.24 s/frame) |
-| finalize, `driver: manual` (writes the job card) | < 0.1 s | < 0.1 s |
-| export GLB + keys + Blender script | **20.4 s** (39.7 MB, 1229 meshes) | **38.8 s** (397.2 MB, 1052 meshes) |
-| **total** | **190.4 s** | **140.7 s** |
+| Step | union-square-sf | kyoto-higashiyama | pangyo-technovalley |
+| --- | --- | --- | --- |
+| create project + prompt → keys (provider `none`) | < 0.1 s | < 0.1 s | < 0.1 s |
+| previz, 2 s @ 640×360 — 60 frames | **26.1 s** | **28.2 s** | **14.7 s** |
+| previz, 10 s @ 1920×1080 — 300 frames | **143.0 s** (0.48 s/frame) | **72.8 s** (0.24 s/frame) | **138.5 s** (0.46 s/frame) |
+| finalize, `driver: manual` (writes the job card) | < 0.1 s | < 0.1 s | < 0.1 s |
+| export GLB + keys + Blender script | **20.4 s** (39.7 MB, 1229 meshes) | **38.8 s** (397.2 MB, 1052 meshes) | **9.2 s** (18.2 MB, 565 meshes) |
+| **total** | **190.4 s** | **140.7 s** | **164.7 s** |
 
-Neither run fell back to software rendering (`softwareRender: false`). The Blender import
-step is not included: Blender is not installed on this machine, so `blender_import.py` is
+No run fell back to software rendering (`softwareRender: false`). Pangyo's figures are from
+`node tools/e2e.mjs --world pangyo-technovalley --port 5194`; its GLB is the smallest of the
+three because that world is pure OSM massing with procedural façades and no hero interiors
+yet. The Blender import step is not included: Blender is not installed on this machine, so `blender_import.py` is
 written and checked for existence but has not been executed here.
 
 Union Square's 1080p previz got ~25 % faster once the renderer started sending `studio=1`
@@ -495,5 +513,7 @@ mkcert as above and reload over `https://<lan-ip>:5180/phone/…`.
 The world's chrome was not hidden. `ui=0` must hide *every* overlay, including any
 full-screen click-to-start plate that is a sibling of the HUD rather than a child of it.
 
-**Ports.** 5173 union-square-sf · 5174 kyoto-higashiyama · 5180 Director UI · 5190 studio
-server. All are `strictPort`, so a clash fails loudly rather than silently moving.
+**Ports.** 5173 union-square-sf · 5174 kyoto-higashiyama · 5175 pangyo-technovalley · 5180
+Director UI · 5190 studio server. All are `strictPort`, so a clash fails loudly rather than
+silently moving. `tools/e2e.mjs` takes its own `--port` (default 5191) for the throwaway
+server it starts, so keep that off 5190.
