@@ -70,8 +70,18 @@ function cloneMeshDeep(doc, mesh) {
   return newMesh;
 }
 
+/**
+ * `--as <category>/<name>`: the kit id the asset is filed under, and therefore which manifest it joins
+ * (`manifest_<category>.json`, alongside the world's own `street`/`veg`/`retail`/... manifests).
+ * `varco/` stays the documented default - this tool is the VARCO import path - but a world that keeps
+ * its own kit under another category (pangyo's hero modules live in `pangyo/`) can inject into it.
+ */
+export const AS_RE = /^([a-z0-9_]+)\/([a-z0-9_]+)$/;
+
 export async function injectAsset({ input, worldDir, as, kind = 'prop', height, scale, budget = 2000, replace }) {
-  if (!/^varco\/[a-z0-9_]+$/.test(as)) throw new Error('--as must look like varco/name');
+  const asParts = AS_RE.exec(as || '');
+  if (!asParts) throw new Error('--as must look like <category>/<name>, e.g. varco/torii (lower-case, [a-z0-9_])');
+  const category = asParts[1];
   if (height !== undefined && !(height > 0)) throw new Error('--height must be > 0');
   if (scale !== undefined && !(scale > 0)) throw new Error('--scale must be > 0');
   const modelsDir = path.join(worldDir, 'public/assets/models');
@@ -188,8 +198,8 @@ export async function injectAsset({ input, worldDir, as, kind = 'prop', height, 
   const rel = as, outGlb = path.join(modelsDir, `${rel}.glb`);
   fs.mkdirSync(path.dirname(outGlb), { recursive: true });
   await io.write(outGlb, doc);
-  const entry = { file: `assets/models/${rel}.glb`, tris, bbox_threejs: b, sizeBytes: fs.statSync(outGlb).size, kind, height: +(b.max[1] - b.min[1]).toFixed(3), footprint: [+(b.max[0] - b.min[0]).toFixed(3), +(b.max[2] - b.min[2]).toFixed(3)], front: '-Z', origin: 'bottom_center', source: 'varco' };
-  const manPath = path.join(modelsDir, 'manifest_varco.json');
+  const entry = { file: `assets/models/${rel}.glb`, tris, bbox_threejs: b, sizeBytes: fs.statSync(outGlb).size, kind, height: +(b.max[1] - b.min[1]).toFixed(3), footprint: [+(b.max[0] - b.min[0]).toFixed(3), +(b.max[2] - b.min[2]).toFixed(3)], front: '-Z', origin: 'bottom_center', source: 'varco' };  // `source` records the tool, not the category
+  const manPath = path.join(modelsDir, `manifest_${category}.json`);
   const man = fs.existsSync(manPath) ? JSON.parse(fs.readFileSync(manPath, 'utf8')) : {};
   man[rel] = entry;
   fs.writeFileSync(manPath, JSON.stringify(man, null, 1));

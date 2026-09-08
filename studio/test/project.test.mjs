@@ -7,9 +7,20 @@ describe('project schema', () => {
     expect(p.id).toMatch(/^[a-z0-9-]{8,}$/); expect(p.shots).toEqual([]); expect(p.refs).toEqual({ artist: [], style: [] });
   });
   it('rejects unknown worlds', () => expect(() => createProject({ name: 'x', world: 'mars' })).toThrow(/world/));
-  it('shot defaults: 30fps 1920x1080 sunset', () => {
+  it('shot defaults: 30fps 1920x1080 sunset, life off', () => {
     const s = createShot({ name: 'opening' });
     expect([s.fps, s.width, s.height, s.timeOfDay]).toEqual([30, 1920, 1080, 'sunset']); expect(s.keys).toEqual([]);
+    // life off is the studio's contract with every world: a render without the crowd is reproducible
+    expect(s.life).toBe(false);
+    expect(createShot({ name: 'crowd', life: true }).life).toBe(true);
+  });
+  it('validateShot accepts a boolean life and rejects anything else', () => {
+    const s = createShot({ name: 'a', life: true });
+    expect(validateShot(s)).toEqual([]);
+    s.life = 'yes';
+    expect(validateShot(s)).toContain('life must be a boolean');
+    delete s.life;                                   // a shot saved before the flag existed stays valid
+    expect(validateShot(s)).toEqual([]);
   });
   it('validateKey flags bad keys', () => {
     expect(validateKey({ t: 0, m: 'air', eye: [0, 1, 2], look: [0, 0, 0] })).toEqual([]);

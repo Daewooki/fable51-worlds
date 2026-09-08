@@ -264,6 +264,11 @@ node tools/varco_fetch.mjs --image ref.png --name torii --out torii.glb
 #    real-world height, and (optionally) takes the place of an existing asset.
 node tools/inject_asset.mjs torii.glb --as varco/torii --height 6.4 [--replace <rel-path>]
 
+#    `--as` is <category>/<name> (lower-case, [a-z0-9_]). The category picks the manifest the
+#    entry joins — `varco/torii` writes manifest_varco.json, `pangyo/x` writes
+#    manifest_pangyo.json — so an asset can go straight into a world's own kit. `varco/` is
+#    the default and the documented path; the entry always records `source: "varco"`.
+
 # 3. restart the world's Vite dev server so the new asset is picked up.
 ```
 
@@ -353,7 +358,7 @@ data (OSM buildings, SRTM terrain, fitted street specs, `tour.json` landmarks).
 **1. Query parameters.** The world is always opened as
 
 ```
-http://localhost:<port>/?qa=1&ui=0&studio=1&life=0&time=<day|sunset|night>&q=<low|med|high>
+http://localhost:<port>/?qa=1&ui=0&studio=1&life=<0|1>&time=<day|sunset|night>&q=<low|med|high>
 ```
 
 `qa=1` asks for the automation surface, `studio=1` additionally asks for the postMessage
@@ -361,6 +366,15 @@ bridge, `ui=0` hides all chrome (including any click-to-start plate — the rend
 screenshot straight through it otherwise), `time` sets the lighting and `q` the render
 quality. **Any parameter the world does not understand must be ignored**, not rejected:
 the studio sends the same query string to every world.
+
+`life` is the world's crowd and traffic, and it is **`0` unless the shot asks for it**. A shot
+carries a `life` flag (the *life (pedestrians & traffic)* checkbox on the **New shot** form,
+`life: false` by default); when it is set, the preview iframe, the previz render and the GLB
+export all open the world with `life=1`. Leave it off for anything you intend to re-render:
+the agents are simulated in real time, so **two renders of the same shot with life on are not
+frame-for-frame identical** — that is what makes a previz comparable to its re-render, and why
+the default stays `life=0`. `worldUrl()` in `server/render/browser.mjs` is the single place
+this query is composed, for the server and for the tests.
 
 **2. `window.__twin`.**
 

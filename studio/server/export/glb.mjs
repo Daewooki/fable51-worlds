@@ -77,7 +77,7 @@ export async function exportGlb({ project, shotId, log }) {
   const glb = path.join(out, 'scene.glb');
   fs.writeFileSync(glb, Buffer.alloc(0));
 
-  const { browser, page } = await launchWorld({ world: project.world, width: 640, height: 360, time: shot.timeOfDay, quality: 'low' });
+  const { browser, page } = await launchWorld({ world: project.world, width: 640, height: 360, time: shot.timeOfDay, quality: 'low', life: !!shot.life });
   try {
     await page.exposeFunction('__glbChunk', (b64) => { fs.appendFileSync(glb, Buffer.from(b64, 'base64')); });
     page.on('console', (msg) => { if (msg.type() === 'error' || msg.type() === 'warning') log('page console:', msg.text()); });

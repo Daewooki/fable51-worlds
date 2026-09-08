@@ -11,8 +11,13 @@ export function createProject({ name, world }) {
   if (!WORLDS.includes(world)) throw new Error(`unknown world: ${world} (valid: ${WORLDS.join(', ')})`);
   return { id: newId(), name, world, createdAt: new Date().toISOString(), refs: { artist: [], style: [] }, shots: [], finalize: [] };
 }
-export function createShot({ name, fps = 30, width = 1920, height = 1080, timeOfDay = 'sunset' }) {
-  return { id: newId(), name, fps, width, height, timeOfDay, keys: [] };
+/**
+ * `life` opts a shot into the world's pedestrians and traffic (query `life=1`). It is OFF by default,
+ * which is the studio's contract with every world: with life off a render is deterministic frame to
+ * frame, so a previz can be re-rendered and compared. Turn it on when the shot wants the crowd.
+ */
+export function createShot({ name, fps = 30, width = 1920, height = 1080, timeOfDay = 'sunset', life = false }) {
+  return { id: newId(), name, fps, width, height, timeOfDay, life: !!life, keys: [] };
 }
 const isVec = (v, n) => Array.isArray(v) && v.length === n && v.every(Number.isFinite);
 export function validateKey(k) {
@@ -31,6 +36,7 @@ export function validateShot(s) {
   if (!s.name) e.push('shot needs a name');
   if (!(s.fps > 0 && s.width > 0 && s.height > 0)) e.push('fps/width/height must be positive');
   if (!['day', 'sunset', 'night'].includes(s.timeOfDay)) e.push('timeOfDay must be day|sunset|night');
+  if (s.life !== undefined && typeof s.life !== 'boolean') e.push('life must be a boolean');
   s.keys.forEach((k, i) => validateKey(k).forEach((m) => e.push(`key[${i}]: ${m}`)));
   for (let i = 1; i < s.keys.length; i++) if (s.keys[i].t < s.keys[i - 1].t) { e.push('keys must be sorted by t'); break; }
   return e;

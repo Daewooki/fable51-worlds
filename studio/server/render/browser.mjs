@@ -5,15 +5,26 @@ export const WORLD_PORTS = { 'union-square-sf': 5173, 'kyoto-higashiyama': 5174,
 const GPU = ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--use-gl=angle', '--hide-scrollbars'];
 const SOFT = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--hide-scrollbars'];
 
-export async function launchWorld({ world, width = 1280, height = 720, time = 'sunset', quality = 'med', software = false, extraQuery = '', port: portOverride } = {}) {
+/**
+ * The URL a world is opened at. Exported so the query contract can be unit-tested without a browser.
+ *
+ * `studio=1` as well as `qa=1`, exactly as the world contract in studio/README.md documents
+ * ("The world is always opened as ?qa=1&ui=0&studio=1&life=0&time=&q="). It is what tells a world
+ * that something else is driving its camera: union-square-sf switches its own controllers off,
+ * kyoto-higashiyama parks its frame loop (its `qa=1` path is that world's own capture tooling and
+ * must keep a live loop).
+ *
+ * `life` defaults to 0 - a render with the crowd running is not reproducible frame to frame. A shot
+ * that wants pedestrians and traffic sets `life: true` and gets `life=1`.
+ */
+export function worldUrl({ world, port: portOverride, time = 'sunset', quality = 'med', life = false, extraQuery = '' } = {}) {
   const port = portOverride ?? WORLD_PORTS[world];
   if (!port) throw new Error(`unknown world ${world}`);
-  // `studio=1` as well as `qa=1`, exactly as the world contract in studio/README.md
-  // documents ("The world is always opened as ?qa=1&ui=0&studio=1&life=0&time=&q="). It is
-  // what tells a world that something else is driving its camera: union-square-sf switches
-  // its own controllers off, kyoto-higashiyama parks its frame loop (its `qa=1` path is that
-  // world's own capture tooling and must keep a live loop).
-  const url = `http://localhost:${port}/?qa=1&ui=0&studio=1&life=0&time=${time}&q=${quality}${extraQuery}`;
+  return `http://localhost:${port}/?qa=1&ui=0&studio=1&life=${life ? 1 : 0}&time=${time}&q=${quality}${extraQuery}`;
+}
+
+export async function launchWorld({ world, width = 1280, height = 720, time = 'sunset', quality = 'med', software = false, life = false, extraQuery = '', port: portOverride } = {}) {
+  const url = worldUrl({ world, port: portOverride, time, quality, life, extraQuery });
 
   const attempt = async (args, softwareRender) => {
     const browser = await chromium.launch({ headless: true, args });

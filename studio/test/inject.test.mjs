@@ -47,6 +47,27 @@ it('normalizes scale/origin, decimates to budget, writes manifest and override',
   expect(ov['street/bench_plaza']).toBe('varco/bench_test');
 });
 
+// `--as` is <category>/<name>: the category picks the manifest the entry joins, so a world can be
+// given assets in its own kit (pangyo/) and not only in varco/.
+it('files an asset under the category named by --as', async () => {
+  const r = await injectAsset({ input: fixture, worldDir, as: 'pangyo/x', height: 3, budget: 400 });
+  expect(path.basename(r.glb)).toBe('x.glb');
+  expect(path.basename(path.dirname(r.glb))).toBe('pangyo');
+  expect(fs.existsSync(r.glb)).toBe(true);
+  const man = JSON.parse(fs.readFileSync(path.join(worldDir, 'public/assets/models/manifest_pangyo.json'), 'utf8'));
+  expect(man['pangyo/x']).toBeTruthy();
+  expect(man['pangyo/x'].file).toBe('assets/models/pangyo/x.glb');
+  expect(man['pangyo/x'].height).toBeCloseTo(3, 2);
+  // varco/ stays the documented default and keeps its own manifest
+  expect(Object.keys(JSON.parse(fs.readFileSync(path.join(worldDir, 'public/assets/models/manifest_varco.json'), 'utf8')))).not.toContain('pangyo/x');
+});
+
+it('rejects an --as that is not <category>/<name>', async () => {
+  for (const as of ['torii', 'Varco/Torii', 'varco/a/b', 'varco/', '']) {
+    await expect(injectAsset({ input: fixture, worldDir, as, height: 1 }), as).rejects.toThrow(/--as must look like/);
+  }
+});
+
 it('rejects an override target that is not in any manifest', async () => {
   await expect(injectAsset({ input: fixture, worldDir, as: 'varco/x', height: 1, replace: 'street/nope' })).rejects.toThrow(/not in manifest/);
 });

@@ -8,7 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { validateKey } from '../schemas/project.mjs';
+import { validateKey, WORLDS } from '../schemas/project.mjs';
 import { getKey, defaultProvider } from './secrets.mjs';
 
 // studio/server/prompt.mjs -> repo root is two levels up.
@@ -95,6 +95,9 @@ const TOURS = {
 // them. The TOURS table above stays as the fallback for the two worlds that hard-code their
 // tour in code (union-square-sf, kyoto-higashiyama) and ship no such file.
 function tourStops(world) {
+  // `world` is validated by WORLDS everywhere it enters the server, but this is the one place it is
+  // pasted into a filesystem path - so it is checked here too rather than trusted from a caller.
+  if (!WORLDS.includes(world)) return null;
   try {
     const raw = fs.readFileSync(path.join(ROOT, world, 'public/data/tour.json'), 'utf8');
     const list = JSON.parse(raw);

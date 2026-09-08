@@ -83,6 +83,7 @@ function renderLeft() {
         <option value="sunset" selected>sunset</option>
         <option value="night">night</option>
       </select>
+      <label title="Open the world with life=1 so the shot has the world's crowd and traffic. Renders with life are not deterministic frame to frame."><input id="ns-life" type="checkbox" /> life (pedestrians &amp; traffic)</label>
       <button id="ns-create" type="button">Create</button>
     </details>
   `;
@@ -118,7 +119,8 @@ function renderLeft() {
     const width = Number($<HTMLInputElement>('#ns-w').value) || 1920;
     const height = Number($<HTMLInputElement>('#ns-h').value) || 1080;
     const timeOfDay = $<HTMLSelectElement>('#ns-time').value as 'day' | 'sunset' | 'night';
-    const shot = createShot({ name, fps, width, height, timeOfDay });
+    const life = $<HTMLInputElement>('#ns-life').checked;
+    const shot = createShot({ name, fps, width, height, timeOfDay, life });
     ctx.project.shots.push(shot);
     await ctx.save();
     await selectShot(shot.id);
@@ -406,7 +408,7 @@ function mountWorldForShot(shot: any) {
   ctx.bridge = bridge;
   bridge.onPos((p) => { livePosEl.textContent = `eye (${p.x.toFixed(2)}, ${p.y.toFixed(2)}, ${p.z.toFixed(2)})`; });
   statusEl.textContent = `loading ${world}…`;
-  iframeEl.src = `http://localhost:${port}/?qa=1&ui=0&studio=1&life=0&time=${shot.timeOfDay}`;
+  iframeEl.src = `http://localhost:${port}/?qa=1&ui=0&studio=1&life=${shot.life ? 1 : 0}&time=${shot.timeOfDay}`;
   // Liveness probe: an opaque no-cors fetch resolves if anything answers on the port and
   // rejects on connection refused, so a world whose dev server is not running gets a clear
   // message instead of a silent "loading…" forever.

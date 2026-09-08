@@ -72,7 +72,7 @@ async function run() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
   const t0 = Date.now();
   const { browser, page, errors, softwareRender } = await launchWorld({
-    world: 'pangyo-technovalley', port: 5175, width: 1280, height: 720, time: 'day', quality: 'med', extraQuery: '&life=1',
+    world: 'pangyo-technovalley', port: 5175, width: 1280, height: 720, time: 'day', quality: 'med', life: true,
   });
   // Everything from here on runs inside try/finally: any throw (a missing __twin member, a
   // screenshot failure, a bad viewpoint) used to leave the headless Chromium running forever.

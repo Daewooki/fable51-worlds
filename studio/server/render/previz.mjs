@@ -29,7 +29,9 @@ export async function renderPreviz({ world, shot, outDir, onProgress, onWarn }) 
   const FPS = shot.fps, total = Math.round(duration(shot.keys) * FPS);
   if (total < 1) throw new Error('shot has no duration');
   const frames = path.join(outDir, 'frames'); fs.rmSync(frames, { recursive: true, force: true }); fs.mkdirSync(frames, { recursive: true });
-  const { browser, page, softwareRender } = await launchWorld({ world, width: shot.width, height: shot.height, time: shot.timeOfDay });
+  // `shot.life` opts this render into the world's pedestrians and traffic; with it on the render is
+  // no longer deterministic frame to frame (see the world contract in studio/README.md).
+  const { browser, page, softwareRender } = await launchWorld({ world, width: shot.width, height: shot.height, time: shot.timeOfDay, life: !!shot.life });
   try {
     await page.evaluate(INSTALL);
     // Collision warning (does not block the render): probe the path at 10 Hz the same way the
