@@ -1,4 +1,46 @@
-# fable51-worlds
+# fable51-worlds → MV Studio
+
+> **This fork turns [PhiloLabs/fable51-worlds](https://github.com/PhiloLabs/fable51-worlds) — AI-built, walkable Three.js cities — into a music-video production tool, and adds a third city built from public map data alone.**
+> Upstream is the engine. Everything below this box is what was added on top: **+49 commits, ~25k lines, 250+ tests, three worlds filmable through one contract.**
+
+<img src="docs/media/pangyo-target-cut.gif" width="100%" alt="Pangyo Techno Valley: aerial over the NCSOFT R&D Center, then south along 판교역로 at sunset — rendered from the browser world by MV Studio">
+
+<sub>▲ 판교테크노밸리 (Pangyo, Korea) — a city that did not exist in this repo a day ago. Built from OpenStreetMap + SRTM with no manual survey, hero buildings generated in headless Blender, filmed with the timeline below. [Full 1080p cut](pangyo-technovalley/docs/stage3-target-cut.mp4) · [how it was made](pangyo-technovalley/README.md#how-this-world-was-made) · [QA report with every known defect](pangyo-technovalley/FINAL_QA_REPORT.md)</sub>
+
+## What this fork adds
+
+| | Added | In one line |
+|---|---|---|
+| 🎬 | **[MV Studio](studio/README.md)** — a local Director UI + render server | Fly the live world in an iframe, keyframe a camera timeline, render a deterministic **previz MP4** headlessly on the GPU, hand it to **Seedance 2.5** as a motion reference, export the set as **GLB + Blender camera**. |
+| 🗺️ | **Three ways to block a shot** | By hand (unlock the camera and fly), by **prompt → camera path** (LLM or an offline landmark planner — no API key needed), or with your **phone as a virtual camera** over WebSocket (QR code, gyro, record straight into keys). |
+| 🧱 | **Collision-aware camera paths** | Every shot is probed against the world; red bands on the scrubber show where the camera clips a building, and **Fix path** lifts the move over the roofs automatically. Generated paths come out clean. |
+| 🏙️ | **A third world from public GIS only** — [Pangyo Techno Valley](pangyo-technovalley/) | Overpass + OpenTopoData → fitted street specs → the upstream runtime, generalized so a city is data, not code. 564 buildings, 23 streets, crowds, traffic, signals, ground cover, three hero buildings (NCSOFT R&D Center with its rooftop sign, 알파돔 towers, 판교역 canopies) generated with **Blender-as-a-module**. |
+| 🎨 | **VARCO / any-GLB asset injector** | Drop a generated 3D asset into a world: normalize scale and origin (bake transforms, normals included), decimate to a triangle budget, register it in the manifest, and swap it in for an existing prop — one bench becomes 26. |
+| 🔐 | **Runs on your PC, keys optional** | Previz, export and the offline planner need **no API key**. Per-machine keys (Anthropic / OpenAI / VARCO) are entered in a Settings panel and stored locally; the server binds to localhost, checks Host/Origin, and spawns the Seedance CLI without a shell. |
+| 🚀 | **One command** | `cd studio && npm run up` starts all three worlds, the server and the UI; `npm run down` stops them. `tools/e2e.mjs` runs create → prompt → previz → finalize → export on any world. |
+
+<p>
+<img src="docs/media/director.png" width="49%" alt="MV Studio Director: numbered steps (project, shot, camera keys, render), the world in an iframe, the timeline scrubber">
+<img src="docs/media/pangyo-nc-entrance.png" width="49%" alt="The NCSOFT R&D Center hero module: curtain wall, rooftop NCSOFT sign, glass entrance — generated in headless Blender from the OSM footprint">
+</p>
+
+**Quick start** (Node 22, ffmpeg on PATH, a GPU):
+
+```bash
+cd union-square-sf && npm install && cd ../kyoto-higashiyama && npm install && cd ../pangyo-technovalley && npm install
+cd ../studio && npm install && npx playwright install chromium
+npm run up          # → open http://localhost:5180, pick a world, make a shot, hit Generate, Render previz
+```
+
+**How it was built.** The whole fork was produced in one continuous session with [Claude Code](https://claude.com/claude-code) (Claude Fable 5.1): a written design spec → a task plan → a fresh implementer agent per task → an independent reviewer per task → fix rounds → a final whole-branch security review. The specs and plans are in [`docs/superpowers/`](docs/superpowers/); every world ships its own QA report, defects included, in the upstream tradition.
+
+**Credits.** The worlds, the world-authoring pipeline and the runtime are [PhiloLabs/fable51-worlds](https://github.com/PhiloLabs/fable51-worlds) (MIT). Map data © OpenStreetMap contributors (ODbL); elevation from SRTM via OpenTopoData. Seedance 2.5 via the Higgsfield CLI; VARCO 3D by NC AI.
+
+---
+
+# The engine underneath — upstream README
+
+*Everything from here down is [PhiloLabs/fable51-worlds](https://github.com/PhiloLabs/fable51-worlds)' own README, kept intact, with the Pangyo world and MV Studio rows added where they belong.*
 
 **Worlds as code. A prompt in, a world you can walk out.**
 
