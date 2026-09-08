@@ -448,6 +448,24 @@ cd studio && node tools/e2e.mjs --world union-square-sf     --port 5197
 `tools/e2e.mjs` starts its own studio server on its own port, so it is safe to run while a
 real one is up. `--projects <dir> --keep` leaves the artifacts behind to look at.
 
+### The showreel
+
+```bash
+cd studio && node tools/showreel.mjs            # ~16 min: three previz renders, a Director
+                                                # screen capture, then the ffmpeg assembly
+node tools/showreel.mjs --skip-render           # ~3 min: re-assemble from the cached segments
+```
+
+`tools/showreel.mjs` builds the repo's public reel (`docs/media/mv-studio-showreel.mp4`, plus
+`showreel.gif`, `showreel-poster.jpg` and `director-prompt.png`). Like `e2e.mjs` and
+`stage1_targetcut.mjs` it starts **its own** studio server on its own port (5210) with its own
+projects dir under `%TMP%/mv-studio-showreel`, and rewrites the Director's `/api` and `/files`
+calls to it — so a studio server already running on :5190 is neither needed nor disturbed, and
+nothing is written under `studio/projects/`. The rendered segments are cached in that work dir,
+which is what makes `--skip-render` cheap. It writes four sampled frames next to the reel
+(`docs/media/showreel-f1..f4.png`) purely so a human (or an agent) can look at the result; they
+are not part of the deliverable and are deleted before committing.
+
 ---
 
 ## Measured on
