@@ -440,9 +440,9 @@ node kyoto-higashiyama/tools/studio_bridge_test.mjs
 node pangyo-technovalley/tools/qa/studio_bridge_test.mjs
 
 # the whole pipeline, end to end, against a throwaway projects dir
-cd studio && node tools/e2e.mjs --world union-square-sf
-             node tools/e2e.mjs --world kyoto-higashiyama   --port 5192
-             node tools/e2e.mjs --world pangyo-technovalley --port 5194
+cd studio && node tools/e2e.mjs --world union-square-sf     --port 5197
+             node tools/e2e.mjs --world kyoto-higashiyama   --port 5198
+             node tools/e2e.mjs --world pangyo-technovalley --port 5199
 ```
 
 `tools/e2e.mjs` starts its own studio server on its own port, so it is safe to run while a
@@ -459,17 +459,36 @@ world's load-and-build time in the first render of each run.
 | Step | union-square-sf | kyoto-higashiyama | pangyo-technovalley |
 | --- | --- | --- | --- |
 | create project + prompt → keys (provider `none`) | < 0.1 s | < 0.1 s | < 0.1 s |
-| previz, 2 s @ 640×360 — 60 frames | **26.1 s** | **28.2 s** | **14.7 s** |
-| previz, 10 s @ 1920×1080 — 300 frames | **143.0 s** (0.48 s/frame) | **72.8 s** (0.24 s/frame) | **138.5 s** (0.46 s/frame) |
+| previz, 2 s @ 640×360 — 60 frames | **25.7 s** | **31.2 s** | **14.7 s** |
+| previz, 10 s @ 1920×1080 — 300 frames | **147.9 s** (0.49 s/frame) | **85.8 s** (0.29 s/frame) | **121.2 s** (0.40 s/frame) |
 | finalize, `driver: manual` (writes the job card) | < 0.1 s | < 0.1 s | < 0.1 s |
-| export GLB + keys + Blender script | **20.4 s** (39.7 MB, 1229 meshes) | **38.8 s** (397.2 MB, 1052 meshes) | **9.2 s** (18.2 MB, 565 meshes) |
-| **total** | **190.4 s** | **140.7 s** | **164.7 s** |
+| export GLB + keys + Blender script | **20.3 s** (39.7 MB, 1229 meshes) | **40.1 s** (397.1 MB, 1052 meshes) | **10.2 s** (30.8 MB, 585 meshes) |
+| **total** | **196.4 s** | **159.3 s** | **149.2 s** |
 
-No run fell back to software rendering (`softwareRender: false`). Pangyo's figures are from
-`node tools/e2e.mjs --world pangyo-technovalley --port 5194`; its GLB is the smallest of the
-three because that world is pure OSM massing with procedural façades and no hero interiors
-yet. The Blender import step is not included: Blender is not installed on this machine, so `blender_import.py` is
-written and checked for existence but has not been executed here.
+Measured together on 2026-09-08 with all three world servers up:
+`node tools/e2e.mjs --world union-square-sf --port 5197`, `--world kyoto-higashiyama --port 5198`,
+`--world pangyo-technovalley --port 5199` — all three **PASS**. No run fell back to software
+rendering (`softwareRender: false`). Pangyo's GLB is the smallest of the three because that
+world is pure OSM massing with procedural façades and no interiors; it grew 18.2 → 30.8 MB in
+stage 3 when the ground cover was extended to the whole extract. The Blender import step is
+not included: Blender is not installed on this machine, so `blender_import.py` is written and
+checked for existence but has not been executed here.
+
+### Pangyo's target cuts
+
+The three deliverable cuts are the same 8 s / 240-frame / 1920×1080 sunset move, blocked in the
+Director and rendered through the same previz path (`studio/tools/stage1_targetcut.mjs`, on its
+own port so :5190 is untouched) — so the three rows are a like-for-like measure of what each
+stage of that world costs to film.
+
+| Cut | What changed in the world | Previz render (240 frames @ 1920×1080) | Iframe world load |
+| --- | --- | --- | --- |
+| [stage 1](../pangyo-technovalley/docs/stage1-target-cut.mp4) | OSM massing + fitted streets | **124.2 s** (0.52 s/frame) | 11.6 s |
+| [stage 2](../pangyo-technovalley/docs/stage2-target-cut.mp4) | + hero modules (NC, canopies, towers) | **118.1 s** (0.49 s/frame) | 13.1 s |
+| [stage 3](../pangyo-technovalley/docs/stage3-target-cut.mp4) | + ground cover, routes, signals | **114.6 s** (0.48 s/frame) | 13.5 s |
+
+Each was `path clear` on the first collision check, none fell back to software rendering, and
+each encodes to 3.5–4.0 MB at `-crf 28` (the studio's own `previz.mp4` is 16–17 MB at `-crf 18`).
 
 Union Square's 1080p previz got ~25 % faster once the renderer started sending `studio=1`
 (that world then switches its own walk/orbit controllers off instead of running them beside

@@ -32,17 +32,23 @@ Same brief, same test conditions, two models. Each built Union Square from scrat
 
 <sub>▶ **[Watch the walkthrough](kyoto-higashiyama/media/kyoto-higashiyama-walkthrough.mp4)** · 54 s · 1920×1080 · seven scenes, Gion to Kiyomizu-dera at sunset</sub>
 
-### 🏢 [판교테크노밸리, Seongnam](pangyo-technovalley/) — *in progress*
+### 🏢 [판교테크노밸리, Seongnam](pangyo-technovalley/)
 
 <a href="pangyo-technovalley/docs/stage3-target-cut.mp4"><img src="pangyo-technovalley/docs/stage3-f120.png" width="100%" alt="Pangyo Techno Valley: 판교역로 looking south from 30 m at sunset"></a>
 
-<sub>▶ **[Watch the stage-3 target cut](pangyo-technovalley/docs/stage3-target-cut.mp4)** · 8 s · 1920×1080 · aerial over the NCSOFT R&D Center, down to 판교역로, south toward 판교역 · [QA report](pangyo-technovalley/FINAL_QA_REPORT.md)</sub>
+<sub>▶ **[Watch the target cut](pangyo-technovalley/docs/stage3-target-cut.mp4)** · 8 s · 1920×1080 · aerial over the NCSOFT R&D Center, down to 판교역로, south toward 판교역 · the same move at each stage: [1 — massing](pangyo-technovalley/docs/stage1-target-cut.mp4) · [2 — hero modules](pangyo-technovalley/docs/stage2-target-cut.mp4) · [3 — ground cover, routes, life](pangyo-technovalley/docs/stage3-target-cut.mp4) · [QA report](pangyo-technovalley/FINAL_QA_REPORT.md)</sub>
 
-| World | Geometry from | Dev port | Status |
+<sub>The first world built end to end from **public map data alone** — no survey pass, no hand-authored street specs: OpenStreetMap geometry and SRTM elevation in, a filmable world out. [How it was made →](pangyo-technovalley/README.md#how-this-world-was-made)</sub>
+
+| World | Source data | Dev port | Status |
 | --- | --- | --- | --- |
-| [Union Square, San Francisco](union-square-sf/) | survey + hand-authored specs | 5173 | complete |
-| [Higashiyama, Kyoto](kyoto-higashiyama/) | survey + hand-authored specs | 5174 | complete |
-| [판교테크노밸리 (Pangyo Techno Valley)](pangyo-technovalley/) | OpenStreetMap + SRTM, built by tools in the repo | 5175 | stage 3 — massing, hero modules, ground cover, life, [QA](pangyo-technovalley/FINAL_QA_REPORT.md) |
+| [Union Square, San Francisco](union-square-sf/) | reconnaissance agents: survey, elevation and a storefront census → hand-authored specs | 5173 | **complete** — [walkthrough](union-square-sf/media/union-square-walkthrough.mp4), two interiors, [head-to-head vs GPT-6 Astra](union-square-sf-gpt-astra/) |
+| [Higashiyama, Kyoto](kyoto-higashiyama/) | reconnaissance agents: survey + GSI elevation → hand-authored specs, fully procedural geometry | 5174 | **complete** — [walkthrough](kyoto-higashiyama/media/kyoto-higashiyama-walkthrough.mp4), seven scenes, no GLB kit at all |
+| [판교테크노밸리 (Pangyo Techno Valley)](pangyo-technovalley/) | **public GIS only**: OpenStreetMap (Overpass) + SRTM via OpenTopoData, fetched and fitted by `pangyo-technovalley/tools/geo/` | 5175 | **complete (stages 1–3)** — 564 buildings, 23 fitted streets, 3 hero modules, ground cover, crowds and signals; [target cut](pangyo-technovalley/docs/stage3-target-cut.mp4), and a [QA report](pangyo-technovalley/FINAL_QA_REPORT.md) that lists what is still approximated (every street is fitted to a straight line) |
+
+All three are filmable by [MV Studio](studio/README.md) through the same contract, and all three pass
+its end-to-end pipeline check (`studio/tools/e2e.mjs`): **196.4 s / 159.3 s / 149.2 s** for create →
+prompt → previz → finalize → GLB export.
 
 *More worlds coming.*
 

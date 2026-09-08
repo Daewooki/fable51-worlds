@@ -3,6 +3,26 @@
 A third MV Studio world: the blocks around the **NCSOFT R&D Center** (엔씨소프트R&D센터) in 판교, 성남, built from
 public GIS data and rendered by a generalized copy of the `union-square-sf` Three.js runtime.
 
+| | |
+| --- | --- |
+| **Target cuts** (8 s · 1920×1080 · 30 fps · sunset, the same move at each stage) | [stage 1 — massing](docs/stage1-target-cut.mp4) · [stage 2 — hero modules](docs/stage2-target-cut.mp4) · [stage 3 — ground cover, routes, signals](docs/stage3-target-cut.mp4) |
+| **QA** | [FINAL_QA_REPORT.md](FINAL_QA_REPORT.md) — counts, four probed viewpoints with screenshots, life and traffic-light smoke, and the defect list |
+
+## How this world was made
+
+Four commands, in this order, each re-runnable on its own. Nothing in `src/` names a place: the
+world is whatever the JSON under `src/data/recon/` says it is.
+
+| | Step | Command | What it produces |
+| --- | --- | --- | --- |
+| 1 | **Data** — OSM + SRTM into a local frame | `npm run geo` | `gis.json` (564 buildings, 118 parts, 794 ways, 378 POIs, 232 ground-cover areas, 58 signals, 65 crossings), `elevation.json`, `streets_spec.json` (23 fitted streets, 2 dropped), and a regenerated `src/geo/geo.ts` |
+| 2 | **Runtime** — a generalized copy of union's Three.js app | `npm run dev` → <http://localhost:5175/> | terrain, massing, procedural façades, the analytic street model, props |
+| 3 | **Hero modules** — the three authored GLBs | `npm run assets` (portable Blender) | `public/assets/models/pangyo/*.glb` + `manifest_pangyo.json`, fitted to their OSM footprints at load time |
+| 4 | **Life, ground cover and QA** | `node tools/qa/qa_report.mjs` | ground fill, routes, signals and crowds are built by the runtime; the QA pass probes and shoots the four viewpoints and writes [`FINAL_QA_REPORT.md`](FINAL_QA_REPORT.md) |
+
+Filming is a fifth step and lives in the studio: `cd studio && npm run up:pangyo`, block a shot in
+the Director on :5180, **Check path**, **Render previz**.
+
 ## Run
 
 ```bash
@@ -10,7 +30,8 @@ npm install
 npm run dev        # http://localhost:5175/
 ```
 
-Studio/QA URL contract: `http://localhost:5175/?qa=1&ui=0&studio=1&life=0&time=sunset&q=med`
+Studio/QA URL contract: `http://localhost:5175/?qa=1&ui=0&studio=1&life=<0|1>&time=sunset&q=med`
+(`life=1` turns the pedestrians and traffic on — the studio sends `0` unless the shot asks for it)
 
 > `npm run dev` is plain `vite` (unlike union-square-sf's, it does not sync data first), so it
 > works on a repo path containing a space. `npm run sync` re-copies `src/data/recon/*` to
@@ -32,6 +53,14 @@ node tools/qa/studio_bridge_test.mjs
 
 `npm run geo` rebuilds everything from the cached OSM/elevation inputs:
 `fetch_osm` → `fetch_elevation` → `build_gis` → `build_streets` → `sync_data` (copies `src/data/recon/*` to `public/data/`).
+
+**`pois` counts 378, not 460.** `build_gis.mjs` bins the ground-cover areas (`landuse` / `leisure` /
+`amenity=parking` / `natural` polygons) **first**, and every way that lands in that bin is kept out of
+the POI bin. Those tags also match `POI_KEYS`, so before this every park, car park and pond was filed
+twice — once as ground cover and once as a "point of interest" — and `fetch_osm --augment` added 29
+more of them in stage 3. Excluding them drops `pois` 460 → 378 and changes nothing else: buildings
+564, building parts 118, ways 794, fitted streets 23, ground cover 232, signals 58, crossings 65,
+NC height 58 m are all byte-identical. A census that wants those areas should read `landuse` too.
 
 Runtime data files under `src/data/recon/` (synced to `public/data/`):
 
@@ -79,7 +108,7 @@ tour stops below are the landmark list the planner (and provider `none`) aims at
 cd studio
 npm run up:pangyo                                        # world + server + Director UI
 npx vitest run test/pangyo.test.mjs                       # launch + 2 s previz + GLB export
-node tools/e2e.mjs --world pangyo-technovalley --port 5194 # whole pipeline, throwaway dir
+node tools/e2e.mjs --world pangyo-technovalley --port 5199 # whole pipeline, throwaway dir
 ```
 
 ## Stage 1 — target cut
@@ -147,9 +176,16 @@ Blender and fitted to their OSM footprints at load time.
 
 ### Generating the GLBs
 
+```bash
+npm run assets
+# = tools/blender/<portable build>/blender.exe --background --python-exit-code 1 \
+#     --python tools/bpl/gen_pangyo.py
 ```
-tools/blender/blender-4.2.9-windows-x64/blender.exe --background --python tools/bpl/gen_pangyo.py
-```
+
+`--python-exit-code 1` is not optional: without it Blender exits **0** even when the script raised, so
+`gen_pangyo.py`'s per-module triangle-budget check (`raise SystemExit`) printed an error and the build
+carried on with a stale GLB. `tools/bpl/run_blender.mjs` resolves the Blender path relative to this
+package (so a repo path containing a space is fine) and prints how to get a build if there is none.
 
 Blender 4.2.9 LTS is unpacked under `tools/blender/` and **not committed** (it is in the root
 `.gitignore`); download the portable Windows build from blender.org and unpack it there to
@@ -161,7 +197,17 @@ in Three.js, materials named from `MATERIAL_LIBRARY` and remapped by `src/materi
 are the same ones the union kit uses.
 
 The generator writes `public/assets/models/manifest_pangyo.json` itself (real tri counts, real
-bboxes). The studio's `tools/inject_asset.mjs` was not used: it only accepts `--as varco/<name>`.
+bboxes, and the `originNote` below). The studio's `tools/inject_asset.mjs` was not used — it is the
+VARCO import path — but it now accepts `--as <category>/<name>`, so it *could* write into this
+world's `manifest_pangyo.json`.
+
+**The canopy's origin is not its bbox minimum.** All three modules declare `origin: bottom_center`,
+and for the NC slab and the tower that is literally true (`bbox.min.y == 0`). The station canopy's
+origin is the **plaza slab**, and the stair well cut into that slab drops the top flight of steps and
+the balustrade footing **1.02 m below it** (`bbox.min.y = −1.02`). Placement therefore puts `y = 0` on
+the pavement, not on the bbox minimum, or every canopy would float a metre in the air. The manifest
+says so in `originNote`, and `test/hero.test.mjs` asserts it twice: on the manifest, and on the real
+geometry in the scene.
 
 ### Data
 
@@ -242,16 +288,31 @@ garden, grass, forest, village_green), `paving` (commercial, retail, industrial,
 
 `BlockFill` then paints them, plus a fallback: the block cells between consecutive fitted street
 centrelines (inset by half the street width + its sidewalk) wherever no OSM polygon covers the ground.
-Each patch is earcut-triangulated, the triangles are clipped to a 10 m grid so the surface follows the
-terrain, and the street corridors (road + both sidewalks) are cut out exactly — otherwise the 운중천
-polygon would be painted straight across 판교역로. Patches merge into **one mesh per surface**, each at
-its own millimetre offset above the terrain so nested areas never z-fight.
+Each patch is earcut-triangulated, the triangles are clipped to an **8 m** grid — the terrain's own
+resolution, so a cell never spans more than one heightfield quad — and the street corridors (road +
+both sidewalks) are cut out exactly, or the 운중천 polygon would be painted straight across 판교역로.
+Patches merge into **one mesh per surface**, each at its own millimetre offset above the terrain so
+nested areas never z-fight.
+
+Three things the stage-3 review asked for and this now does:
+
+- **The fill covers the whole extract.** It used to stop at a symmetric ±620 m box, which left the
+  outer third of the world as bare white terrain with streets running off into nothing. The box is now
+  `BlockFill.FILL_BBOX` = `geo.localBbox()` — x −903…805, z −870…553 — so the fill ends exactly where
+  the OSM data does.
+- **A street only bounds the ground where it runs.** `blockCells()` applies a boundary's sidewalk
+  inset only to the cells its own `from`/`to` span reaches, instead of cutting a strip across the
+  whole world at every side street's offset. `Coverage.covers()` also treats a polygon's holes as
+  uncovered ground, so a ring-shaped park gets its courtyard filled.
+- **Water reads as water.** The `water` material is a darker blue-grey at alpha 0.75, and nothing is
+  painted *under* a translucent class (`TRANSLUCENT_SURFACES`) — the 봇들 park's grass and its three
+  rectangular pitches used to be plainly visible through the river.
 
 | | |
 | --- | --- |
-| OSM ground-cover polygons in `gis.json` | 232 (189 inside the ±620 m box) |
-| fallback block patches | 721 |
-| draw calls / triangles added | **5** / ~83 k |
+| OSM ground-cover polygons in `gis.json` | 232, all of them inside the fill box |
+| fallback block patches | 1,607 |
+| draw calls / triangles added | **5** / ~189 k |
 | new material | `water` (registered in this world's `src/materials/Library.ts` only) |
 
 ### Transit routes (`src/data/recon/routes.json`)
@@ -285,7 +346,7 @@ junction's own widths, so **42** masts are driven instead of 4.
 ### Pedestrians
 
 `NavGraph.BOUNDS` was 420 m, which cut the 판교역 forecourt (z ≈ 530) out of the graph entirely — no
-pedestrian ever reached the station. It is now 620 m, matching `Props.EXTENT`: 2,254 nav nodes, 240 of
+pedestrian ever reached the station. It is now 620 m, matching `Props.EXTENT` (the ground fill is the one layer that spans the whole bbox): 2,254 nav nodes, 240 of
 them pruned as unreachable (down from 322), and 26 live nodes within 120 m of the station. No plaza
 lattice was needed; the station forecourt is reached over the fitted sidewalks of 판교역로 and
 대왕판교로606번길.
@@ -298,11 +359,19 @@ npx vitest run test/life.test.mjs
 ```
 
 `tools/qa/qa_report.mjs` boots the world through the studio's Playwright launcher with `life=1`, probes and
-screenshots the four `viewpoints.json` cameras into `docs/qa/`, measures the life systems at 0 s and after
+screenshots the four `viewpoints.json` cameras into `docs/qa/`, measures the life systems at boot and after
 30 s of simulated time, runs a 60 s traffic-light smoke (a route vehicle must come to rest at a stop bar
 whose signal is not green) and writes [`FINAL_QA_REPORT.md`](FINAL_QA_REPORT.md) with the defect list.
 Time is advanced with `__twin.stepLife(seconds, dt)`, which steps only the life systems in fixed 1/30 s
-steps, so the numbers do not depend on the headless frame rate.
+steps, so the numbers do not depend on the headless frame rate. The run exits non-zero on a page error, a
+blocked camera, an unknown viewpoint id, or a light smoke with no red-light stop, and it closes the
+browser in a `finally`.
+
+**Viewpoint coordinates.** Each camera in `viewpoints.json` carries both the authored local `x`/`z` (the
+source of truth — that is what was aimed) and the same point as `lat`/`lon`, recomputed with
+`localToGeo`. `Viewpoints.place()` prefers `x`/`z` when both are finite and falls back to `lat`/`lon`, and
+`test/geo.test.mjs` asserts every camera round-trips within 0.5 m — the two had drifted ~11 m apart, so the
+QA harness and the in-world overlay were standing in different places.
 
 Reference photos are **not** committed (Kakao/Naver road view is not redistributable): `photos/` is
 git-ignored except for its README, which says what to capture for each viewpoint.
@@ -321,9 +390,13 @@ Still: `docs/stage3-f120.png`.
 | `softwareRender` | **false** (GPU / ANGLE d3d11) |
 | encoded deliverable | 4.0 MB (`-crf 28`; the studio's own `previz.mp4` is 17.1 MB) |
 
-The studio always opens a world with `life=0` (the world contract in `studio/README.md`, enforced in
-`studio/server/render/browser.mjs`), so the previz shows the new ground cover but **no moving agents**.
-The traffic and crowd are covered by `docs/qa/*.png`, `FINAL_QA_REPORT.md` and `test/life.test.mjs`.
+The studio opens a world with `life=0` by default (the world contract in `studio/README.md`, composed in
+`studio/server/render/browser.mjs`), so this cut shows the ground cover but **no moving agents**. A shot
+can now opt in: tick **life (pedestrians & traffic)** on the Director's *New shot* form and the preview,
+the previz render and the GLB export all open the world with `life=1`. The default stays off because a
+render with the crowd running is not reproducible frame to frame. The traffic and crowd in this world are
+covered by `docs/qa/*.png` (shot with `life=1`), [`FINAL_QA_REPORT.md`](FINAL_QA_REPORT.md) and
+`test/life.test.mjs`.
 
 ## Licensing / attribution
 
