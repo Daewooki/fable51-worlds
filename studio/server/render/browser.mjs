@@ -2,7 +2,15 @@ import { chromium } from 'playwright';
 
 export const WORLD_PORTS = { 'union-square-sf': 5173, 'kyoto-higashiyama': 5174, 'pangyo-technovalley': 5175 };
 
-const GPU = ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--use-gl=angle', '--hide-scrollbars'];
+// GPU launch flags per platform. Windows needs ANGLE on D3D11 explicitly (the default headless
+// path lands in software on this machine); macOS picks Metal through ANGLE by itself, so no
+// backend flag is passed there (forcing one has broken headless Chromium before); Linux gets
+// ANGLE with the driver's default backend. The SwiftShader fallback below is the same everywhere.
+export const GPU_ARGS = process.platform === 'win32'
+  ? ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--use-gl=angle', '--hide-scrollbars']
+  : process.platform === 'darwin'
+    ? ['--enable-gpu', '--ignore-gpu-blocklist', '--hide-scrollbars']
+    : ['--enable-gpu', '--ignore-gpu-blocklist', '--use-gl=angle', '--hide-scrollbars'];
 const SOFT = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--hide-scrollbars'];
 
 /**
@@ -51,7 +59,7 @@ export async function launchWorld({ world, width = 1280, height = 720, time = 's
 
   if (software) return attempt(SOFT, true);
   try {
-    return await attempt(GPU, false);
+    return await attempt(GPU_ARGS, false);
   } catch (e) {
     if (e.isTimeout) throw e;
     return attempt(SOFT, true);

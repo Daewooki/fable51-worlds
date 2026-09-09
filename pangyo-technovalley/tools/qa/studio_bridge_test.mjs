@@ -1,5 +1,6 @@
 import { chromium } from 'playwright';
-const LAUNCH_ARGS = ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--use-gl=angle', '--enable-unsafe-swiftshader', '--hide-scrollbars'];
+import { GPU_ARGS } from '../../../studio/server/render/browser.mjs';
+const LAUNCH_ARGS = GPU_ARGS; // platform-aware (d3d11 on Windows, Metal via ANGLE default on macOS)
 
 async function waitReady(page) {
   const ready = await page.evaluate(() => new Promise((res) => { window.addEventListener('message', (e) => { if (e.data?.type === 'studio:ready') res(true); }); setTimeout(() => res(false), 240000); }));

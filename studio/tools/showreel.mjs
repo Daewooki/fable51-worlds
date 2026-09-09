@@ -31,6 +31,7 @@
  * Rendered segments are cached under `--work` (default %TMP%/mv-studio-showreel) so
  * `--skip-render` re-assembles the reel from them in seconds.
  */
+import { GPU_ARGS } from '../server/render/browser.mjs';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -185,11 +186,24 @@ function probe(file) {
 // The three faces the reel uses, staged into WORK so the filtergraph can name them relatively.
 const FONTS = { bold: 'arialbd.ttf', regular: 'arial.ttf', korean: 'malgun.ttf' };
 const FONT = FONTS.bold, FONT_REG = FONTS.regular, FONT_KR = FONTS.korean;
+// Per-platform candidates for each face; the first that exists is staged under the Windows-style
+// name the filtergraph uses, so the graph itself never changes between machines.
+const FONT_CANDIDATES = process.platform === 'win32'
+  ? { bold: [path.join(process.env.WINDIR || 'C:\\Windows', 'Fonts', 'arialbd.ttf')], regular: [path.join(process.env.WINDIR || 'C:\\Windows', 'Fonts', 'arial.ttf')], korean: [path.join(process.env.WINDIR || 'C:\\Windows', 'Fonts', 'malgun.ttf')] }
+  : process.platform === 'darwin'
+    ? { bold: ['/System/Library/Fonts/Supplemental/Arial Bold.ttf', '/Library/Fonts/Arial Bold.ttf', '/System/Library/Fonts/Helvetica.ttc'],
+        regular: ['/System/Library/Fonts/Supplemental/Arial.ttf', '/Library/Fonts/Arial.ttf', '/System/Library/Fonts/Helvetica.ttc'],
+        korean: ['/System/Library/Fonts/AppleSDGothicNeo.ttc', '/System/Library/Fonts/Supplemental/AppleGothic.ttf'] }
+    : { bold: ['/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf'],
+        regular: ['/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', '/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf'],
+        korean: ['/usr/share/fonts/truetype/nanum/NanumGothic.ttf', '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'] };
 function stageFonts() {
-  const dir = path.join(process.env.WINDIR || 'C:\\Windows', 'Fonts');
-  for (const f of Object.values(FONTS)) {
-    const dest = path.join(WORK, f);
-    if (!fs.existsSync(dest)) fs.copyFileSync(path.join(dir, f), dest);
+  for (const [face, name] of Object.entries(FONTS)) {
+    const dest = path.join(WORK, name);
+    if (fs.existsSync(dest)) continue;
+    const src = FONT_CANDIDATES[face].find((p) => fs.existsSync(p));
+    if (!src) throw new Error(`no ${face} font found on this machine — tried: ${FONT_CANDIDATES[face].join(', ')} (install one or edit FONT_CANDIDATES in tools/showreel.mjs)`);
+    fs.copyFileSync(src, dest);
   }
 }
 
@@ -305,7 +319,7 @@ async function renderShot(spec) {
   const attempt = async () => {
     const browser = await chromium.launch({
       headless: true,
-      args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--use-gl=angle', '--hide-scrollbars'],
+      args: GPU_ARGS,
     });
     try {
       const page = await browser.newPage({ viewport: { width: 1680, height: 1000 } });
@@ -389,7 +403,7 @@ async function captureDirector() {
 
   const browser = await chromium.launch({
     headless: true,
-    args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--use-gl=angle', '--hide-scrollbars'],
+    args: GPU_ARGS,
   });
   const ctx = await browser.newContext({
     viewport: { width: 1920, height: 1080 },

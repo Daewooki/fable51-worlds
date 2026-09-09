@@ -16,6 +16,7 @@
  *
  *   cd studio && node tools/stage1_targetcut.mjs
  */
+import { GPU_ARGS } from '../server/render/browser.mjs';
 import fs from 'node:fs'; import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -75,7 +76,7 @@ try {
 
   browser = await chromium.launch({
     headless: true,
-    args: ['--use-angle=d3d11', '--enable-gpu', '--ignore-gpu-blocklist', '--use-gl=angle', '--hide-scrollbars'],
+    args: GPU_ARGS,
   });
   const page = await browser.newPage({ viewport: { width: 1680, height: 1000 } });
   page.on('pageerror', (e) => console.error('  [page error]', e.message));

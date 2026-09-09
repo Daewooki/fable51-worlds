@@ -23,16 +23,27 @@ const SCRIPT = path.join(PKG, 'tools', 'bpl', 'gen_pangyo.py');
 
 /** First `blender.exe`/`blender` one level under tools/blender/ (the unpacked portable build). */
 function findBlender() {
-  const names = process.platform === 'win32' ? ['blender.exe'] : ['blender'];
-  if (!fs.existsSync(BLENDER_DIR)) return null;
-  for (const n of names) {
-    const direct = path.join(BLENDER_DIR, n);
-    if (fs.existsSync(direct)) return direct;
-  }
-  for (const d of fs.readdirSync(BLENDER_DIR, { withFileTypes: true })) {
-    if (!d.isDirectory()) continue;
+  // BLENDER env var wins (any platform), then the unpacked portable build under tools/blender/,
+  // then the usual macOS app-bundle locations.
+  if (process.env.BLENDER && fs.existsSync(process.env.BLENDER)) return process.env.BLENDER;
+  const names = process.platform === 'win32' ? ['blender.exe']
+    : process.platform === 'darwin' ? ['blender', path.join('Blender.app', 'Contents', 'MacOS', 'Blender'), path.join('Contents', 'MacOS', 'Blender')]
+    : ['blender'];
+  if (fs.existsSync(BLENDER_DIR)) {
     for (const n of names) {
-      const p = path.join(BLENDER_DIR, d.name, n);
+      const direct = path.join(BLENDER_DIR, n);
+      if (fs.existsSync(direct)) return direct;
+    }
+    for (const d of fs.readdirSync(BLENDER_DIR, { withFileTypes: true })) {
+      if (!d.isDirectory()) continue;
+      for (const n of names) {
+        const p = path.join(BLENDER_DIR, d.name, n);
+        if (fs.existsSync(p)) return p;
+      }
+    }
+  }
+  if (process.platform === 'darwin') {
+    for (const p of ['/Applications/Blender.app/Contents/MacOS/Blender', path.join(process.env.HOME || '', 'Applications', 'Blender.app', 'Contents', 'MacOS', 'Blender')]) {
       if (fs.existsSync(p)) return p;
     }
   }
@@ -44,8 +55,9 @@ if (!blender) {
   console.error(
     `no Blender found under ${BLENDER_DIR}\n` +
     'The hero-module generator needs a portable Blender 4.2 LTS build, which is NOT committed:\n' +
-    '  1. download the Windows portable .zip from https://www.blender.org/download/lts/\n' +
-    `  2. unpack it so that ${path.join(BLENDER_DIR, '<blender-4.2.x-windows-x64>', 'blender.exe')} exists\n` +
+    '  1. download Blender 4.2 LTS from https://www.blender.org/download/lts/ (Windows: portable .zip; macOS: .dmg)\n' +
+    `  2. Windows: unpack so that ${path.join(BLENDER_DIR, '<blender-4.2.x-windows-x64>', 'blender.exe')} exists\n` +
+    '     macOS: drag Blender.app into /Applications (found automatically) or into tools/blender/, or set BLENDER=/path/to/Blender.app/Contents/MacOS/Blender\n' +
     '  3. re-run `npm run assets`\n' +
     '(the PyPI `bpy` wheel is not an option here: bpy >= 4.2 needs Python 3.11)'
   );

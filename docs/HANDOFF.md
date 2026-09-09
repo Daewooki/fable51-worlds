@@ -49,6 +49,19 @@ Notes that cost time before:
 - **API keys**: entered in the Director's Settings panel → `studio/.secrets.json` (git-ignored). Env vars of the same name win.
 - **Local backups**: `../backup/` next to the repo holds a full git bundle and the portable Claude context folder (`claude-context/`: memory files, ledgers, raw transcript, RESTORE.md).
 
+## Moving to macOS (or Linux)
+
+Everything was developed on Windows 11 with an NVIDIA GPU; the code paths that were Windows-specific are now platform-aware, but check these on first run:
+
+- **Headless GPU flags** live in one place, `studio/server/render/browser.mjs` (`GPU_ARGS`): Windows forces ANGLE/D3D11; macOS passes no backend flag (Chromium picks Metal through ANGLE); the SwiftShader fallback is identical everywhere. If previz reports `softwareRender: true` on a Mac, run `npx playwright install chromium` again and check `chrome://gpu` in the launched profile; Apple-silicon Macs render the worlds fine in headed Chromium, so the fallback should not trigger.
+- **Launcher** (`studio/tools/up.mjs`) uses `lsof`/`SIGTERM` off Windows — works on macOS as is.
+- **Showreel fonts** (`studio/tools/showreel.mjs`): looks for Arial/Helvetica and Apple SD Gothic Neo on macOS (DejaVu/Nanum on Linux); it fails with a clear message if none is found.
+- **Blender for the Pangyo hero generator** (`pangyo-technovalley/tools/bpl/run_blender.mjs`): on macOS install Blender 4.2 LTS to `/Applications` (found automatically) or set `BLENDER=/Applications/Blender.app/Contents/MacOS/Blender`; then `npm run assets` in `pangyo-technovalley/`.
+- **GitHub CLI**: `brew install gh && gh auth login && gh auth setup-git`.
+- **ffmpeg**: `brew install ffmpeg`.
+- **Auto-memory slug**: it is derived from the directory Claude Code is started in, so it will NOT be the Windows name. See `RESTORE.md` in the portable context folder: start Claude Code once in the new checkout's parent directory, then copy `memory/` into the folder that appears under `~/.claude/projects/`.
+- Line endings: the repo has no `.gitattributes`; files were committed with LF (git on Windows warned about CRLF conversion on checkout). On macOS nothing to do.
+
 ## Known limitations (all recorded in the QA reports)
 
 - Pangyo streets are fitted to straight, axis-aligned lines (the runtime's street model); 판교역로 runs north–south in OSM and its strip overlaps 삼성화재/카카오 massing; signals collapse 58→6 fitted crossings; 판교역 has canopies but no station building/plaza; the road crosses the stream as a flat causeway; facades outside the three hero modules are generic. See `pangyo-technovalley/FINAL_QA_REPORT.md` (15 defects).
